@@ -1,12 +1,14 @@
 <?php
-namespace Revaycolizer\Utils;
+namespace Mpemba\Utils;
 
 class Utility{
 
     public static function safeQuery($query, $params = [], $query_type = 'SELECT', $one_row = null)
     {
-        global $db;
-        $conn = $db;
+        $conn = $GLOBALS['db'] ?? null;
+        if ($conn === null) {
+            throw new \RuntimeException('Database connection not initialized. Ensure config/bootstrap.php is required before using Utility.');
+        }
 
         try {
             if ($query_type == 'SELECT') {
@@ -20,7 +22,10 @@ class Utility{
         }
 
         if ($query_type == 'INSERT') {
-            return $conn->lastInsertId();
+            if (method_exists($conn, 'lastInsertId')) {
+                return $conn->lastInsertId();
+            }
+            return null;
         } elseif ($query_type == 'SELECT') {
             return $one_row ? $result->fetchAssociative() : $result->fetchAllAssociative();
         } else {
@@ -33,9 +38,9 @@ class Utility{
      * Prepare data before inserting, the output of this function is expected to be a
      * clean insert statement. General assumption is that field names on post corresponds to
      * table columns on the database
-     * @param $table
-     * @param $post_array
-     *@return array{query: string, params: array}
+     * @param string $table
+     * @param array $post_array
+     * @return array
      */
     public static function safePrepareInsertQuery(string $table, array $post_array)
     {
@@ -68,11 +73,11 @@ class Utility{
     }
 
     /**
-     * @param $table
-     * @param $id
-     * @param $post_array
-     * @param $id_column
-     * @return array{query: string, params: array}
+    * @param string $table
+    * @param mixed $id
+    * @param array $post_array
+    * @param string $id_column
+    * @return array
      */
     public static function safePrepareUpdateQuery($table, $id, $post_array, $id_column = 'id')
     {
@@ -102,17 +107,17 @@ class Utility{
 
     /**
      * Updates a a row with a given key-value pair
-     * @param String $table
+     * @param string $table
      * @param int $id
-     * @param Array $array_data
+     * @param array $array_data
      * @return boolean
-     * @throws Exception
+     * @throws '\Exception'?
      */
     public static function update($table, $id, $array_data)
     {
-        $q = Utility::safePrepareUpdateQuery($table, $id, $array_data);
+        $q = self::safePrepareUpdateQuery((string)$table, $id, $array_data);
         try {
-            return Utility::safeQuery($q['query'],$q['params'], "UPDATE");
+            return self::safeQuery($q['query'], $q['params'], 'UPDATE');
         } catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
@@ -121,28 +126,36 @@ class Utility{
     public static function delete($table, $id, $id_column_name = 'id')
     {
         $q = "DELETE FROM {$table} WHERE {$id_column_name} = ?";
-        return Utility::safeQuery($q,[$id], "DELETE");
+        return self::safeQuery($q, [$id], 'DELETE');
     }
 
       /**
      * UI Notifications (SWAL)
      * @param $text
      * @param string $type
-     * @param null $title
+     * @param callable|null $title
      * @param int $buttons
      */
-     public static function notify($text, $type = 'success', $title = null, $buttons = 1)
+    public static function notify($text, $type = 'success', $title = null, $buttons = 1)
     {
-    
         if ($title === null) {
-            echo '<script>Swal.fire("' . $text . '"); </script>';
-        } else {
-            if (is_null($buttons)) {
-                echo '<script>Swal.fire({html:"' . $text . '",title:"' . $title . '",icon:"' . $type . '", allowOutsideClick: true, showConfirmButton: false}); </script>';
-            } else {
-                echo '<script>Swal.fire({html:"' . $text . '",title:"' . $title . '",icon:"' . $type . '", showConfirmButton: true}); </script>';
-            }
+            echo '<script>Swal.fire(' . json_encode((string)$text) . ');</script>';
+            return;
         }
+
+        $options = [
+            'html' => (string)$text,
+            'title' => (string)$title,
+            'icon' => (string)$type,
+            'showConfirmButton' => $buttons !== null ? true : false,
+        ];
+
+        if ($buttons === null) {
+            $options['allowOutsideClick'] = true;
+            $options['showConfirmButton'] = false;
+        }
+
+        echo '<script>Swal.fire(' . json_encode($options) . ');</script>';
     }
 
 }

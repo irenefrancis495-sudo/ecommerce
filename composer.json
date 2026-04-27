@@ -1,17 +1,17 @@
 {
-  "name": "revaycolizer/crud",
+  "name": "mpemba/crud",
   "type": "project",
   "autoload": {
     "psr-4": {
-      "Revaycolizer\\Crud\\": "src/",
+      "Mpemba\\Crud\\": "src/",
       "App\\Types\\": "types/",
-      "Revaycolizer\\Utils\\": "utils/"
+      "Mpemba\\Utils\\": "utils/"
     }
   },
   "authors": [
     {
-      "name": "Revaycolizer",
-      "email": "albinuslucas@gmail.com"
+      "name": "Mpemba",
+      "email": "mpemba@gmail.com"
     }
   ],
   "require": {

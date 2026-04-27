@@ -10,7 +10,7 @@ return [
     ],
 
     'migrations_paths' => [
-        'Revaycolizer\Crud\Migrations' => 'src/Migrations',
+        'Mpemba\Crud\Migrations' => 'src/Migrations',
     ],
 
     'all_or_nothing' => true,

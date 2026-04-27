@@ -1,5 +1,5 @@
 <?php
-use Revaycolizer\Utils\Utility;
+use Mpemba\Utils\Utility;
 $results = Utility::safeQuery("SELECT * FROM user");
 print_r($results);
 echo "<h3>Admin Dashboard</h3>";
