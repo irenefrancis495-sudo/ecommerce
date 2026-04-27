@@ -5,7 +5,8 @@
     "psr-4": {
       "Mpemba\\Crud\\": "src/",
       "App\\Types\\": "types/",
-      "Mpemba\\Utils\\": "utils/"
+      "Mpemba\\Utils\\": "utils/",
+      "Mpemba\\Entity\\": "entity/"
     }
   },
   "authors": [

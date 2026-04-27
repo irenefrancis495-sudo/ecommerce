@@ -1,4 +1,4 @@
 <?php
-use Revaycolizer\Utils\Utility;
+use Mpemba\Utils\Utility;
 
 echo "<h3>Test Page</h3>";
