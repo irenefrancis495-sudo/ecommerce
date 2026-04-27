@@ -1,0 +1,37 @@
+#!/usr/bin/env php
+<?php
+
+use Doctrine\Migrations\Configuration\Migration\PhpFile;
+use Doctrine\Migrations\Configuration\Connection\ExistingConnection;
+use Doctrine\Migrations\DependencyFactory;
+use Doctrine\Migrations\Tools\Console\Command;
+use Symfony\Component\Console\Application;
+
+require_once __DIR__ . '/../config/bootstrap.php';
+
+/** @var \Doctrine\DBAL\Connection $db */
+
+$commands = [
+    new Command\DumpSchemaCommand(),
+    new Command\ExecuteCommand(),
+    new Command\GenerateCommand(),
+    new Command\LatestCommand(),
+    new Command\ListCommand(),
+    new Command\MigrateCommand(),
+    new Command\RollupCommand(),
+    new Command\StatusCommand(),
+    new Command\SyncMetadataCommand(),
+    new Command\VersionCommand(),
+    // Command\DiffCommand is not available without ORM
+];
+
+$cli = new Application('Doctrine Migration CLI');
+$cli->setCatchExceptions(true);
+
+$config = new PhpFile(__DIR__ . '/../migrations.php');
+
+$dependencyFactory = DependencyFactory::fromConnection($config, new ExistingConnection($db));
+
+$cli->addCommands($commands);
+
+$cli->run();
