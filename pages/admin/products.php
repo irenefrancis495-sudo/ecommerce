@@ -1,7 +1,7 @@
 <?php
 use Mpemba\Entity\Product;
 require_once __DIR__ . '/../../data/mock_data.php';
-//require_once __DIR__ . '/_auth.php';
+require_once __DIR__ . '/_auth.php';
 // $products = get_products();
 $products = Product::getProducts();
 
