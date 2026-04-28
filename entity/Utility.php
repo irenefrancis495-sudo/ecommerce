@@ -1,5 +1,5 @@
 <?php
-namespace Mpemba\Utils;
+namespace Mpemba\Entity;
 
 class Utility{
 

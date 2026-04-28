@@ -19,7 +19,7 @@ $connectionParams = [
 ];
 
 if (($connectionParams['driver'] ?? '') === 'pdo_sqlite') {
-    $connectionParams['path'] = __DIR__ . '/' . ($_ENV['DB_PATH'] ?? 'db.sqlite');
+    $connectionParams['path'] = __DIR__ . '/../' . ($_ENV['DB_PATH'] ?? 'db.sqlite');
 }
 
 $db = 'Doctrine\DBAL\DriverManager'::getConnection($connectionParams);
