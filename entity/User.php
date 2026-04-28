@@ -40,7 +40,8 @@ class User {
     public function delete(): void {
         global $db;
         if ($this->id) {
-            $db->delete('users', ['id' => $this->id]);
+
+            $db->delete('users', ['id' => $this->id]);      
         }
     }
 
