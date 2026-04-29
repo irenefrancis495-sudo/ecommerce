@@ -14,14 +14,6 @@ $top_selling = [
     ['id'=>503, 'name' => '4K LED TV 55"', 'qty' => 180, 'price' => 1800000, 'img' => 'https://images.unsplash.com/photo-1585386959984-a415522b4e9b?w=800&auto=format&fit=crop&q=60'],
 ];
 
-$products = [
-    ['id'=>501,'name'=>'Smartphone X','price'=>750000,'stock'=>120,'category'=>'Electronics','img'=>'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=800&auto=format&fit=crop&q=60'],
-    ['id'=>502,'name'=>'Laptop Pro 15"','price'=>2200000,'stock'=>60,'category'=>'Electronics','img'=>'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800&auto=format&fit=crop&q=60'],
-    ['id'=>503,'name'=>'4K LED TV 55"','price'=>1800000,'stock'=>30,'category'=>'Electronics','img'=>'https://images.unsplash.com/photo-1585386959984-a415522b4e9b?w=800&auto=format&fit=crop&q=60'],
-    ['id'=>504,'name'=>'Wireless Earbuds','price'=>120000,'stock'=>200,'category'=>'Electronics','img'=>'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=800&auto=format&fit=crop&q=60'],
-    ['id'=>505,'name'=>'Smartwatch Series 5','price'=>350000,'stock'=>95,'category'=>'Electronics','img'=>'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?w=800&auto=format&fit=crop&q=60'],
-];
-
 $customers = [
     ['id'=>201,'name'=>'Alice Smith','email'=>'alice@example.com','joined'=>'2024-02-10'],
     ['id'=>202,'name'=>'Bob Johnson','email'=>'bob@example.com','joined'=>'2024-03-21'],
@@ -38,7 +30,6 @@ $orders = [
 
 function get_stats() { global $stats; return $stats; }
 function get_top_selling() { global $top_selling; return $top_selling; }
-function get_products() { global $products; return $products; }
 function get_customers() { global $customers; return $customers; }
 function get_orders() { global $orders; return $orders; }
 

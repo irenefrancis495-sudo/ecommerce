@@ -10,22 +10,6 @@ $id = $segments[1] ?? null;
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($resource) {
-    case 'products':
-        if ($method === 'GET' && $id) {
-            Mpemba\Controller\ProductController::show($id);
-        } elseif ($method === 'GET') {
-            Mpemba\Controller\ProductController::index();
-        } elseif ($method === 'POST') {
-            Mpemba\Controller\ProductController::store();
-        } elseif ($method === 'PUT' && $id) {
-            Mpemba\Controller\ProductController::update($id);
-        } elseif ($method === 'DELETE' && $id) {
-            Mpemba\Controller\ProductController::destroy($id);
-        } else {
-            http_response_code(405);
-            echo json_encode(['error' => 'Method not allowed']);
-        }
-        break;
     case 'orders':
         if ($method === 'GET' && $id) {
             Mpemba\Controller\OrderController::show($id);
