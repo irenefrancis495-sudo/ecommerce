@@ -1,5 +1,5 @@
 <?php
-namespace Mpemba\Entity;
+namespace Mpemba\Utils;
 
 class Router {
     public static function load() {

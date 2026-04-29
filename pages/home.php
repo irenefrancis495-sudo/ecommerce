@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mpemba Marketplace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-50 text-slate-900">
-    <?php include 'partials/header.php'; ?>
+
+<section class="bg-slate-50 text-slate-900 mt-16">
+     <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
     <main class="max-w-6xl mx-auto px-6 py-10">
         <section class="rounded-3xl bg-white shadow-lg p-10 mb-10">
             <div class="grid gap-8 lg:grid-cols-2 items-center">
@@ -47,6 +40,6 @@
             </div>
         </section>
     </main>
-    <?php include 'partials/footer.php'; ?>
-</body>
-</html>
+    </section>
+   <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+

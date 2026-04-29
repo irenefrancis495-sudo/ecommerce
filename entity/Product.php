@@ -1,61 +1,57 @@
 <?php
 namespace Mpemba\Entity;
 
-use Doctrine\DBAL\Connection;
+use Mpemba\Utils\Utility;
 
 class Product {
-    private Connection $db;
-
+    
     public $id;
     public $name;
     public $price;
     public $stock;
     public $category;
 
-    public function __construct(Connection $db, $id = null, $name = null, $price = null, $stock = null, $category = null) {
-        $this->db = $db;
-        $this->id = $id;
-        $this->name = $name;
-        $this->price = $price;
-        $this->stock = $stock;
-        $this->category = $category;
+    public function __construct($id = null, ) {
+       if(!empty($id)){
+        $data = Utility::safeQuery('SELECT * FROM products WHERE id = ?',[$id]);
+        $this->id = $data['id'];
+        $this->name = $data['name'];
+        $this->price = $data['price'];
+        $this->stock = $data['stock'];
+        $this->category = $data['category'];
+       }
     }
 
-    public static function getProducts(Connection $db = null): array {
-        if (!$db) {
-            global $db;
-        }
-        $stmt = $db->prepare('SELECT * FROM products');
-        $result = $stmt->executeQuery();
-        return $result->fetchAllAssociative();
+    public static function getProducts(): array {
+    
+        return Utility::safeQuery('SELECT * FROM products');
     }
 
     public function save(): void {
         if ($this->id) {
-            $this->db->update('products', [
-                'name' => $this->name,
-                'price' => $this->price,
-                'stock' => $this->stock,
-                'category' => $this->category,
-            ], ['id' => $this->id]);
-        } else {
-            $this->db->insert('products', [
+            Utility::update('products',$this->id, [
                 'name' => $this->name,
                 'price' => $this->price,
                 'stock' => $this->stock,
                 'category' => $this->category,
             ]);
-            $this->id = $this->db->lastInsertId();
+        } else {
+           $this->id = Utility::insert('products', [
+                'name' => $this->name,
+                'price' => $this->price,
+                'stock' => $this->stock,
+                'category' => $this->category,
+            ]);
         }
     }
 
     public function delete(): void {
         if ($this->id) {
-            $this->db->delete('products', ['id' => $this->id]);
+            Utility::delete('products', $this->id);
         }
     }
 
-    public static function findById($id, Connection $db = null): ?Product {
+    public static function findById($id): ?Product {
         if (!$db) {
             global $db;
         }
