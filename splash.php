@@ -1,14 +1,10 @@
-<!DOCTYPE html>
+<!DOCTY 
+html>
 
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Mpemba Marketplace | Welcome</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800&amp;family=Manrope:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script>
     setTimeout(function() {
         window.location.href = 'index.php';
     }, 3000); // Redirect after 3 seconds
@@ -18,7 +14,8 @@
         darkMode: "class",
         theme: {
           extend: {
-            "colors": {
+            "colors": 
+
                     "background": "#f8f9fb",
                     "on-error-container": "#93000a",
                     "surface": "#f8f9fb",

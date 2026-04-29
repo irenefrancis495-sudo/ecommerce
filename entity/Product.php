@@ -1,32 +1,66 @@
 <?php
 namespace Mpemba\Entity;
+
+use Mpemba\Utils\Utility;
+
 class Product {
+    
     public $id;
     public $name;
     public $price;
     public $stock;
     public $category;
 
-    public function __construct($id, $name, $price, $stock, $category) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->price = $price;
-        $this->stock = $stock;
-        $this->category = $category;
+    public function __construct($id = null, ) {
+       if(!empty($id)){
+        $data = Utility::safeQuery('SELECT * FROM products WHERE id = ?',[$id]);
+        $this->id = $data['id'];
+        $this->name = $data['name'];
+        $this->price = $data['price'];
+        $this->stock = $data['stock'];
+        $this->category = $data['category'];
+       }
     }
 
-    public static function getProducts():array{
-
-    $products = [
-    ['id'=>101,'name'=>'King Burger','price'=>6.99,'stock'=>120,'category'=>'Burgers'],
-    ['id'=>102,'name'=>'Chicken Noodles','price'=>5.49,'stock'=>80,'category'=>'Noodles'],
-    ['id'=>103,'name'=>'Hot & Sour Soup','price'=>3.99,'stock'=>50,'category'=>'Soups'],
-    ];
-
-    return $products;
+    public static function getProducts(): array {
+    
+        return Utility::safeQuery('SELECT * FROM products');
     }
 
-    public function get():array{
-        return self::getProducts();
+    public function save(): void {
+        if ($this->id) {
+            Utility::update('products',$this->id, [
+                'name' => $this->name,
+                'price' => $this->price,
+                'stock' => $this->stock,
+                'category' => $this->category,
+            ]);
+        } else {
+           $this->id = Utility::insert('products', [
+                'name' => $this->name,
+                'price' => $this->price,
+                'stock' => $this->stock,
+                'category' => $this->category,
+            ]);
+        }
+    }
+
+    public function delete(): void {
+        if ($this->id) {
+            Utility::delete('products', $this->id);
+        }
+    }
+
+    public static function findById($id): ?Product {
+        if (!$db) {
+            global $db;
+        }
+        $stmt = $db->prepare('SELECT * FROM products WHERE id = ?');
+        $result = $stmt->executeQuery([$id]);
+        $data = $result->fetchAssociative();
+        if ($data) {
+            return new Product($db, $data['id'], $data['name'], $data['price'], $data['stock'], $data['category']);
+        }
+        return null;
     }
 }
