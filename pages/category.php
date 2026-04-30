@@ -114,12 +114,13 @@ $categoryImages = [
     <main class="pt-20">
         <section class="relative h-[409px] min-h-[400px] flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 editorial-gradient z-0"></div>
-            <div class="absolute inset-0 opacity-30 z-0">
+            <div class="absolute inset-0 opacity-40 z-0">
                 <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80" alt="Marketplace curated collections background">
             </div>
             <div class="relative z-10 text-center px-6">
-                <h1 class="font-display font-black text-5xl md:text-7xl text-on-primary tracking-tighter mb-4">Curated Collections</h1>
-                <p class="font-body text-primary-fixed max-w-xl mx-auto text-lg opacity-90">Discover a world of intentional design and artisan craftsmanship, tailored for the modern aesthetic.</p>
+                <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.4em] text-white/90">Curated categories</span>
+                <h1 class="font-display font-black text-5xl md:text-7xl text-white tracking-tighter mb-4 mt-6">Collections for every lifestyle</h1>
+                <p class="font-body text-white/80 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">Browse signature categories that blend craftsmanship, technology and wellness into one elevated marketplace experience.</p>
             </div>
         </section>
 
@@ -145,6 +146,7 @@ $categoryImages = [
                             <h2 class="font-display font-bold text-3xl mb-3">Sanctuary Home</h2>
                             <p class="font-body text-surface-variant text-sm mb-4">Quiet luxury for your private spaces.</p>
                             <a class="inline-flex items-center gap-2 font-label font-bold text-secondary-fixed" href="/sanctuary-home">Explore Collection <span class="material-symbols-outlined">arrow_forward</span></a>
+                        <p class="mt-4 text-sm text-white/80 max-w-sm">Handpicked home pieces to elevate daily living with calm minimalism.</p>
                         </div>
                     </div>
                 </div>
@@ -155,6 +157,7 @@ $categoryImages = [
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-2xl mb-2">Atelier Electronics</h2>
                             <a class="inline-flex items-center gap-2 font-label font-bold text-secondary-fixed" href="/atelier-electronics">Explore Collection <span class="material-symbols-outlined">arrow_forward</span></a>
+                        <p class="mt-4 text-sm text-white/80 max-w-sm">Sleek electronics designed for creative work and effortless living.</p>
                         </div>
                     </div>
                 </div>
@@ -165,6 +168,7 @@ $categoryImages = [
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-2xl mb-2">Natural Beauty</h2>
                             <a class="inline-flex items-center gap-2 font-label font-bold text-secondary-fixed" href="/natural-beauty">Explore Collection <span class="material-symbols-outlined">arrow_forward</span></a>
+                        <p class="mt-4 text-sm text-white/80 max-w-sm">Beauty essentials made from botanicals and thoughtfully sourced ingredients.</p>
                         </div>
                     </div>
                 </div>
@@ -175,6 +179,7 @@ $categoryImages = [
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-2xl mb-2">Lifestyle Essentials</h2>
                             <a class="inline-flex items-center gap-2 font-label font-bold text-secondary-fixed" href="/lifestyle-essentials">Explore Collection <span class="material-symbols-outlined">arrow_forward</span></a>
+                        <p class="mt-4 text-sm text-white/80 max-w-sm">Everyday essentials designed for thoughtful routines and elevated comfort.</p>
                         </div>
                     </div>
                 </div>

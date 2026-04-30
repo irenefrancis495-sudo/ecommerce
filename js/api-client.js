@@ -49,9 +49,9 @@ class MpembaAPI {
     // Mock product methods using localStorage
     async getProducts(params = {}) {
         const mockProducts = [
-            { id: 1, name: 'Product 1', description: 'A great product', price: 50, category: 'electronics', image_url: 'https://via.placeholder.com/300x200?text=Product+1' },
-            { id: 2, name: 'Product 2', description: 'Amazing item', price: 75, category: 'fashion', image_url: 'https://via.placeholder.com/300x200?text=Product+2' },
-            { id: 3, name: 'Product 3', description: 'Must have', price: 100, category: 'home', image_url: 'https://via.placeholder.com/300x200?text=Product+3' },
+            { id: 1, name: 'Product 1', description: 'A great product', price: 50, category: 'electronics', image_url: 'https://images.unsplash.com/photo-1512499617640-c2f999018b72?w=300&h=200&fit=crop&crop=center' },
+            { id: 2, name: 'Product 2', description: 'Amazing item', price: 75, category: 'fashion', image_url: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=300&h=200&fit=crop&crop=center' },
+            { id: 3, name: 'Product 3', description: 'Must have', price: 100, category: 'home', image_url: 'https://images.unsplash.com/photo-1503602642458-232111445657?w=300&h=200&fit=crop&crop=center' },
         ];
         return Promise.resolve(mockProducts);
     }

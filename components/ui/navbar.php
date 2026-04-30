@@ -113,8 +113,8 @@
                     localStorage.removeItem('user');
                     if (typeof Swal !== 'undefined') {
                         Swal.fire({
-                            title: 'Umefanikiwa',
-                            text: 'Umetoka kwenye akaunti.',
+                            title: 'Success',
+                            text: 'You have successfully logged out.',
                             icon: 'success',
                             timer: 1500,
                             showConfirmButton: false

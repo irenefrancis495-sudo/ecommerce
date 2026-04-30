@@ -81,10 +81,19 @@ function renderProducts() {
     const productsGrid = document.getElementById('productsGrid');
     productsGrid.innerHTML = '';
 
-    paginatedProducts.forEach(product => {
-        const productCard = createProductCard(product);
-        productsGrid.appendChild(productCard);
-    });
+    if (paginatedProducts.length === 0) {
+        productsGrid.innerHTML = `
+            <div class="col-span-full rounded-3xl border border-dashed border-slate-300 bg-white/80 p-16 text-center text-slate-600">
+                <p class="text-xl font-semibold mb-2">No products found</p>
+                <p class="max-w-xl mx-auto">Try changing the filters, or explore other categories for more curated finds.</p>
+            </div>
+        `;
+    } else {
+        paginatedProducts.forEach(product => {
+            const productCard = createProductCard(product);
+            productsGrid.appendChild(productCard);
+        });
+    }
 
     renderPagination(sortedProducts.length);
 }
@@ -106,7 +115,7 @@ function createProductCard(product) {
 
     card.innerHTML = `
         <div class="aspect-square bg-gradient-to-br from-primary/5 to-secondary/5 relative overflow-hidden">
-            <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://via.placeholder.com/400x400?text=${encodeURIComponent(product.name)}'">
+            <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.src='https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop&crop=center'">
             <button class="absolute top-4 right-4 w-10 h-10 bg-surface/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                 <span class="material-symbols-outlined text-lg">favorite</span>
             </button>
@@ -123,6 +132,10 @@ function createProductCard(product) {
             </div>
             <h3 class="font-semibold text-lg mb-2">${product.name}</h3>
             <p class="text-on-surface-variant text-sm mb-4 line-clamp-2">${product.description}</p>
+            <div class="flex items-center justify-between gap-4 mb-4 text-sm text-slate-500">
+                <span>${product.stock_quantity > 10 ? 'In stock' : product.stock_quantity > 0 ? 'Limited stock' : 'Out of stock'}</span>
+                <span>${product.stock_quantity} pcs available</span>
+            </div>
             <div class="flex items-center justify-between">
                 <span class="text-2xl font-bold text-primary">$${product.price}</span>
                 <button class="add-to-cart px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors" data-id="${product.id}" data-name="${product.name.replace(/"/g, '&quot;')}" data-price="${product.price}">
