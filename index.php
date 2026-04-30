@@ -12,7 +12,7 @@ global $entityManager;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= Router::getPathName() ?> ?></title>
+    <title><?= Router::getPathName() ?></title>
     <link href="styles.css" rel="stylesheet">
     <script src="assets/jquery/jquery.min.js"></script>
     <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
