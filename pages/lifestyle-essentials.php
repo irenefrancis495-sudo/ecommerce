@@ -128,7 +128,7 @@
         </section>
 
         <section class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-12 gap-8">
-            <div class="md:col-span-8 group product-card" data-id="401" data-name="The Heritage Weekender Bag" data-price="480" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
+            <div class="md:col-span-8 group">
                 <div class="relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md">
                     <div class="grid md:grid-cols-2 h-full">
                         <div class="p-10 flex flex-col justify-between">
@@ -141,7 +141,7 @@
                                 <span class="text-2xl font-display font-semibold text-primary">$480.00</span>
                             </div>
                             <div class="mt-8">
-                                <button class="bg-gradient-to-r from-secondary to-secondary-container text-on-secondary px-8 py-3 rounded-lg font-label font-bold text-sm scale-100 hover:scale-102 transition-transform duration-200" data-action="add-to-cart">Add to Atelier</button>
+                                <button class="bg-gradient-to-r from-secondary to-secondary-container text-on-secondary px-8 py-3 rounded-lg font-label font-bold text-sm scale-100 hover:scale-102 transition-transform duration-200">Add to Atelier</button>
                             </div>
                         </div>
                         <div class="relative h-96 md:h-full overflow-hidden">
@@ -170,7 +170,7 @@
                 </div>
             </div>
 
-            <div class="md:col-span-4 group product-card" data-id="402" data-name="Obsidian & Driftwood Scent" data-price="62" data-image="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80">
+            <div class="md:col-span-4 group">
                 <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
                     <div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-lg bg-surface-container-low">
                         <img alt="Scented candle" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" />
@@ -180,7 +180,7 @@
                         <h4 class="text-lg font-display font-bold text-primary mb-2">Obsidian &amp; Driftwood Scent</h4>
                         <div class="flex items-center justify-between">
                             <span class="text-lg font-display font-semibold text-primary">$62.00</span>
-                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors" data-action="add-to-cart">
+                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors">
                                 <span class="material-symbols-outlined text-sm">add</span>
                             </button>
                         </div>
@@ -188,7 +188,7 @@
                 </div>
             </div>
 
-            <div class="md:col-span-4 group product-card" data-id="403" data-name="Slimline Pebble Wallet" data-price="85" data-image="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80">
+            <div class="md:col-span-4 group">
                 <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
                     <div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-lg bg-surface-container-low">
                         <img alt="Leather card holder" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80" />
@@ -198,7 +198,7 @@
                         <h4 class="text-lg font-display font-bold text-primary mb-2">Slimline Pebble Wallet</h4>
                         <div class="flex items-center justify-between">
                             <span class="text-lg font-display font-semibold text-primary">$85.00</span>
-                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors" data-action="add-to-cart">
+                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors">
                                 <span class="material-symbols-outlined text-sm">add</span>
                             </button>
                         </div>
@@ -206,7 +206,7 @@
                 </div>
             </div>
 
-            <div class="md:col-span-4 group product-card" data-id="404" data-name="Eclipse Frame Eyewear" data-price="185" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
+            <div class="md:col-span-4 group">
                 <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
                     <div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-lg bg-surface-container-low">
                         <img alt="Luxury glasses" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" />
@@ -216,7 +216,7 @@
                         <h4 class="text-lg font-display font-bold text-primary mb-2">Eclipse Frame Eyewear</h4>
                         <div class="flex items-center justify-between">
                             <span class="text-lg font-display font-semibold text-primary">$185.00</span>
-                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors" data-action="add-to-cart">
+                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors">
                                 <span class="material-symbols-outlined text-sm">add</span>
                             </button>
                         </div>
