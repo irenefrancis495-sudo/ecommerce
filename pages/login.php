@@ -62,7 +62,7 @@
 
         // Disable button and show loading
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Inapakia...';
+        submitBtn.textContent = 'Logging in...';
 
         try {
             const response = await fetch('/api/auth.php?action=login', {

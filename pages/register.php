@@ -81,13 +81,13 @@
         if (!username || !email || password.length < 6) {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Kosa',
-                    text: 'Tafadhali jaza sehemu zote na tumia nenosiri lenye angalau herufi 6.',
+                    title: 'Error',
+                    text: 'Please fill in all fields and use a password with at least 6 characters.',
                     icon: 'error',
-                    confirmButtonText: 'Sawa'
+                    confirmButtonText: 'OK'
                 });
             } else {
-                alert('Tafadhali jaza sehemu zote na tumia nenosiri lenye angalau herufi 6.');
+                alert('Please fill in all fields and use a password with at least 6 characters.');
             }
             return;
         }
@@ -97,20 +97,20 @@
         if (!emailRegex.test(email)) {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Kosa',
-                    text: 'Tafadhali ingiza anwani ya barua pepe halali.',
+                    title: 'Error',
+                    text: 'Please enter a valid email address.',
                     icon: 'error',
-                    confirmButtonText: 'Sawa'
+                    confirmButtonText: 'OK'
                 });
             } else {
-                alert('Tafadhali ingiza anwani ya barua pepe halali.');
+                alert('Please enter a valid email address.');
             }
             return;
         }
 
         // Disable button and show loading
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Inasajili...';
+        submitBtn.textContent = 'Registering...';
 
         try {
             const response = await fetch('/api/auth.php?action=register', {
@@ -133,14 +133,14 @@
 
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
-                        title: 'Umefanikiwa!',
-                        text: 'Akaunti yako imeundwa. Unakaribishwa!',
+                        title: 'Success!',
+                        text: 'Your account has been created. Welcome!',
                         icon: 'success',
                         timer: 2000,
                         showConfirmButton: false
                     });
                 } else {
-                    alert('Umefanikiwa kusajili!');
+                    alert('Registration successful!');
                 }
 
                 setTimeout(() => {
@@ -149,10 +149,10 @@
             } else {
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
-                        title: 'Imeshindikana',
+                        title: 'Failed',
                         text: result.message,
                         icon: 'error',
-                        confirmButtonText: 'Jaribu Tena'
+                        confirmButtonText: 'Try Again'
                     });
                 } else {
                     alert(result.message);
@@ -162,18 +162,18 @@
             console.error('Registration error:', error);
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Kosa',
-                    text: 'Kuna tatizo la kiufundi. Tafadhali jaribu tena.',
+                    title: 'Error',
+                    text: 'A technical issue occurred. Please try again.',
                     icon: 'error',
-                    confirmButtonText: 'Sawa'
+                    confirmButtonText: 'OK'
                 });
             } else {
-                alert('Kuna tatizo la kiufundi. Tafadhali jaribu tena.');
+                alert('A technical issue occurred. Please try again.');
             }
         } finally {
             // Re-enable button
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Unda Akaunti';
+            submitBtn.textContent = 'Registering...';
         }
     });
 </script>
