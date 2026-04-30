@@ -109,20 +109,34 @@
 <section class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 py-6 sticky top-20 bg-surface/90 backdrop-blur-md z-40">
 <div class="flex flex-wrap gap-3">
 <div class="group relative">
-<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-lowest transition-all flex items-center gap-2">
-<span>Skin Type</span>
+<button id="skin-type-toggle" class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-lowest transition-all flex items-center gap-2" type="button" aria-expanded="false">
+<span class="dropdown-label">Skin Type</span>
 <span class="material-symbols-outlined text-sm">expand_more</span>
 </button>
+<div id="skin-type-menu" class="absolute left-0 mt-3 w-52 rounded-3xl bg-white border border-surface-container-high shadow-2xl shadow-surface-container-high/40 opacity-0 pointer-events-none scale-95 transition-all duration-200 z-50 overflow-hidden">
+<button type="button" data-skin="all" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">All Skin Types</button>
+<button type="button" data-skin="oily" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Oily</button>
+<button type="button" data-skin="dry" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Dry</button>
+<button type="button" data-skin="sensitive" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Sensitive</button>
+<button type="button" data-skin="combination" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Combination</button>
+</div>
 </div>
 <div class="group relative">
-<button class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-lowest transition-all flex items-center gap-2">
-<span>Ingredients</span>
+<button id="ingredients-toggle" class="px-6 py-2 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container-lowest transition-all flex items-center gap-2" type="button" aria-expanded="false">
+<span class="dropdown-label">Ingredients</span>
 <span class="material-symbols-outlined text-sm">expand_more</span>
 </button>
+<div id="ingredients-menu" class="absolute left-0 mt-3 w-52 rounded-3xl bg-white border border-surface-container-high shadow-2xl shadow-surface-container-high/40 opacity-0 pointer-events-none scale-95 transition-all duration-200 z-50 overflow-hidden">
+<button type="button" data-ingredient="all" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">All Ingredients</button>
+<button type="button" data-ingredient="aloe vera" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Aloe Vera</button>
+<button type="button" data-ingredient="turmeric" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Turmeric</button>
+<button type="button" data-ingredient="honey" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Honey</button>
+<button type="button" data-ingredient="coconut oil" class="w-full text-left px-4 py-3 text-sm text-on-surface hover:bg-surface-container-lowest transition-colors">Coconut Oil</button>
+</div>
 </div>
 <div class="flex items-center gap-2 px-2">
 <div class="w-2 h-2 rounded-full bg-secondary"></div>
-<span class="font-label text-sm uppercase tracking-widest text-primary/60">64 Results</span>
+<span class="font-label text-sm uppercase tracking-widest text-primary/60"><span id="results-count">4</span> Results</span>
 </div>
 </div>
 <div class="flex items-center gap-4 w-full md:w-auto">
@@ -137,7 +151,7 @@
 <!-- Product Grid: Asymmetric Layout -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
 <!-- Product 1: Botanical Oil -->
-<article class="group">
+<article class="group product-card" data-id="1" data-name="Golden Marula Elixir" data-price="84" data-skin-type="dry" data-ingredients="coconut oil" data-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAjDV-ajlBPebFHy5x3hZgWy7cHarjuTrSQ8POTQkv2PA1AY5FtApjK2KBr5tbsyYKbmJdw6mIySypIWizIl6MOgYMIF3qmTHeuRja-EqrrXdZyslSUQSioicIOEZ6EnZqlrYEDA2D8lvf9KifqKUY_4MooUZ_oppjNXs2atndz8p_Rb5Vft1F3PkdFxXnexb9LiYorN__cc0LHwjNhzF3yiALDw5hzTUhHtFQ3ud1pZnLiYqUxMxylB-pknRMiPxsNQ_7Q70RqhSg">
 <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[3/4] mb-6">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A frosted glass bottle of golden botanical oil sitting on a piece of raw cedar wood with dried wildflowers nearby" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjDV-ajlBPebFHy5x3hZgWy7cHarjuTrSQ8POTQkv2PA1AY5FtApjK2KBr5tbsyYKbmJdw6mIySypIWizIl6MOgYMIF3qmTHeuRja-EqrrXdZyslSUQSioicIOEZ6EnZqlrYEDA2D8lvf9KifqKUY_4MooUZ_oppjNXs2atndz8p_Rb5Vft1F3PkdFxXnexb9LiYorN__cc0LHwjNhzF3yiALDw5hzTUhHtFQ3ud1pZnLiYqUxMxylB-pknRMiPxsNQ_7Q70RqhSg"/>
 <button class="absolute top-4 right-4 p-2 bg-white/50 backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
@@ -156,12 +170,12 @@
 </div>
 <p class="font-display text-xl font-bold text-primary">$84</p>
 </div>
-<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2">
+<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2 add-to-collection" data-action="add-to-cart">
                     Add to Collection
                 </button>
 </article>
 <!-- Product 2: Skincare Cream (Larger focus) -->
-<article class="group md:mt-12">
+<article class="group product-card md:mt-12" data-id="2" data-name="Wild Sage Repair Cream" data-price="62" data-skin-type="sensitive" data-ingredients="aloe vera" data-image="https://lh3.googleusercontent.com/aida-public/AB6AXuDnDQhvC4xVHRMCZxAnmT3Dxvjt5ASIyC-y9g2872CABitqw-k_aK1UwuajYemnXhCxG-csA936qjB99EFVJ2BGEO9QBynaYrkllcOCEyZwsIGcW6gW3OgQ4Wf8Msk6vDVPYdWxZSG64Zyl6WRzMSsRE3X4-IiF42rzvnOdti5GAgET7fMyWsPRw-jJt2fyPDfSKrW46wlcbhXy13oh6bFKIh3nXqQLzEPZIfWTJ3bC7kfeXbuj09lATNfT9O_m4CjhOOw2w21K3Ec">
 <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[3/4] mb-6">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Texture shot of creamy white facial moisturizer in a white ceramic jar with a silver spatula and fresh sage leaves" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDnDQhvC4xVHRMCZxAnmT3Dxvjt5ASIyC-y9g2872CABitqw-k_aK1UwuajYemnXhCxG-csA936qjB99EFVJ2BGEO9QBynaYrkllcOCEyZwsIGcW6gW3OgQ4Wf8Msk6vDVPYdWxZSG64Zyl6WRzMSsRE3X4-IiF42rzvnOdti5GAgET7fMyWsPRw-jJt2fyPDfSKrW46wlcbhXy13oh6bFKIh3nXqQLzEPZIfWTJ3bC7kfeXbuj09lATNfT9O_m4CjhOOw2w21K3Ec"/>
 <div class="absolute bottom-4 left-4">
@@ -180,12 +194,12 @@
 </div>
 <p class="font-display text-xl font-bold text-primary">$62</p>
 </div>
-<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2">
+<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2 add-to-collection" data-action="add-to-cart">
                     Add to Collection
                 </button>
 </article>
 <!-- Product 3: Herbal Remedy -->
-<article class="group">
+<article class="group product-card" data-id="3" data-name="Ancient Bark Cleansing Grains" data-price="45" data-skin-type="oily" data-ingredients="turmeric" data-image="https://lh3.googleusercontent.com/aida-public/AB6AXuDKiw7y-i-WMnTyAE9vVrfQpV8vomGN4h71LBwiR8ux9uaVTM8nC7mbfSSBBgTGwE-n1DA563XqAm1HXd1zwCM472TsOFvS2NhtzSbkDk607A_CcPVdo2L_G3YjRVxRjf-6RQD2sxg8iHc_bV5YoB0SPOxNCuNmeBF6Fn0ICa0BKR16SbW67EPflYS2Iiv3p0wvw5b9veoFCvCsBDdaAojDDy5mHVzAX7TDfTE1VXDc342Rr4lAN4cDHTcZi8PRrDoc9gXl3VeC9dM">
 <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[3/4] mb-6">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Handcrafted pottery bowls containing various dried herbs and botanical powders for traditional natural skincare recipes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKiw7y-i-WMnTyAE9vVrfQpV8vomGN4h71LBwiR8ux9uaVTM8nC7mbfSSBBgTGwE-n1DA563XqAm1HXd1zwCM472TsOFvS2NhtzSbkDk607A_CcPVdo2L_G3YjRVxRjf-6RQD2sxg8iHc_bV5YoB0SPOxNCuNmeBF6Fn0ICa0BKR16SbW67EPflYS2Iiv3p0wvw5b9veoFCvCsBDdaAojDDy5mHVzAX7TDfTE1VXDc342Rr4lAN4cDHTcZi8PRrDoc9gXl3VeC9dM"/>
 </div>
@@ -201,13 +215,13 @@
 </div>
 <p class="font-display text-xl font-bold text-primary">$45</p>
 </div>
-<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2">
+<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2 add-to-collection" data-action="add-to-cart">
                     Add to Collection
                 </button>
 </article>
 <!-- Row 2 -->
 <!-- Product 4 -->
-<article class="group md:mt-[-3rem]">
+<article class="group product-card md:mt-[-3rem]" data-id="4" data-name="Vitamin C Glow Serum" data-price="78" data-skin-type="combination" data-ingredients="honey" data-image="https://lh3.googleusercontent.com/aida-public/AB6AXuBhZyMVLZ8NrQeq420GG3OAdn28YABBWp0oNZ6T8iSVhAts54_xYkRCpSKjA_Fu-a97g5Sfj3QaOZSxjR5fXL3WDozDwywPGh0er0C5ekywT00Y6kvPgFk084ohR2xz5GfUt4b0x1MWaqM32FK2J5BbGBnMfGkicmIRNojWnPmW5ctixXswilvWyCDKKDRt-tCHT0pqZRh8iq01EnNKDBV93Jzz_M9i0XPYIOKnqo5ISqIYIQfqVf3hFPKWnC3BOlaU4BN0apB1cKs">
 <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest aspect-[3/4] mb-6 shadow-xl shadow-primary/5">
 <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A minimalist dark amber bottle with a dropper labeled in elegant serif typography on a marble surface with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBhZyMVLZ8NrQeq420GG3OAdn28YABBWp0oNZ6T8iSVhAts54_xYkRCpSKjA_Fu-a97g5Sfj3QaOZSxjR5fXL3WDozDwywPGh0er0C5ekywT00Y6kvPgFk084ohR2xz5GfUt4b0x1MWaqM32FK2J5BbGBnMfGkicmIRNojWnPmW5ctixXswilvWyCDKKDRt-tCHT0pqZRh8iq01EnNKDBV93Jzz_M9i0XPYIOKnqo5ISqIYIQfqVf3hFPKWnC3BOlaU4BN0apB1cKs"/>
 </div>
@@ -222,7 +236,7 @@
 </div>
 <p class="font-display text-xl font-bold text-primary">$78</p>
 </div>
-<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2">
+<button class="mt-6 w-full py-4 rounded-lg bg-primary text-on-primary font-label text-xs uppercase tracking-widest hover:bg-primary-container hover:text-on-primary-container transition-all scale-102 flex justify-center items-center gap-2 add-to-collection" data-action="add-to-cart">
                     Add to Collection
                 </button>
 </article>
@@ -257,7 +271,7 @@
 <span class="material-symbols-outlined">chevron_right</span>
 </button>
 </div>
-<p class="font-label text-xs text-on-surface-variant uppercase tracking-widest">Showing 6 of 64 products</p>
+<p class="font-label text-xs text-on-surface-variant uppercase tracking-widest"><span id="results-range">Showing 4 of 4 products</span></p>
 </div>
 </main>
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
@@ -265,4 +279,105 @@
 <button class="fixed bottom-8 right-8 w-14 h-14 bg-secondary text-on-secondary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50 md:hidden">
 <span class="material-symbols-outlined">filter_list</span>
 </button>
+<script>
+(function(){
+    const skinToggle = document.getElementById('skin-type-toggle');
+    const ingredientToggle = document.getElementById('ingredients-toggle');
+    const skinMenu = document.getElementById('skin-type-menu');
+    const ingredientMenu = document.getElementById('ingredients-menu');
+    const productCards = Array.from(document.querySelectorAll('.product-card'));
+    const resultsCount = document.getElementById('results-count');
+    const resultsRange = document.getElementById('results-range');
+    let selectedSkin = 'all';
+    let selectedIngredient = 'all';
+
+    function closeMenus() {
+        [skinMenu, ingredientMenu].forEach(menu => {
+            menu.classList.add('opacity-0', 'pointer-events-none', 'scale-95');
+            menu.classList.remove('opacity-100', 'pointer-events-auto', 'scale-100');
+        });
+        skinToggle.setAttribute('aria-expanded', 'false');
+        ingredientToggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleMenu(menu, toggleButton) {
+        const open = toggleButton.getAttribute('aria-expanded') === 'true';
+        closeMenus();
+        if (!open) {
+            menu.classList.remove('opacity-0', 'pointer-events-none', 'scale-95');
+            menu.classList.add('opacity-100', 'pointer-events-auto', 'scale-100');
+            toggleButton.setAttribute('aria-expanded', 'true');
+        }
+    }
+
+    function applyFilters() {
+        let visible = 0;
+        productCards.forEach(card => {
+            const skinType = card.dataset.skinType || '';
+            const ingredients = (card.dataset.ingredients || '').toLowerCase();
+            const matchSkin = selectedSkin === 'all' || skinType === selectedSkin;
+            const matchIngredient = selectedIngredient === 'all' || ingredients.split(',').map(i => i.trim()).includes(selectedIngredient);
+            const show = matchSkin && matchIngredient;
+            card.style.display = show ? '' : 'none';
+            if (show) visible += 1;
+        });
+        resultsCount.textContent = visible;
+        resultsRange.textContent = `Showing ${visible} of ${productCards.length} products`;
+    }
+
+    function updateActiveMenu(menu, selector, activeValue) {
+        menu.querySelectorAll(`[data-${selector}]`).forEach(button => {
+            if (button.dataset[selector] === activeValue) {
+                button.classList.add('bg-primary', 'text-on-primary');
+            } else {
+                button.classList.remove('bg-primary', 'text-on-primary');
+            }
+        });
+    }
+
+    function setSkinType(value, label) {
+        selectedSkin = value;
+        skinToggle.querySelector('.dropdown-label').textContent = label;
+        updateActiveMenu(skinMenu, 'skin', value);
+        applyFilters();
+    }
+
+    function setIngredient(value, label) {
+        selectedIngredient = value;
+        ingredientToggle.querySelector('.dropdown-label').textContent = label;
+        updateActiveMenu(ingredientMenu, 'ingredient', value);
+        applyFilters();
+    }
+
+    skinMenu.querySelectorAll('[data-skin]').forEach(button => {
+        button.addEventListener('click', function() {
+            setSkinType(this.dataset.skin, this.textContent.trim());
+            closeMenus();
+        });
+    });
+
+    ingredientMenu.querySelectorAll('[data-ingredient]').forEach(button => {
+        button.addEventListener('click', function() {
+            setIngredient(this.dataset.ingredient, this.textContent.trim());
+            closeMenus();
+        });
+    });
+
+    skinToggle.addEventListener('click', function() {
+        toggleMenu(skinMenu, skinToggle);
+    });
+
+    ingredientToggle.addEventListener('click', function() {
+        toggleMenu(ingredientMenu, ingredientToggle);
+    });
+
+    document.addEventListener('click', function(event) {
+        if (!skinToggle.contains(event.target) && !skinMenu.contains(event.target) && !ingredientToggle.contains(event.target) && !ingredientMenu.contains(event.target)) {
+            closeMenus();
+        }
+    });
+
+    applyFilters();
+})();
+</script>
 </body></html>

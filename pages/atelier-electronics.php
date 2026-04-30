@@ -160,10 +160,10 @@
                     </div>
                 </div>
 
-                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
+                <div class="product-card bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-id="201" data-name="Core Hub Ultra" data-price="299" data-image="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Smart home hub" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-action="add-to-cart">
                             <span class="material-symbols-outlined text-primary">add_circle</span>
                         </button>
                     </div>
@@ -174,16 +174,16 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$299.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
+                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors" data-action="add-to-cart">
                             <span class="material-symbols-outlined">shopping_cart</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
+                <div class="product-card bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-id="202" data-name="Pulse Pro Band" data-price="189" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Wearable device" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-action="add-to-cart">
                             <span class="material-symbols-outlined text-primary">add_circle</span>
                         </button>
                     </div>
@@ -194,7 +194,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$189.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
+                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors" data-action="add-to-cart">
                             <span class="material-symbols-outlined">shopping_cart</span>
                         </button>
                     </div>
@@ -217,10 +217,10 @@
                     </div>
                 </div>
 
-                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
+                <div class="product-card bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-id="203" data-name="Sonic Array 5" data-price="650" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Desktop speakers" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-action="add-to-cart">
                             <span class="material-symbols-outlined text-primary">add_circle</span>
                         </button>
                     </div>
@@ -231,7 +231,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$650.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
+                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors" data-action="add-to-cart">
                             <span class="material-symbols-outlined">shopping_cart</span>
                         </button>
                     </div>

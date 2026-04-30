@@ -10,9 +10,9 @@
 <button class="text-[#003345] dark:text-[#bfe8ff] hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-full transition-all scale-102 duration-200 ease-in-out">
 <span class="material-symbols-outlined">person</span>
 </button>
-<a class="text-[#003345] dark:text-white border-b-2 border-[#904d00] pb-1 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-t-lg transition-all scale-102 duration-200 ease-in-out relative" href="/cart">
+<a id="cart-link" class="text-[#003345] dark:text-white border-b-2 border-[#904d00] pb-1 hover:bg-slate-50 dark:hover:bg-slate-800 p-2 rounded-t-lg transition-all scale-102 duration-200 ease-in-out relative" href="/cart">
 <span class="material-symbols-outlined">shopping_cart</span>
-<span class="absolute -top-1 -right-1 bg-secondary text-on-secondary text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">3</span>
+<span id="cart-count" class="absolute -top-1 -right-1 bg-secondary text-on-secondary text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full"></span>
 </a>
 </div>
 </div>

@@ -144,11 +144,11 @@
         </section>
 
         <section class="max-w-7xl mx-auto px-8 py-16 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="md:col-span-2 md:row-span-2 group">
+            <div class="product-card md:col-span-2 md:row-span-2 group" data-id="301" data-name="The Saharan Nomad Robe" data-price="420" data-image="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80">
                 <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
                     <img alt="Editorial look" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80" />
                     <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-white text-xs font-bold uppercase tracking-widest">Masterpiece</div>
-                    <button class="absolute bottom-6 right-6 w-14 h-14 bg-secondary text-white rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <button class="absolute bottom-6 right-6 w-14 h-14 bg-secondary text-white rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-action="add-to-cart">
                         <span class="material-symbols-outlined">add_shopping_cart</span>
                     </button>
                 </div>
@@ -166,10 +166,10 @@
                 </div>
             </div>
 
-            <div class="group">
+            <div class="product-card group" data-id="302" data-name="Veldt Tailored Vest" data-price="185" data-image="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
                     <img alt="Linen vest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-action="add-to-cart">
                         <span class="material-symbols-outlined text-sm">shopping_bag</span>
                     </button>
                 </div>
@@ -182,10 +182,10 @@
                 </div>
             </div>
 
-            <div class="group">
+            <div class="product-card group" data-id="303" data-name="Bogolan Wrap Skirt" data-price="210" data-image="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
                     <img alt="Wrap skirt" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-action="add-to-cart">
                         <span class="material-symbols-outlined text-sm">shopping_bag</span>
                     </button>
                 </div>
@@ -213,10 +213,10 @@
                 </div>
             </div>
 
-            <div class="group">
+            <div class="product-card group" data-id="305" data-name="Kwara Bead Sandals" data-price="130" data-image="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
                     <img alt="Leather sandals" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-action="add-to-cart">
                         <span class="material-symbols-outlined text-sm">shopping_bag</span>
                     </button>
                 </div>
@@ -229,10 +229,10 @@
                 </div>
             </div>
 
-            <div class="group">
+            <div class="product-card group" data-id="306" data-name="Axum Minimalist Shirt" data-price="160" data-image="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80">
                 <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
                     <img alt="Minimalist shirt" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <button class="absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-action="add-to-cart">
                         <span class="material-symbols-outlined text-sm">shopping_bag</span>
                     </button>
                 </div>

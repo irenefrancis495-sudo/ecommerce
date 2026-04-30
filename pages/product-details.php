@@ -62,18 +62,22 @@ if (!$product) {
             const item = {
                 id: <?= json_encode($product->id) ?>,
                 name: <?= json_encode($product->name) ?>,
-                price: <?= json_encode($product->price) ?>,
-                qty: 1
+                price: <?= json_encode($product->price) ?>
             };
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            const existing = cart.find(entry => entry.id === item.id);
-            if (existing) {
-                existing.qty += 1;
+            if (typeof addToCart === 'function') {
+                addToCart(item);
             } else {
-                cart.push(item);
+                const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                const existing = cart.find(entry => entry.id === item.id);
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    cart.push({ ...item, qty: 1 });
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                if (typeof updateCartCount === 'function') updateCartCount();
+                alert(item.name + ' added to cart');
             }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            alert(item.name + ' added to cart');
         });
     </script>
 </body>
