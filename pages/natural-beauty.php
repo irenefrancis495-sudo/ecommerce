@@ -262,7 +262,6 @@
     </section>
 </main>
 
-<?php include __DIR__ . '/../components/ui/footer.php'; ?>
 <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="/js/app.js"></script>
 
@@ -345,8 +344,6 @@
         </div>
     </div>
 </main>
-
-<?php include __DIR__ . '/../components/ui/footer.php'; ?>
 
 <script>
 function addToCart(productName, price) {

@@ -53,6 +53,6 @@ $orders = [];
             </section>
         <?php endif; ?>
     </main>
-    <?php include __DIR__ . '/../partials/footer.php'; ?>
+    <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 </body>
 </html>
