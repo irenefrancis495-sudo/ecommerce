@@ -1,97 +1,11 @@
-<!DOCTYPE html>
+<?php
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header('Location: /login');
+    exit;
+}
+?>
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Mpemba Admin | Marketplace Controller</title>
-<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;700;800;900&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script id="tailwind-config">
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            "colors": {
-                    "on-secondary": "#ffffff",
-                    "surface-container": "#edeef0",
-                    "on-error-container": "#93000a",
-                    "tertiary": "#705d00",
-                    "secondary-container": "#ffa454",
-                    "surface-variant": "#e1e2e5",
-                    "on-secondary-fixed-variant": "#6e3900",
-                    "on-background": "#191c1e",
-                    "tertiary-fixed-dim": "#e9c400",
-                    "outline-variant": "#c0c7cd",
-                    "surface-dim": "#d9dadc",
-                    "error-container": "#ffdad6",
-                    "on-primary-fixed-variant": "#044d65",
-                    "primary-container": "#004b63",
-                    "surface": "#f8f9fb",
-                    "surface-container-lowest": "#ffffff",
-                    "on-tertiary": "#ffffff",
-                    "on-tertiary-fixed": "#221b00",
-                    "surface-container-low": "#f2f4f6",
-                    "on-secondary-container": "#713b00",
-                    "inverse-surface": "#2e3133",
-                    "on-primary-container": "#83bad6",
-                    "on-error": "#ffffff",
-                    "tertiary-fixed": "#ffe16d",
-                    "on-tertiary-container": "#4c3f00",
-                    "primary-fixed-dim": "#96ceeb",
-                    "tertiary-container": "#c9a900",
-                    "inverse-on-surface": "#f0f1f3",
-                    "primary-fixed": "#bfe8ff",
-                    "surface-tint": "#2a657e",
-                    "primary": "#003345",
-                    "error": "#ba1a1a",
-                    "on-primary": "#ffffff",
-                    "surface-container-high": "#e7e8ea",
-                    "secondary-fixed-dim": "#ffb77d",
-                    "on-surface": "#191c1e",
-                    "secondary": "#904d00",
-                    "on-secondary-fixed": "#2f1500",
-                    "surface-bright": "#f8f9fb",
-                    "on-primary-fixed": "#001f2b",
-                    "secondary-fixed": "#ffdcc3",
-                    "surface-container-highest": "#e1e2e5",
-                    "on-surface-variant": "#40484c",
-                    "background": "#f8f9fb",
-                    "outline": "#71787d",
-                    "inverse-primary": "#96ceeb",
-                    "on-tertiary-fixed-variant": "#544600"
-            },
-            "borderRadius": {
-                    "DEFAULT": "0.25rem",
-                    "lg": "0.5rem",
-                    "xl": "0.75rem",
-                    "full": "9999px"
-            },
-            "fontFamily": {
-                    "headline": ["Epilogue"],
-                    "display": ["Epilogue"],
-                    "body": ["Manrope"],
-                    "label": ["Manrope"]
-            }
-          }
-        }
-      }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .editorial-shadow {
-            box-shadow: 0 32px 64px -12px rgba(25, 28, 30, 0.06);
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-        }
-    </style>
-</head>
-<body class="bg-surface font-body text-on-surface antialiased">
 <!-- SideNavBar Component -->
 <aside class="h-screen w-64 fixed left-0 top-0 z-50 flex flex-col py-6 bg-slate-50 dark:bg-slate-950 font-epilogue font-bold text-sm tracking-tight">
 <div class="px-6 mb-10 flex items-center gap-3">
@@ -307,7 +221,7 @@
 </div>
 </section>
 </main>
-</body></html>
+
       <div class="panel">
         <h2>Top Selling</h2>
         <ul class="list">
@@ -343,5 +257,4 @@
 
   </div>
   <script>window.__ADMIN_API = '/Mpemba/api/admin_data.php';</script>
-</body>
-</html>
+
