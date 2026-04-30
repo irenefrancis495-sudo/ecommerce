@@ -3,6 +3,12 @@
 require_once __DIR__ . '/utils/Router.php';
 session_start();
 
+$path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+if (strpos($path, 'admin') === 0) {
+    \Mpemba\Utils\Router::load();
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 
