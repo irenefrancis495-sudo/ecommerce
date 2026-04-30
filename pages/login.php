@@ -1,38 +1,130 @@
+<?php include __DIR__ . '/../components/ui/navbar.php'; ?>
 
-<section class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form id="loginForm">
-            <div class="mb-4">
-                <label class="block text-gray-700">Username</label>
-                <input type="text" id="username" class="w-full px-3 py-2 border rounded-lg" required>
+<main class="pt-32 pb-20 max-w-3xl mx-auto px-6">
+    <section class="bg-slate-50 rounded-[2rem] shadow-2xl overflow-hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-6">
+            <div class="bg-[url('https://images.unsplash.com/photo-1517502166878-35c93a0072bb?w=1200&h=1200&fit=crop&crop=center')] bg-cover bg-center p-10 hidden lg:block">
+                <div class="h-full w-full rounded-[2rem] bg-gradient-to-br from-black/40 via-black/20 to-transparent p-8 flex flex-col justify-end">
+                    <p class="text-sm uppercase tracking-[0.35em] text-white mb-4">Welcome back</p>
+                    <h2 class="text-4xl font-extrabold text-white mb-4">Login to Mpemba</h2>
+                    <p class="text-slate-200 leading-relaxed">Access your curated favorites, continue shopping, and manage your cart with a faster checkout experience.</p>
+                </div>
             </div>
-            <div class="mb-6">
-                <label class="block text-gray-700">Password</label>
-                <input type="password" id="password" class="w-full px-3 py-2 border rounded-lg" required>
-            </div>
-            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Login</button>
-        </form>
-        <p class="mt-4 text-center">Don't have an account? <a href="/register" class="text-blue-500">Register</a></p>
-    </div>
-</section>
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
 
-            const response = await fetch('/api.php/login', {
+            <div class="p-10 bg-white">
+                <div class="max-w-md mx-auto">
+                    <p class="text-sm uppercase tracking-[0.35em] text-primary font-semibold">Login</p>
+                    <h1 class="text-4xl font-black text-[#003345] mt-4">Welcome back</h1>
+                    <p class="mt-4 text-slate-600">Sign in to continue exploring natural beauty, lifestyle, and electronics from Mpemba Marketplace.</p>
+
+                    <form id="loginForm" class="mt-10 space-y-6">
+                        <div>
+                            <label for="username" class="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                            <input type="text" id="username" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Enter your username" required>
+                        </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                            <input type="password" id="password" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Minimum 6 characters" required>
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full rounded-3xl bg-primary px-6 py-3 text-white text-lg font-semibold hover:bg-primary/90 transition">Login</button>
+                    </form>
+
+                    <p class="mt-6 text-center text-slate-600">Don't have an account? <a href="/register" class="text-primary font-semibold hover:underline">Create one</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<?php include __DIR__ . '/../components/ui/footer.php'; ?>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (!username || password.length < 6) {
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Kosa',
+                    text: 'Tafadhali ingiza jina la mtumiaji halali na nenosiri lenye angalau herufi 6.',
+                    icon: 'error',
+                    confirmButtonText: 'Sawa'
+                });
+            } else {
+                alert('Tafadhali ingiza jina la mtumiaji halali na nenosiri lenye angalau herufi 6.');
+            }
+            return;
+        }
+
+        // Disable button and show loading
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Inapakia...';
+
+        try {
+            const response = await fetch('/api/auth.php?action=login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
             });
 
             const result = await response.json();
+
             if (result.success) {
-                window.location.href = '/home';
+                // Store user data in localStorage for client-side use
+                localStorage.setItem('user', JSON.stringify(result.user));
+
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Umefanikiwa!',
+                        text: 'Umeingia kwenye akaunti yako.',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    alert('Umefanikiwa kuingia!');
+                }
+
+                setTimeout(() => {
+                    window.location.href = '/home';
+                }, 1000);
             } else {
-                alert(result.error);
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        title: 'Imeshindikana',
+                        text: result.message,
+                        icon: 'error',
+                        confirmButtonText: 'Jaribu Tena'
+                    });
+                } else {
+                    alert(result.message);
+                }
             }
-        });
-    </script>
+        } catch (error) {
+            console.error('Login error:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    title: 'Kosa',
+                    text: 'Kuna tatizo la kiufundi. Tafadhali jaribu tena.',
+                    icon: 'error',
+                    confirmButtonText: 'Sawa'
+                });
+            } else {
+                alert('Kuna tatizo la kiufundi. Tafadhali jaribu tena.');
+            }
+        } finally {
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Ingia';
+        }
+    });
+</script>

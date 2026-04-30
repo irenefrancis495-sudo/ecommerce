@@ -206,9 +206,22 @@
 </label>
 <input class="w-full bg-white/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
 </div>
-<button class="w-full bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold font-headline mt-4 shadow-lg shadow-secondary/20 active:scale-95 transition-transform">
-                            Confirm and Save
-                        </button>
+<div id="payment-order-summary" class="rounded-3xl bg-white p-5 border border-surface-container-high shadow-sm mt-4">
+<h4 class="text-base font-semibold text-primary mb-3">Order Summary</h4>
+<div class="space-y-3 text-sm text-on-surface-variant">
+<div class="flex justify-between"><span>Items</span><span id="summary-count">0</span></div>
+<div class="flex justify-between"><span>Subtotal</span><span id="summary-subtotal">$0.00</span></div>
+<div class="flex justify-between"><span>Shipping</span><span id="summary-shipping">$0.00</span></div>
+<div class="flex justify-between"><span>Taxes</span><span id="summary-taxes">$0.00</span></div>
+</div>
+<div class="pt-4 border-t border-surface-container-high mt-4 flex justify-between items-center font-bold text-primary">
+<span>Total</span>
+<span id="summary-total">$0.00</span>
+</div>
+</div>
+<button id="payment-confirm-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold font-headline mt-4 shadow-lg shadow-secondary/20 active:scale-95 transition-transform" disabled>
+                    Confirm Payment
+                </button>
 </div>
 </div>
 <!-- Trust Badges -->
@@ -246,4 +259,59 @@
 </nav>
 <!-- Visual Texture Element (Asymmetric) -->
 <div class="fixed top-0 right-0 w-1/3 h-screen -z-10 bg-gradient-to-b from-primary-container/5 to-transparent pointer-events-none"></div>
+<script>
+    function getCart() {
+        return JSON.parse(localStorage.getItem('cart') || '[]');
+    }
+
+    function formatCurrency(amount) {
+        return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    function renderPaymentSummary() {
+        const cart = getCart();
+        const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+        const shipping = cart.length ? 24 : 0;
+        const taxes = subtotal * 0.07;
+        const total = subtotal + shipping + taxes;
+
+        document.getElementById('summary-count').textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+        document.getElementById('summary-subtotal').textContent = formatCurrency(subtotal);
+        document.getElementById('summary-shipping').textContent = formatCurrency(shipping);
+        document.getElementById('summary-taxes').textContent = formatCurrency(taxes);
+        document.getElementById('summary-total').textContent = formatCurrency(total);
+
+        const confirmButton = document.getElementById('payment-confirm-button');
+        if (confirmButton) {
+            confirmButton.disabled = cart.length === 0;
+        }
+    }
+
+    function getSelectedPaymentMethod() {
+        const radios = document.querySelectorAll('input[name="mobile_money"]');
+        const selected = Array.from(radios).find(r => r.checked);
+        if (!selected) return 'Mobile Money';
+        const label = selected.closest('label');
+        return label ? label.textContent.trim() : 'Mobile Money';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        renderPaymentSummary();
+
+        const confirmButton = document.getElementById('payment-confirm-button');
+        if (confirmButton) {
+            confirmButton.addEventListener('click', function() {
+                const cart = getCart();
+                if (cart.length === 0) {
+                    alert('Your cart is empty. Add items before confirming payment.');
+                    return;
+                }
+                const method = getSelectedPaymentMethod();
+                localStorage.removeItem('cart');
+                alert('Payment confirmed using ' + method + '. Thank you for your order!');
+                window.location.href = '/order-status';
+            });
+        }
+    });
+</script>
 </body></html>

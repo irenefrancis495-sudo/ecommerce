@@ -91,128 +91,76 @@
 <p class="font-body text-on-surface-variant">Review your curated artisan pieces before proceeding to checkout.</p>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-<!-- Left Column: Cart Items -->
-<div class="lg:col-span-2 space-y-8">
-<!-- Item 1 -->
-<div class="flex flex-col md:flex-row gap-6 p-6 bg-surface-container-lowest rounded-xl group transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
-<div class="w-full md:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-low">
-<img alt="Handcrafted Leather Bag" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Close-up of a premium tan leather handcrafted tote bag with intricate stitching on a neutral studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIMcmyAen0BQZazQ3B0edn0EqC47B_4iYwbC_i1Abt4pVDiv6v_h5-roKJEJVx4RYVD0y3VZX-Pnixus8cJgPZAsusgImGl_4ATZ3LsZU6xK5frFluF2vu9IC966DBaHYjkA-HGyJhXB40RtD0NOVChlF7b_ohs5gRGnv7l6aJG_UmlhexMVpPCAgPu1SAffWx26PY7NVEMNEf4mCmNho7gYafN3pP852vwVgyw9SL7bVii-Nfvj5y1_ljX6NGnNHlFIcMycvhbV0"/>
-</div>
-<div class="flex flex-col flex-grow justify-between">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline text-xl font-bold text-primary mb-1">Nomad Heritage Tote</h3>
-<p class="font-label text-sm text-on-surface-variant">Cognac Leather • One Size</p>
-</div>
-<button class="text-outline hover:text-error transition-colors">
-<span class="material-symbols-outlined">delete</span>
-</button>
-</div>
-<div class="flex justify-between items-end mt-6">
-<div class="flex items-center bg-surface-container-high rounded-full px-4 py-2 space-x-4">
-<button class="text-primary font-bold hover:scale-125 transition-transform">—</button>
-<span class="font-label font-semibold text-primary">1</span>
-<button class="text-primary font-bold hover:scale-125 transition-transform">+</button>
-</div>
-<span class="font-headline text-lg font-bold text-primary">$420.00</span>
-</div>
-</div>
-</div>
-<!-- Item 2 -->
-<div class="flex flex-col md:flex-row gap-6 p-6 bg-surface-container-lowest rounded-xl group transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
-<div class="w-full md:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-low">
-<img alt="Minimalist Vase" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Elegant matte white ceramic minimalist vase with sculptural curves on a soft grey surface with natural sunlight shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMFtCIKG8Cm4G_y7GN6PR1a99L7xrYWtPqua3IJppQYcH2RjWKITJK-vV8zfofGoOuSz-wxwqB7-mahj0f77IYMfvPdqhigykmKq-prsRwufupI5HCv_HO9rbjQx7NESE-i29pYAPkVNBUELuGRjj_VaFod57LtCQs69uW1rtqD9WxQZZYVj4ImxgaG9Zts0lKUQbzZ0x4dye06UgSZquumDfSScUVXCtJ53v-YdgPr_khhrtCr0EzFFAYew6a4f5zH55uQC48r5Y"/>
-</div>
-<div class="flex flex-col flex-grow justify-between">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline text-xl font-bold text-primary mb-1">Ethereal Form Vase</h3>
-<p class="font-label text-sm text-on-surface-variant">Matte Bone • Medium</p>
-</div>
-<button class="text-outline hover:text-error transition-colors">
-<span class="material-symbols-outlined">delete</span>
-</button>
-</div>
-<div class="flex justify-between items-end mt-6">
-<div class="flex items-center bg-surface-container-high rounded-full px-4 py-2 space-x-4">
-<button class="text-primary font-bold hover:scale-125 transition-transform">—</button>
-<span class="font-label font-semibold text-primary">2</span>
-<button class="text-primary font-bold hover:scale-125 transition-transform">+</button>
-</div>
-<span class="font-headline text-lg font-bold text-primary">$185.00</span>
-</div>
-</div>
-</div>
-<!-- Item 3 -->
-<div class="flex flex-col md:flex-row gap-6 p-6 bg-surface-container-lowest rounded-xl group transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]">
-<div class="w-full md:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-low">
-<img alt="Designer Headphones" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Luxury over-ear gold and black headphones with premium metal accents lying on a minimalist wooden desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCC0bf9iiI8emt4NRshS5ZvpvxOyxPfSWGCTjWYjyqiO1tLIO2M3BRcpOq-12ISpN04TMM9sn1sgHiOqakHIF_B4gykvqU5Zwb68n5Gm7tnAbJhW84QNNZTmRCF_0weEm9f75bstuvY4yjuno14JkUctaG9YAA7Mtre7RuwYrVawS5H7-gPtg95CxrCWz6nFLMkCYzTe5kkJdO6coOKbKJ3N-PZR5ULCCFIsO6MiiiExjq4mJo1mUrXc_FNlbAD8Is1VXEEIdqhexA"/>
-</div>
-<div class="flex flex-col flex-grow justify-between">
-<div class="flex justify-between items-start">
-<div>
-<h3 class="font-headline text-xl font-bold text-primary mb-1">Studio Acoustic Elite</h3>
-<p class="font-label text-sm text-on-surface-variant">Obsidian Gold • Wireless</p>
-</div>
-<button class="text-outline hover:text-error transition-colors">
-<span class="material-symbols-outlined">delete</span>
-</button>
-</div>
-<div class="flex justify-between items-end mt-6">
-<div class="flex items-center bg-surface-container-high rounded-full px-4 py-2 space-x-4">
-<button class="text-primary font-bold hover:scale-125 transition-transform">—</button>
-<span class="font-label font-semibold text-primary">1</span>
-<button class="text-primary font-bold hover:scale-125 transition-transform">+</button>
-</div>
-<span class="font-headline text-lg font-bold text-primary">$550.00</span>
-</div>
-</div>
-</div>
-</div>
-<!-- Right Column: Sidebar -->
-<aside class="space-y-6">
-<div class="p-8 bg-surface-container rounded-xl shadow-[0_32px_64px_-15px_rgba(25,28,30,0.04)] sticky top-32">
-<h2 class="font-headline text-2xl font-black text-primary mb-8 tracking-tighter">Order Summary</h2>
-<div class="space-y-4 mb-8">
-<div class="flex justify-between font-label text-on-surface-variant">
-<span>Subtotal</span>
-<span class="text-primary font-semibold">$1,340.00</span>
-</div>
-<div class="flex justify-between font-label text-on-surface-variant">
-<span>Estimated Shipping</span>
-<span class="text-primary font-semibold">$24.00</span>
-</div>
-<div class="flex justify-between font-label text-on-surface-variant">
-<span>Taxes</span>
-<span class="text-primary font-semibold">$110.55</span>
-</div>
-<div class="pt-4 border-t border-outline-variant/20 flex justify-between font-headline text-xl font-bold text-primary">
-<span>Total</span>
-<span>$1,474.55</span>
-</div>
-</div>
-<div class="space-y-4">
-<div class="relative">
-<input class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 font-label text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Promo Code" type="text"/>
-<button class="absolute right-2 top-2 px-3 py-1 bg-primary text-on-primary rounded-md text-xs font-bold font-headline uppercase tracking-widest hover:bg-primary-container transition-colors">Apply</button>
-</div>
-<button class="w-full bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-5 rounded-lg text-lg tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300">
-                            Proceed to Checkout
-                        </button>
-<p class="text-center font-label text-[10px] text-on-surface-variant/60 pt-4">
-                            FREE SHIPPING ON ORDERS OVER $2,000
-                        </p>
-</div>
-</div>
-<div class="p-6 bg-primary-container/10 rounded-xl flex items-start gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-<div>
-<h4 class="font-headline text-sm font-bold text-primary">Secure Transaction</h4>
-<p class="font-label text-xs text-on-primary-fixed-variant leading-relaxed">Your data is encrypted with enterprise-grade SSL certificates for your safety.</p>
-</div>
-</div>
-</aside>
+    <div class="lg:col-span-2 space-y-8">
+        <div class="rounded-3xl bg-white p-8 shadow-sm">
+            <h2 class="font-display text-3xl font-black text-primary mb-2">Your Cart</h2>
+            <p class="text-slate-600">Items you added to your cart are shown below. Update quantities or remove items before checkout.</p>
+        </div>
+
+        <div id="cart-items" class="space-y-6"></div>
+
+        <div id="cart-empty" class="hidden rounded-3xl bg-white p-8 text-center text-slate-500">
+            <p class="text-xl font-semibold text-slate-900">Your cart is currently empty.</p>
+            <p class="mt-3">Browse our catalog and start adding items to your cart.</p>
+            <a href="/products" class="inline-flex mt-5 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary/90 transition">Shop products</a>
+        </div>
+    </div>
+
+    <aside class="space-y-6">
+        <div class="p-8 bg-surface-container rounded-xl shadow-[0_32px_64px_-15px_rgba(25,28,30,0.04)] sticky top-32">
+            <h2 class="font-headline text-2xl font-black text-primary mb-6 tracking-tighter">Order Summary</h2>
+            <div class="space-y-4 mb-6">
+                <div class="flex justify-between font-label text-on-surface-variant">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="text-primary font-semibold">$0.00</span>
+                </div>
+                <div class="flex justify-between font-label text-on-surface-variant">
+                    <span>Shipping</span>
+                    <span id="cart-shipping" class="text-primary font-semibold">$0.00</span>
+                </div>
+                <div class="flex justify-between font-label text-on-surface-variant">
+                    <span>Taxes</span>
+                    <span id="cart-tax" class="text-primary font-semibold">$0.00</span>
+                </div>
+                <div class="pt-4 border-t border-outline-variant/20 flex justify-between font-headline text-xl font-bold text-primary">
+                    <span>Total</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="relative">
+                    <input class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 font-label text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Promo Code" type="text" />
+                    <button class="absolute right-2 top-2 px-3 py-1 bg-primary text-on-primary rounded-md text-xs font-bold font-headline uppercase tracking-widest hover:bg-primary-container transition-colors">Apply</button>
+                </div>
+                <button id="checkout-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-4 rounded-lg text-base tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+                    Proceed to Checkout
+                </button>
+                <p class="text-center font-label text-[10px] text-on-surface-variant/60 pt-4">FREE SHIPPING ON ORDERS OVER $2,000</p>
+            </div>
+        </div>
+
+        <div class="p-6 bg-primary-container/10 rounded-xl flex items-start gap-4">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+            <div>
+                <h4 class="font-headline text-sm font-bold text-primary">Secure Transaction</h4>
+                <p class="font-label text-xs text-on-primary-fixed-variant leading-relaxed">Your data is encrypted with enterprise-grade SSL certificates for your safety.</p>
+            </div>
+        </div>
+    </aside>
 </div>
 </main>
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+<script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/js/app.js"></script>
+<script>
+    // Initialize cart display when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof renderCart === 'function') {
+            renderCart();
+        }
+        if (typeof updateCartCount === 'function') {
+            updateCartCount();
+        }
+    });
+</script>
 </body></html>

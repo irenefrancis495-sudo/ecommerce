@@ -155,7 +155,7 @@
                         </div>
                         <div class="flex items-center justify-between border-t border-surface-container-low pt-6">
                             <span class="text-3xl font-black text-primary font-display">$449.00</span>
-                            <button class="bg-secondary px-8 py-3 rounded-xl text-white font-bold hover:scale-105 transition-transform shadow-lg shadow-secondary/20">Pre-Order</button>
+                            <button class="add-to-cart bg-secondary px-8 py-3 rounded-xl text-white font-bold hover:scale-105 transition-transform shadow-lg shadow-secondary/20" data-id="301" data-name="Aura V2 Adaptive Headphones" data-price="449">Add to Cart</button>
                         </div>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
                 <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Smart home hub" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="add-to-cart absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-id="302" data-name="Core Hub Ultra" data-price="299" aria-label="Add Core Hub Ultra to cart">
                             <span class="material-symbols-outlined text-primary">add_circle</span>
                         </button>
                     </div>
@@ -183,7 +183,7 @@
                 <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Wearable device" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="add-to-cart absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-id="303" data-name="Pulse Pro Band" data-price="189" aria-label="Add Pulse Pro Band to cart">
                             <span class="material-symbols-outlined text-primary">add_circle</span>
                         </button>
                     </div>
@@ -194,7 +194,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$189.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
+                        <button class="add-to-cart p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors" data-id="303" data-name="Pulse Pro Band" data-price="189">
                             <span class="material-symbols-outlined">shopping_cart</span>
                         </button>
                     </div>
@@ -220,7 +220,7 @@
                 <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Desktop speakers" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button class="add-to-cart absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-id="304" data-name="Sonic Array 5" data-price="650" aria-label="Add Sonic Array 5 to cart">
                             <span class="material-symbols-outlined text-primary">add_circle</span>
                         </button>
                     </div>
@@ -231,7 +231,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$650.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
+                        <button class="add-to-cart p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors" data-id="304" data-name="Sonic Array 5" data-price="650">
                             <span class="material-symbols-outlined">shopping_cart</span>
                         </button>
                     </div>
@@ -251,5 +251,7 @@
         </section>
     </main>
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+    <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="/js/app.js"></script>
 </body>
 </html>

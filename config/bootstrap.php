@@ -1,25 +1,17 @@
 <?php
+// Simple autoloader for Mpemba namespace
+spl_autoload_register(function ($class) {
+    // Convert namespace to file path
+    $class = str_replace('Mpemba\\', '', $class);
+    $class = str_replace('\\', '/', $class);
 
-use Doctrine\DBAL\DriverManager;
-use Dotenv\Dotenv;
+    $file = __DIR__ . '/../' . $class . '.php';
 
-require __DIR__ . '/../vendor/autoload.php';
+    if (file_exists($file)) {
+        require_once $file;
+    }
+});
 
-// Load .env file
-$dotenv = 'Dotenv\Dotenv'::createImmutable(__DIR__ . '/../');
-$dotenv->safeLoad();
-
-$connectionParams = [
-    'driver'   => $_ENV['DB_DRIVER'] ?? 'pdo_mysql',
-    'host'     => $_ENV['DB_HOST'] ?? '127.0.0.1',
-    'port'     => $_ENV['DB_PORT'] ?? '3306',
-    'dbname'   => $_ENV['DB_NAME'] ?? 'field_teaching',
-    'user'     => $_ENV['DB_USER'] ?? 'root',
-    'password' => $_ENV['DB_PASSWORD'] ?? '',
-];
-
-if (($connectionParams['driver'] ?? '') === 'pdo_sqlite') {
-    $connectionParams['path'] = __DIR__ . '/../' . ($_ENV['DB_PATH'] ?? 'db.sqlite');
-}
-
-$db = 'Doctrine\DBAL\DriverManager'::getConnection($connectionParams);
+// Start session
+session_start();
+?>

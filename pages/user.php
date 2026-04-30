@@ -1,13 +1,9 @@
 <?php
-require __DIR__ . '/../config/bootstrap.php';
+// Static user page - no database
 session_start();
-use Mpemba\Entity\Order;
 
-$userLogged = isset($_SESSION['user_id']);
+$userLogged = isset($_SESSION['user_id']) || localStorage.getItem('user'); // Check localStorage instead
 $orders = [];
-if ($userLogged) {
-    $orders = Order::findByUserId($_SESSION['user_id']);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

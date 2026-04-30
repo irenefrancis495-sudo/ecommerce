@@ -1,0 +1,47 @@
+[
+    {
+        "username": "admin",
+        "password": "$2y$12$g0pG5lSgawRkfKC.i\/DpFOC4zInoYxQNDf0xansJmuyBVhgt88626",
+        "email": "admin@mpemba.com",
+        "first_name": "Admin",
+        "last_name": "User",
+        "role": "admin",
+        "id": 1
+    },
+    {
+        "username": "john_doe",
+        "password": "$2y$12$v5JVDEM4Q80oqnns.fPS9u7qPTtXHSFteokcypftwSKz56BzQzBby",
+        "email": "john@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "role": "customer",
+        "id": 2
+    },
+    {
+        "username": "jane_smith",
+        "password": "$2y$12$v5JVDEM4Q80oqnns.fPS9u7qPTtXHSFteokcypftwSKz56BzQzBby",
+        "email": "jane@example.com",
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "role": "customer",
+        "id": 3
+    },
+    {
+        "id": 4,
+        "username": "testuser",
+        "email": "test@example.com",
+        "password": "$2y$12$q1B4uRVLbjBpvvh.paOTY.vH6FAOxTcMDE.IbqeHrNAWLV1YQM0G.",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer"
+    },
+    {
+        "id": 5,
+        "username": "sae",
+        "email": "dignatheobard960@gmail.com",
+        "password": "$2y$12$OfEkY85Xg2offZi654DCSeRR5jMiV\/mDYZ1F\/67e91rgFdxm3r\/oi",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer"
+    }
+]

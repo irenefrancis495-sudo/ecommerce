@@ -158,4 +158,14 @@ class Utility{
         echo '<script>Swal.fire(' . json_encode($options) . ');</script>';
     }
 
+    public static function getLoggedInUser()
+    {
+        if (isset($_SESSION['user'])) {
+            $_SESSION['user_name'];
+            $_SESSION['user_id'];
+            return $_SESSION['user'];
+        }
+        return null;
+    }
+
 }
