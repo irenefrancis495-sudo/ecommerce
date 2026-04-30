@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html class="light" lang="sw"><head>
+<html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;800;900&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
@@ -105,7 +105,7 @@
 <main class="max-w-7xl mx-auto px-6 py-12">
 <!-- Title Section -->
 <div class="mb-12">
-<h2 class="text-4xl md:text-5xl font-extrabold font-headline text-primary tracking-tight mb-4">Mbinu za Malipo</h2>
+<h2 class="text-4xl md:text-5xl font-extrabold font-headline text-primary tracking-tight mb-4">Payment Methods</h2>
 <div class="flex items-center gap-2 text-primary font-semibold">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
 <span class="text-sm font-label uppercase tracking-widest">100% Secured Payment</span>
