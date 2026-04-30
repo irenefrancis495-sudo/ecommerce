@@ -26,8 +26,8 @@ function addToCart(product) {
     // Show success notification
     if (typeof Swal !== 'undefined') {
         Swal.fire({
-            title: 'Imeongezwa kwenye kikapu!',
-            text: `${product.name} imeongezwa kwenye kikapu chako.`,
+            title: 'Added to cart!',
+            text: `${product.name} has been added to your cart.`,
             icon: 'success',
             timer: 2000,
             showConfirmButton: false,
@@ -37,7 +37,7 @@ function addToCart(product) {
             color: '#ffffff'
         });
     } else {
-        alert('Imeongezwa kwenye kikapu!');
+        alert('Added to cart!');
     }
 }
 

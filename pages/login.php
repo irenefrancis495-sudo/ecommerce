@@ -49,13 +49,13 @@
         if (!username || password.length < 6) {
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Kosa',
-                    text: 'Tafadhali ingiza jina la mtumiaji halali na nenosiri lenye angalau herufi 6.',
+                    title: 'Error',
+                    text: 'Please enter a valid username and password with at least 6 characters.',
                     icon: 'error',
-                    confirmButtonText: 'Sawa'
+                    confirmButtonText: 'OK'
                 });
             } else {
-                alert('Tafadhali ingiza jina la mtumiaji halali na nenosiri lenye angalau herufi 6.');
+                alert('Please enter a valid username and password with at least 6 characters.');
             }
             return;
         }
@@ -84,14 +84,14 @@
 
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
-                        title: 'Umefanikiwa!',
-                        text: 'Umeingia kwenye akaunti yako.',
+                        title: 'Success!',
+                        text: 'You have successfully logged into your account.',
                         icon: 'success',
                         timer: 2000,
                         showConfirmButton: false
                     });
                 } else {
-                    alert('Umefanikiwa kuingia!');
+                    alert('Login successful!');
                 }
 
                 setTimeout(() => {
@@ -100,10 +100,10 @@
             } else {
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
-                        title: 'Imeshindikana',
+                        title: 'Login Failed',
                         text: result.message,
                         icon: 'error',
-                        confirmButtonText: 'Jaribu Tena'
+                        confirmButtonText: 'Try Again'
                     });
                 } else {
                     alert(result.message);
@@ -113,18 +113,18 @@
             console.error('Login error:', error);
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
-                    title: 'Kosa',
-                    text: 'Kuna tatizo la kiufundi. Tafadhali jaribu tena.',
+                    title: 'Error',
+                    text: 'There was a technical problem. Please try again.',
                     icon: 'error',
-                    confirmButtonText: 'Sawa'
+                    confirmButtonText: 'OK'
                 });
             } else {
-                alert('Kuna tatizo la kiufundi. Tafadhali jaribu tena.');
+                alert('There was a technical problem. Please try again.');
             }
         } finally {
             // Re-enable button
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Ingia';
+            submitBtn.textContent = 'Login';
         }
     });
 </script>
