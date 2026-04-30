@@ -132,11 +132,11 @@
     {
         "name": "Organic Face Serum",
         "slug": "organic-face-serum",
-        "description": "Natural vitamin C face serum",
+        "description": "Natural vitamin C face serum with hyaluronic acid for radiant, glowing skin",
         "price": 49.99,
         "stock_quantity": 75,
         "category": "natural-beauty",
-        "image_url": "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop&crop=center",
+        "image_url": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=center",
         "featured": 0,
         "rating": 4.6,
         "status": "active",
@@ -145,11 +145,11 @@
     {
         "name": "Natural Shampoo",
         "slug": "natural-shampoo",
-        "description": "Organic shampoo for all hair types",
+        "description": "Organic botanical shampoo with aloe vera and essential oils for healthy hair",
         "price": 19.99,
         "stock_quantity": 120,
         "category": "natural-beauty",
-        "image_url": "https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=400&fit=crop&crop=center",
+        "image_url": "https://images.unsplash.com/photo-1585232351009-aa874380f189?w=400&h=400&fit=crop&crop=center",
         "featured": 0,
         "rating": 5,
         "status": "active",
@@ -158,7 +158,7 @@
     {
         "name": "Moisturizing Cream",
         "slug": "moisturizing-cream",
-        "description": "Hydrating cream for dry skin",
+        "description": "Hydrating face cream with shea butter and natural oils for deep nourishment",
         "price": 39.99,
         "stock_quantity": 90,
         "category": "natural-beauty",
@@ -167,6 +167,58 @@
         "rating": 3.5,
         "status": "active",
         "id": 13
+    },
+    {
+        "name": "Essential Oil Blend",
+        "slug": "essential-oil-blend",
+        "description": "Therapeutic essential oil blend with lavender and chamomile for relaxation",
+        "price": 24.99,
+        "stock_quantity": 85,
+        "category": "natural-beauty",
+        "image_url": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=400&fit=crop&crop=center",
+        "featured": 1,
+        "rating": 4.8,
+        "status": "active",
+        "id": 14
+    },
+    {
+        "name": "Natural Lip Balm",
+        "slug": "natural-lip-balm",
+        "description": "Beeswax lip balm with natural oils for soft, hydrated lips",
+        "price": 8.99,
+        "stock_quantity": 150,
+        "category": "natural-beauty",
+        "image_url": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=center",
+        "featured": 0,
+        "rating": 4.3,
+        "status": "active",
+        "id": 15
+    },
+    {
+        "name": "Herbal Face Mask",
+        "slug": "herbal-face-mask",
+        "description": "Clay face mask with herbal extracts for deep cleansing and detoxification",
+        "price": 16.99,
+        "stock_quantity": 95,
+        "category": "natural-beauty",
+        "image_url": "https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=400&h=400&fit=crop&crop=center",
+        "featured": 0,
+        "rating": 4.5,
+        "status": "active",
+        "id": 16
+    },
+    {
+        "name": "Botanical Hair Oil",
+        "slug": "botanical-hair-oil",
+        "description": "Nourishing hair oil blend with argan and jojoba oils for healthy, shiny hair",
+        "price": 22.99,
+        "stock_quantity": 110,
+        "category": "natural-beauty",
+        "image_url": "https://images.unsplash.com/photo-1585232351009-aa874380f189?w=400&h=400&fit=crop&crop=center",
+        "featured": 0,
+        "rating": 4.7,
+        "status": "active",
+        "id": 17
     },
     {
         "name": "Decorative Pillow",
@@ -179,7 +231,7 @@
         "featured": 0,
         "rating": 3.5,
         "status": "active",
-        "id": 14
+        "id": 18
     },
     {
         "name": "Wall Art Print",
@@ -192,7 +244,7 @@
         "featured": 0,
         "rating": 4.1,
         "status": "active",
-        "id": 15
+        "id": 19
     },
     {
         "name": "Desk Lamp",
@@ -205,6 +257,6 @@
         "featured": 0,
         "rating": 4.4,
         "status": "active",
-        "id": 16
+        "id": 20
     }
 ]

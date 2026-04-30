@@ -53,7 +53,7 @@
     <section class="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
         <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
             <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&h=750&fit=crop&crop=center" alt="Organic Face Serum">
+                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&crop=center" alt="Organic Face Serum">
                 <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
                     <span class="material-symbols-outlined text-slate-900">favorite</span>
                 </div>
@@ -70,7 +70,7 @@
                 <p class="text-sm leading-6 text-slate-600 mb-6">Hydrating serum with aloe vera and hyaluronic acid for radiant, healthy skin.</p>
                 <div class="flex items-center justify-between gap-4">
                     <span class="text-2xl font-bold text-slate-950">$49</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="501" data-name="Organic Face Serum" data-price="49">
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="11" data-name="Organic Face Serum" data-price="49">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         Add
                     </button>
@@ -80,7 +80,7 @@
 
         <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
             <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=600&h=750&fit=crop&crop=center" alt="Natural Shampoo">
+                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1585232351009-aa874380f189?w=600&h=750&fit=crop&crop=center" alt="Natural Shampoo">
                 <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
                     <span class="material-symbols-outlined text-slate-900">favorite</span>
                 </div>
@@ -94,10 +94,10 @@
                     </div>
                 </div>
                 <h2 class="text-xl font-semibold text-slate-950 mb-3">Natural Shampoo</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">A gentle botanical shampoo that strengthens and softens every strand.</p>
+                <p class="text-sm leading-6 text-slate-600 mb-6">Organic botanical shampoo with aloe vera and essential oils for healthy hair.</p>
                 <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$29</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="502" data-name="Natural Shampoo" data-price="29">
+                    <span class="text-2xl font-bold text-slate-950">$19</span>
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="12" data-name="Natural Shampoo" data-price="19">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         Add
                     </button>
@@ -121,10 +121,10 @@
                     </div>
                 </div>
                 <h2 class="text-xl font-semibold text-slate-950 mb-3">Moisturizing Cream</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Rich moisturizer built for dry skin with calming shea and chamomile.</p>
+                <p class="text-sm leading-6 text-slate-600 mb-6">Hydrating face cream with shea butter and natural oils for deep nourishment.</p>
                 <div class="flex items-center justify-between gap-4">
                     <span class="text-2xl font-bold text-slate-950">$39</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="503" data-name="Moisturizing Cream" data-price="39">
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="13" data-name="Moisturizing Cream" data-price="39">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         Add
                     </button>
@@ -134,24 +134,105 @@
 
         <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
             <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=750&fit=crop&crop=center" alt="Rose Geranium Oil">
+                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&h=750&fit=crop&crop=center" alt="Essential Oil Blend">
                 <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
                     <span class="material-symbols-outlined text-slate-900">favorite</span>
                 </div>
             </div>
             <div class="p-6">
                 <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-pink-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-pink-800">Essential Oils</span>
+                    <span class="rounded-full bg-purple-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-purple-800">Essential Oils</span>
                     <div class="flex items-center gap-1 text-sm text-slate-600">
                         <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.9</span>
+                        <span>4.8</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Rose Geranium Oil</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">A calming aromatherapy oil for uplifted, balanced skin and mood.</p>
+                <h2 class="text-xl font-semibold text-slate-950 mb-3">Essential Oil Blend</h2>
+                <p class="text-sm leading-6 text-slate-600 mb-6">Therapeutic essential oil blend with lavender and chamomile for relaxation.</p>
                 <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$27</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="504" data-name="Rose Geranium Oil" data-price="27">
+                    <span class="text-2xl font-bold text-slate-950">$24</span>
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="14" data-name="Essential Oil Blend" data-price="24">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        Add
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
+            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
+                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=600&h=750&fit=crop&crop=center" alt="Herbal Face Mask">
+                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
+                    <span class="material-symbols-outlined text-slate-900">favorite</span>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                    <span class="rounded-full bg-green-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-green-800">Skincare</span>
+                    <div class="flex items-center gap-1 text-sm text-slate-600">
+                        <span class="material-symbols-outlined text-yellow-500">star</span>
+                        <span>4.5</span>
+                    </div>
+                </div>
+                <h2 class="text-xl font-semibold text-slate-950 mb-3">Herbal Face Mask</h2>
+                <p class="text-sm leading-6 text-slate-600 mb-6">Clay face mask with herbal extracts for deep cleansing and detoxification.</p>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-2xl font-bold text-slate-950">$16</span>
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="15" data-name="Herbal Face Mask" data-price="16">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        Add
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
+            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
+                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1585232351009-aa874380f189?w=600&h=750&fit=crop&crop=center" alt="Botanical Hair Oil">
+                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
+                    <span class="material-symbols-outlined text-slate-900">favorite</span>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                    <span class="rounded-full bg-orange-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-orange-800">Hair Care</span>
+                    <div class="flex items-center gap-1 text-sm text-slate-600">
+                        <span class="material-symbols-outlined text-yellow-500">star</span>
+                        <span>4.7</span>
+                    </div>
+                </div>
+                <h2 class="text-xl font-semibold text-slate-950 mb-3">Botanical Hair Oil</h2>
+                <p class="text-sm leading-6 text-slate-600 mb-6">Nourishing hair oil blend with argan and jojoba oils for healthy, shiny hair.</p>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-2xl font-bold text-slate-950">$22</span>
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="17" data-name="Botanical Hair Oil" data-price="22">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        Add
+                    </button>
+                </div>
+            </div>
+        </article>
+
+        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
+            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
+                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&crop=center" alt="Natural Lip Balm">
+                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
+                    <span class="material-symbols-outlined text-slate-900">favorite</span>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                    <span class="rounded-full bg-rose-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-800">Lip Care</span>
+                    <div class="flex items-center gap-1 text-sm text-slate-600">
+                        <span class="material-symbols-outlined text-yellow-500">star</span>
+                        <span>4.3</span>
+                    </div>
+                </div>
+                <h2 class="text-xl font-semibold text-slate-950 mb-3">Natural Lip Balm</h2>
+                <p class="text-sm leading-6 text-slate-600 mb-6">Beeswax lip balm with natural oils for soft, hydrated lips.</p>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-2xl font-bold text-slate-950">$8</span>
+                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="16" data-name="Natural Lip Balm" data-price="8">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         Add
                     </button>
@@ -184,38 +265,6 @@
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="/js/app.js"></script>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
-        <!-- Product Card 1 -->
-        <div class="group bg-surface rounded-2xl shadow-sm border border-outline/50 overflow-hidden hover:shadow-lg transition-all duration-300">
-            <div class="aspect-square bg-gradient-to-br from-primary/5 to-secondary/5 relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop&crop=center" alt="Organic Face Serum" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                <button class="absolute top-4 right-4 w-10 h-10 bg-surface/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined text-lg">favorite</span>
-                </button>
-            </div>
-                    <span class="material-symbols-outlined text-lg">favorite</span>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="px-3 py-1 bg-tertiary-container text-on-tertiary-container text-xs font-medium rounded-full">Skincare</span>
-                    <div class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm text-yellow-500">star</span>
-                        <span class="text-sm font-medium">4.8</span>
-                        <span class="text-sm text-on-surface-variant">(124)</span>
-                    </div>
-                </div>
-                <h3 class="font-semibold text-lg mb-2">Organic Face Serum</h3>
-                <p class="text-on-surface-variant text-sm mb-4 line-clamp-2">Hydrating serum with aloe vera and hyaluronic acid for radiant, healthy skin.</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-2xl font-bold text-primary">$49.99</span>
-                    <button onclick="addToCart('Organic Face Serum', 49.99)" class="px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        </div>
 
         <!-- Product Card 2 -->
         <div class="group bg-surface rounded-2xl shadow-sm border border-outline/50 overflow-hidden hover:shadow-lg transition-all duration-300">
