@@ -101,7 +101,7 @@
 </div>
 <div class="lg:col-span-5 relative">
 <div class="aspect-[4/5] overflow-hidden rounded-xl bg-surface-container-low shadow-lg">
-<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="Minimalist sunlit living room with a single sculptural ceramic vase on a low oak coffee table, warm architectural shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEbZuDoWZdhIa5XSpztkcOB73aGoMa6hL3lfPXP0J6fKzUZLpfityZjnIokw1PwZroOH9Z12wYSqITVw52sd9dhYhDSFtM0g6X3UWG8euV23aivWC_YSkYVxm0EFlRKdB_O9Tyl1Wdgd-Ix_fh0Pq1gy1OwShaLweTcBze3YYrpQRIVeikRi2G-Yl0g0tW36b3HP2fwkVFW-bDkt1qGmH04DanUEBAI5Jty6JcmBV-ePxeQsygzDsOLsmxnaeio94RSPGMs74WN4I"/>
+                <img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=800&fit=crop&crop=center" alt="Minimalist living room with ceramic vase" />
 </div>
 <div class="absolute -bottom-6 -left-12 hidden lg:block bg-secondary p-8 rounded-xl text-on-secondary shadow-xl max-w-[200px]">
 <span class="text-xs uppercase tracking-widest font-label block mb-2 opacity-80">Season Focus</span>
@@ -135,7 +135,7 @@
 <!-- Product 1 -->
 <div class="flex flex-col group">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6 relative">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Close up of a textured off-white handcrafted ceramic bowl on a neutral stone surface with harsh sunlight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSnf1156EQdX2MH72GtxKaR5GYEDJQfVtGmQkDF7L2gBIsCBRtg23FDBi93o83UjVbYhRbcOJcvJzHTUY4S4zx-0WwWoHvoE_8yhH6aPHe-KVCMAfrq-62taD_HLJTRLN_PXGnFHPDWEGndUiVh_jZkXhVifT_EAu_Yy66zphBuFh_2WwFbPsZaEH_cnj4xfa4U7CiMtuawwA63L4ImQX-WtZUKW282vChv7tD2A_NnXqPL1h8F2w6p6zQXEPGO1bCBaLGp5TXtkc"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center" alt="Handcrafted ceramic bowl" />
 <div class="absolute top-4 right-4 bg-white/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold">Limited Edition</div>
 </div>
 <div class="flex justify-between items-start">
@@ -153,7 +153,7 @@
 <!-- Product 2 (Large Vertical) -->
 <div class="flex flex-col group lg:row-span-2">
 <div class="aspect-[3/4] bg-surface-container-lowest overflow-hidden mb-6">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Tall minimalist wooden floor lamp with a linen shade standing in a bright corner of a modern apartment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8iMQdPeNzngKnnZ9L-mvOxi5YZ-N1EI77iq3Adbcky-fPeSyvkcJvaSvltyxqRptuKiX5olJ1xHpc7CiMeABOAQqCmaipS-4CTSXEVCBUehcRZLWKYzdWpu_ZnmFU5GufYMlVx1LuuK2b-dG3souZyxzvQXBKsVmQ0dM0VLkAFfUPW2DNELk4QcAgBR2g1KKSQvK1fn1Mj9wofqB6Vj506iUNOAjtk_DFErD2bDfLAijItNqhA3KKBlD7hIN7R3FhHHNBE17JDbg"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=center" alt="Minimalist wooden floor lamp" />
 </div>
 <div class="flex justify-between items-start">
 <div>
@@ -170,7 +170,7 @@
 <!-- Product 3 -->
 <div class="flex flex-col group">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Sleek black architectural chair with thin metal legs in an empty white gallery space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8jRBAgshCijL0zURjxWBNe5Lhm_rayTTZNCLLMpAPXw5St9KZxtP6J-mbDJl2ANNt57n8u2gN0TKOp77hwwqXVGeXCiX2we4hPB5CVGeoo0DPJNZcrZ7vbGoO4Xh1EtlPrpw1DDxlQAh6h_Tl93rFlQINsVtdoMX5JcMP6xUiVtdACQU03Ha4_7y7yfmkENgY3Kx8SuPbc1fEuoX03ThPWuj-x4jUNpHd7bGo7ckLssQct8tV06uYwVEx4GoOGshrFxrteUkNtwQ"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=600&fit=crop&crop=center" alt="Architectural lounge chair" />
 </div>
 <div class="flex justify-between items-start">
 <div>
@@ -186,7 +186,7 @@
 <!-- Product 4 -->
 <div class="flex flex-col group">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6 relative">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Set of three organic-shaped clay bud vases in shades of terracotta and cream on a minimalist shelf" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQWIYoesf9Robt2M2KHFsPQIleAMoJ8MjQPcVDQT7tvXwAvmM0b4KcNCnQYUQT7R7oj6peBtfzQvPj4YZz7jsNg3st03ZNRBocaC-cbGoHkDdvYybXzqSQEiCQneWKSzohDmwW9CvudV5dbetXfjU3cQ1AcJ2v71FH1xn5LepnvwC7BhLoKgouQI8qjgzyWabWAotjbE92iF4-X49OwT--V1fFCRELObYJWjdq-XraMTysT6epLxVcVibPqg5o8FcE508E_xGqSTg"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center" alt="Clay bud vases" />
 </div>
 <div class="flex justify-between items-start">
 <div>
@@ -199,7 +199,7 @@
 <!-- Product 5 -->
 <div class="flex flex-col group">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6">
-<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Detail of a minimalist linen throw blanket with raw edges draped over a wooden bench" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcLfop4v1vFwsaydNLMoBV-wyTt5Cfr7eX4-sJOLKDcxO_OMTLfYc3A73vb2fguUzcZIwUieQLkY0c5fpntM93QEEjVS4HUb9-XMEosFwTkn7IDIBP_6Q7ScChM1gVrEJ-fd8dYU2VC24uyHorMqXxSUIJXH9u3kGiGhbyWaXWeGcdadMYamSvC9PKDQSd1dtozGsJtJ9u8fW6Zg_-avglYufExDlJpMijotDbYNttxy8tsB8ZPG_q8Md6tfwys4OQQJ6n0pBF_vQ"/>
+                <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1585399363000-c9ffd4e4b308?w=600&h=600&fit=crop&crop=center" alt="Linen throw blanket" />
 </div>
 <div class="flex justify-between items-start">
 <div>
@@ -221,7 +221,7 @@
 <button class="px-10 py-4 bg-secondary text-white font-bold rounded-lg hover:scale-105 transition-all shadow-lg">Book Studio Tour</button>
 </div>
 <div class="w-full md:w-1/3 aspect-square rounded-full overflow-hidden border-8 border-white/10 relative z-10">
-<img class="w-full h-full object-cover" data-alt="Interior designer looking at architectural blueprints and ceramic samples in a sun-drenched minimalist studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5A7M1sW9q4AhHx8_ylgxavsxo70Q3Yw2fcfqikGW5XZGlipjDFZqc7R51tmQLaHMjsxi0BkpZ2aFCvLCkaFVBgwgtq60jebqCqPNgKPqFKvyaGc3VzXx6puAJrsMmcRhmzWPBcBCf6lCP_Y_arRS7J52XHJakOxexYdlEu8R4WZuvgw3S2xLUe6wTNbA8P25-fsCgQTc55nDkKL855wGJdWTjDXpCyOjmwPtcHZ7J2d8R3ldBGnCHMwC89015Kp-HRQt-kxFBLAc"/>
+<img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1494526585095-c41746248156?w=800&h=800&fit=crop&crop=center" alt="Interior designer with blueprints" />
 </div>
 <!-- Abstract Texture Background -->
 <div class="absolute -right-20 -top-20 w-96 h-96 bg-secondary/10 rounded-full blur-3xl"></div>
