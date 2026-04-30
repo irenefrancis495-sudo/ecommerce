@@ -1,0 +1,42 @@
+[
+    {
+        "name": "Atelier Electronics",
+        "slug": "atelier-electronics",
+        "description": "Premium electronic devices and gadgets",
+        "sort_order": 0,
+        "status": "active",
+        "id": 1
+    },
+    {
+        "name": "Heritage Fashion",
+        "slug": "heritage-fashion",
+        "description": "Traditional and modern fashion items",
+        "sort_order": 0,
+        "status": "active",
+        "id": 2
+    },
+    {
+        "name": "Lifestyle Essentials",
+        "slug": "lifestyle-essentials",
+        "description": "Daily essentials for modern living",
+        "sort_order": 0,
+        "status": "active",
+        "id": 3
+    },
+    {
+        "name": "Natural Beauty",
+        "slug": "natural-beauty",
+        "description": "Natural and organic beauty products",
+        "sort_order": 0,
+        "status": "active",
+        "id": 4
+    },
+    {
+        "name": "Sanctuary Home",
+        "slug": "sanctuary-home",
+        "description": "Home decor and furniture",
+        "sort_order": 0,
+        "status": "active",
+        "id": 5
+    }
+]

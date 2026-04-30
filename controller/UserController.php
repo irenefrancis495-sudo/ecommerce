@@ -1,56 +1,87 @@
 <?php
 namespace Mpemba\Controller;
 
-use Mpemba\Entity\User;
+use Mpemba\Utils\Database;
 
 class UserController {
-    public static function login() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $user = User::authenticate($data['username'], $data['password']);
-        if ($user) {
-            session_start();
-            $_SESSION['user_id'] = $user->id;
-            $_SESSION['username'] = $user->username;
-            $_SESSION['role'] = $user->role;
-            header('Content-Type: application/json');
-            echo json_encode(['success' => true, 'user' => ['id' => $user->id, 'username' => $user->username, 'role' => $user->role]]);
-        } else {
-            http_response_code(401);
-            echo json_encode(['error' => 'Invalid credentials']);
-        }
+    private $db;
+
+    public function __construct() {
+        $this->db = new Database();
     }
 
-    public static function logout() {
-        session_start();
+    public function login($username, $password) {
+        $users = $this->db->getUsers();
+
+        foreach ($users as $user) {
+            if ($user['username'] === $username && password_verify($password, $user['password'])) {
+                // Start session and store user data
+                $_SESSION['user'] = [
+                    'id' => $user['id'],
+                    'username' => $user['username'],
+                    'email' => $user['email'],
+                    'first_name' => $user['first_name'],
+                    'last_name' => $user['last_name'],
+                    'role' => $user['role']
+                ];
+                return ['success' => true, 'message' => 'Login successful', 'user' => $_SESSION['user']];
+            }
+        }
+
+        return ['success' => false, 'message' => 'Invalid username or password'];
+    }
+
+    public function register($username, $email, $password, $firstName = '', $lastName = '') {
+        $users = $this->db->getUsers();
+
+        // Check if username already exists
+        foreach ($users as $user) {
+            if ($user['username'] === $username) {
+                return ['success' => false, 'message' => 'Username already exists'];
+            }
+            if ($user['email'] === $email) {
+                return ['success' => false, 'message' => 'Email already exists'];
+            }
+        }
+
+        // Create new user
+        $newUser = [
+            'id' => count($users) + 1,
+            'username' => $username,
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'role' => 'customer'
+        ];
+
+        $users[] = $newUser;
+        $this->db->saveUsers($users);
+
+        // Start session
+        $_SESSION['user'] = [
+            'id' => $newUser['id'],
+            'username' => $newUser['username'],
+            'email' => $newUser['email'],
+            'first_name' => $newUser['first_name'],
+            'last_name' => $newUser['last_name'],
+            'role' => $newUser['role']
+        ];
+
+        return ['success' => true, 'message' => 'Registration successful', 'user' => $_SESSION['user']];
+    }
+
+    public function logout() {
         session_destroy();
-        echo json_encode(['success' => true]);
+        return ['success' => true, 'message' => 'Logged out successfully'];
     }
 
-    public static function register() {
-        $data = json_decode(file_get_contents('php://input'), true);
-        $existingUser = User::findByUsername($data['username']);
-        if ($existingUser) {
-            http_response_code(409);
-            echo json_encode(['error' => 'Username already exists']);
-            return;
-        }
-        $user = new User(null, $data['username'], $data['password'], $data['email']);
-        $user->save();
-        session_start();
-        $_SESSION['user_id'] = $user->id;
-        $_SESSION['username'] = $user->username;
-        $_SESSION['role'] = $user->role;
-        header('Content-Type: application/json');
-        echo json_encode(['success' => true, 'user' => ['id' => $user->id, 'username' => $user->username, 'role' => $user->role]]);
+    public function getCurrentUser() {
+        return isset($_SESSION['user']) ? $_SESSION['user'] : null;
     }
 
-    public static function current() {
-        session_start();
-        if (isset($_SESSION['user_id'])) {
-            echo json_encode(['user' => ['id' => $_SESSION['user_id'], 'username' => $_SESSION['username'], 'role' => $_SESSION['role']]]);
-        } else {
-            http_response_code(401);
-            echo json_encode(['error' => 'Not authenticated']);
-        }
+    public function isLoggedIn() {
+        return isset($_SESSION['user']);
     }
 }
+?>

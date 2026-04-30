@@ -1,0 +1,18 @@
+[
+    {
+        "order_id": 1,
+        "product_id": 1,
+        "quantity": 1,
+        "unit_price": 129.99,
+        "subtotal": 129.99,
+        "id": 1
+    },
+    {
+        "order_id": 1,
+        "product_id": 5,
+        "quantity": 1,
+        "unit_price": 34.99,
+        "subtotal": 34.99,
+        "id": 2
+    }
+]

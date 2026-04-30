@@ -1,0 +1,14 @@
+[
+    {
+        "user_id": 2,
+        "order_number": "ORD-20260429-001",
+        "subtotal": 164.98,
+        "tax": 16.5,
+        "shipping_cost": 10,
+        "total": 191.48,
+        "status": "completed",
+        "payment_status": "paid",
+        "payment_method": "card",
+        "id": 1
+    }
+]

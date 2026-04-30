@@ -1,8 +1,6 @@
 <?php
 
-use Mpemba\Utils\Router;
-
-require __DIR__ . '/config/bootstrap.php';
+require_once __DIR__ . '/utils/Router.php';
 session_start();
 
 ?>
@@ -11,7 +9,7 @@ session_start();
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title><?=  Router::getPathName() ?></title>
+<title><?php echo htmlspecialchars(\Mpemba\Utils\Router::getPathName()); ?></title>
 <link href="styles.css" rel="stylesheet">
     <script src="assets/jquery/jquery.min.js"></script>
     <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
@@ -103,6 +101,6 @@ session_start();
     </style>
 </head>
 <body class="bg-surface font-body text-on-surface antialiased">
-<?php Router::load()?>;
+<?php \Mpemba\Utils\Router::load()?>;
 
 </body></html>

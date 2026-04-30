@@ -1,6 +1,5 @@
 <?php
-require __DIR__ . '/../config/bootstrap.php';
-
+// No backend required - static categories
 $categories = [
     'Heritage Fashion' => [],
     'Sanctuary Home' => [],
@@ -9,11 +8,11 @@ $categories = [
     'Lifestyle Essentials' => [],
 ];
 $categoryImages = [
-    'Heritage Fashion' => 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80',
-    'Sanctuary Home' => 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
-    'Atelier Electronics' => 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
-    'Natural Beauty' => 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80',
-    'Lifestyle Essentials' => 'https://images.unsplash.com/photo-1500217834117-5da57c2f3fb6?auto=format&fit=crop&w=1200&q=80',
+    'Heritage Fashion' => 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=800&fit=crop&crop=center',
+    'Sanctuary Home' => 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&h=800&fit=crop&crop=center',
+    'Atelier Electronics' => 'https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200&h=800&fit=crop&crop=center',
+    'Natural Beauty' => 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&h=800&fit=crop&crop=center',
+    'Lifestyle Essentials' => 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=800&fit=crop&crop=center',
 ];
 ?>
 <!DOCTYPE html>

@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-900">
-    <?php include 'partials/header.php'; ?>
+    <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
     <main class="max-w-5xl mx-auto px-6 py-10">
         <section class="rounded-3xl bg-white shadow-sm p-8">
             <h1 class="text-3xl font-bold mb-6">Order Status</h1>
@@ -37,6 +37,6 @@
             </table>
         </section>
     </main>
-    <?php include 'partials/footer.php'; ?>
+    <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 </body>
 </html>

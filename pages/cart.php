@@ -91,57 +91,76 @@
 <p class="font-body text-on-surface-variant">Review your curated artisan pieces before proceeding to checkout.</p>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-<!-- Left Column: Cart Items -->
-<div class="lg:col-span-2 space-y-8">
-<div id="cart-empty-message" class="p-8 rounded-3xl bg-white text-center text-on-surface-variant">
-Your cart is empty. Add products from the atelier to see them here.
-</div>
-<div id="cart-items" class="space-y-8"></div>
-</div>
-<!-- Right Column: Sidebar -->
-<aside class="space-y-6">
-<div class="p-8 bg-surface-container rounded-xl shadow-[0_32px_64px_-15px_rgba(25,28,30,0.04)] sticky top-32">
-<h2 class="font-headline text-2xl font-black text-primary mb-8 tracking-tighter">Order Summary</h2>
-<div class="space-y-4 mb-8">
-<div class="flex justify-between font-label text-on-surface-variant">
-<span>Subtotal</span>
-<span id="cart-subtotal" class="text-primary font-semibold">$0.00</span>
-</div>
-<div class="flex justify-between font-label text-on-surface-variant">
-<span>Estimated Shipping</span>
-<span class="text-primary font-semibold">$24.00</span>
-</div>
-<div class="flex justify-between font-label text-on-surface-variant">
-<span>Taxes</span>
-<span class="text-primary font-semibold">$110.55</span>
-</div>
-<div class="pt-4 border-t border-outline-variant/20 flex justify-between font-headline text-xl font-bold text-primary">
-<span>Total</span>
-<span id="cart-total">$0.00</span>
-</div>
-</div>
-<div class="space-y-4">
-<div class="relative">
-<input class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 font-label text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Promo Code" type="text"/>
-<button class="absolute right-2 top-2 px-3 py-1 bg-primary text-on-primary rounded-md text-xs font-bold font-headline uppercase tracking-widest hover:bg-primary-container transition-colors">Apply</button>
-</div>
-<button class="w-full bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-5 rounded-lg text-lg tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300">
-                            Proceed to Checkout
-                        </button>
-<p class="text-center font-label text-[10px] text-on-surface-variant/60 pt-4">
-                            FREE SHIPPING ON ORDERS OVER $2,000
-                        </p>
-</div>
-</div>
-<div class="p-6 bg-primary-container/10 rounded-xl flex items-start gap-4">
-<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
-<div>
-<h4 class="font-headline text-sm font-bold text-primary">Secure Transaction</h4>
-<p class="font-label text-xs text-on-primary-fixed-variant leading-relaxed">Your data is encrypted with enterprise-grade SSL certificates for your safety.</p>
-</div>
-</div>
-</aside>
+    <div class="lg:col-span-2 space-y-8">
+        <div class="rounded-3xl bg-white p-8 shadow-sm">
+            <h2 class="font-display text-3xl font-black text-primary mb-2">Your Cart</h2>
+            <p class="text-slate-600">Items you added to your cart are shown below. Update quantities or remove items before checkout.</p>
+        </div>
+
+        <div id="cart-items" class="space-y-6"></div>
+
+        <div id="cart-empty" class="hidden rounded-3xl bg-white p-8 text-center text-slate-500">
+            <p class="text-xl font-semibold text-slate-900">Your cart is currently empty.</p>
+            <p class="mt-3">Browse our catalog and start adding items to your cart.</p>
+            <a href="/products" class="inline-flex mt-5 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary/90 transition">Shop products</a>
+        </div>
+    </div>
+
+    <aside class="space-y-6">
+        <div class="p-8 bg-surface-container rounded-xl shadow-[0_32px_64px_-15px_rgba(25,28,30,0.04)] sticky top-32">
+            <h2 class="font-headline text-2xl font-black text-primary mb-6 tracking-tighter">Order Summary</h2>
+            <div class="space-y-4 mb-6">
+                <div class="flex justify-between font-label text-on-surface-variant">
+                    <span>Subtotal</span>
+                    <span id="cart-subtotal" class="text-primary font-semibold">$0.00</span>
+                </div>
+                <div class="flex justify-between font-label text-on-surface-variant">
+                    <span>Shipping</span>
+                    <span id="cart-shipping" class="text-primary font-semibold">$0.00</span>
+                </div>
+                <div class="flex justify-between font-label text-on-surface-variant">
+                    <span>Taxes</span>
+                    <span id="cart-tax" class="text-primary font-semibold">$0.00</span>
+                </div>
+                <div class="pt-4 border-t border-outline-variant/20 flex justify-between font-headline text-xl font-bold text-primary">
+                    <span>Total</span>
+                    <span id="cart-total">$0.00</span>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="relative">
+                    <input class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 font-label text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Promo Code" type="text" />
+                    <button class="absolute right-2 top-2 px-3 py-1 bg-primary text-on-primary rounded-md text-xs font-bold font-headline uppercase tracking-widest hover:bg-primary-container transition-colors">Apply</button>
+                </div>
+                <button id="checkout-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-4 rounded-lg text-base tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50" disabled>
+                    Proceed to Checkout
+                </button>
+                <p class="text-center font-label text-[10px] text-on-surface-variant/60 pt-4">FREE SHIPPING ON ORDERS OVER $2,000</p>
+            </div>
+        </div>
+
+        <div class="p-6 bg-primary-container/10 rounded-xl flex items-start gap-4">
+            <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+            <div>
+                <h4 class="font-headline text-sm font-bold text-primary">Secure Transaction</h4>
+                <p class="font-label text-xs text-on-primary-fixed-variant leading-relaxed">Your data is encrypted with enterprise-grade SSL certificates for your safety.</p>
+            </div>
+        </div>
+    </aside>
 </div>
 </main>
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+<script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="/js/app.js"></script>
+<script>
+    // Initialize cart display when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof renderCart === 'function') {
+            renderCart();
+        }
+        if (typeof updateCartCount === 'function') {
+            updateCartCount();
+        }
+    });
+</script>
 </body></html>
