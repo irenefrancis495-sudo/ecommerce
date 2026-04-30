@@ -1,6 +1,10 @@
 <?php
+<<<<<<< HEAD
 // Static user page - no database
 session_start();
+=======
+use Mpemba\Utils\Utility;
+>>>>>>> ab0625a (index)
 
 $userLogged = isset($_SESSION['user_id']) || localStorage.getItem('user'); // Check localStorage instead
 $orders = [];
