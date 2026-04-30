@@ -173,7 +173,7 @@
 <label class="flex items-center gap-3 cursor-pointer group">
 <input checked="" class="w-5 h-5 text-primary border-outline focus:ring-primary" name="mobile_money" type="radio"/>
 <div class="w-12 h-8 rounded bg-error/10 flex items-center justify-center p-1">
-<img alt="M-Pesa" class="h-full object-contain" data-alt="Official M-Pesa logo with green and red branding for mobile money services in East Africa" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAI7A-rN5eMyCT0UrP2vqjMkys-Qoo6EgB1P5VhPjIAgs0WXYtkru_JtT5BmjCTxNJB0UWIX38poHDzC6KV2wTGuIvB3ynvlRjI6F07nfw_EL5zAtjbS2S4-6cgvC2IcxbOqw-54fMDR2_07grrSVIR2iMwXsUQXTqh2ekOmtg6XDapBCTgjHspyhcKl-eD73C3eVFbBX6sG0b9NLx33tQt9p1eb0shBrmD8lXDIwhJ5EtcwMoDC9GQv93MNZj13bgInQUE7V-7w8E"/>
+<img alt="M-Pesa" class="h-full object-contain" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop&crop=center" />
 </div>
 <span class="font-bold text-primary">Vodacom M-Pesa</span>
 </label>

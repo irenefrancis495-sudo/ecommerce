@@ -92,7 +92,7 @@ html>
     inset: 0;
     opacity: 0.03;
     pointer-events: none;
-    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuCHiD42SsmJSk_ffqILKDEgiun515BcMj9QcJSkrEKSW3IjpZ8TyhjqppKlBjbDc88IJUXSnlmG-rZyOKwV0Z5wWUZgTNMC0V0U-CXo91HRQDUj6yVOWcsZXsK6wMqXgADLJZwJe19WTWBpO-MfSCNbcfnYybkJYilf95SVW3mH7HTmChqndRexdKQ5gbWDSm-1E-DU4FjmnZNJsGAhhdHLppakO9M0gNd4SHub-UN7GHW5wigg586jzdNz95bDVh7-i8a1XGBFIuw)
+    background-image: url(https://images.unsplash.com/photo-1473187983305-f615310e7daa?w=1600&h=1200&fit=crop&crop=center)
     }
 .loading-line {
     width: 80px;
@@ -154,7 +154,7 @@ html>
 <!-- Visual Anchor / Placeholder for high-end photography focus -->
 <div class="mt-12 group">
 <div class="relative w-48 h-64 md:w-56 md:h-72 bg-primary-container overflow-hidden rounded-xl shadow-2xl transition-transform duration-700 group-hover:scale-105">
-<img alt="High-end curated object" class="w-full h-full object-cover opacity-80 mix-blend-luminosity grayscale hover:grayscale-0 transition-all duration-1000" data-alt="Close-up of a minimalist ceramic vase with elegant curves resting on a stone surface with dramatic shadow and warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_Tu-r_ieIds_8gW2hVdL6zsU37uPkEMoUGrfnKAU_JPI90tzmP-97-c6RR8pVK9H-zPzUYYiHOV3MX7nBrA5L4-BCn9U9gArf4r-CQ3MfY_Jsuvxg70dMcacaQtfJktorNuVBGSSuMBGn2RQtHK7m1HrFuq85C6qm5Zv77ImGXFfZ9CQW1RdQPe763SK3ly7zbq0qNRTGxiKLhKQGSYG11nDcDmeMk5DHVMw6h5KY_XmZwn6-bnxE_wvFw80KkSZKFQtPgyzTgxw"/>
+<img alt="High-end curated object" class="w-full h-full object-cover opacity-80 mix-blend-luminosity grayscale hover:grayscale-0 transition-all duration-1000" src="https://images.unsplash.com/photo-1498079022511-d15614cb1c02?w=800&h=1100&fit=crop&crop=center" />
 <div class="absolute inset-0 bg-gradient-to-t from-primary/60 to-transparent"></div>
 </div>
 </div>

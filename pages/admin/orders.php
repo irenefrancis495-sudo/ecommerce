@@ -126,7 +126,7 @@
 <div class="mt-auto px-6 pt-6">
 <div class="p-4 rounded-xl bg-primary-container/10 border border-primary-container/5">
 <div class="flex items-center gap-3">
-<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="Close up of a professional administrator portrait with clean office background in soft daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_arWbWd_qhKiooDijWCzscscJTyNwnrkS2jWxR4CMfRObgghROJa1BIj172zykHl7fVsvlZ8NAXUCDNKsSQjLbHxiaJcEaZX27CJTPZs3wo-Kojv2RwrTdot_IU42F4yUp8K5Bup0LDM8f7BnY0-jY8FemmtCbGx3EctWIFJ-aSNt_dVIVhae-VvH_ChLxuZto6dGwGI36UYG4H5VVbgeFfRvrXrFPIr-2Ua4SsSxr38StrpjeucfFgPpLhyoqH5S_4PKDmbo-2I"/>
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=80&h=80&fit=crop&crop=center" />
 <div>
 <p class="text-xs font-bold text-cyan-950">Sarah Jenkins</p>
 <p class="text-[10px] text-cyan-800 opacity-70 uppercase tracking-tighter">Chief Controller</p>

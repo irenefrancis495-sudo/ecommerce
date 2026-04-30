@@ -41,7 +41,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             </a>
 </nav>
 <div class="px-6 pt-6 mt-auto bg-slate-100/50 dark:bg-slate-900/50 py-4 flex items-center gap-3">
-<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="Professional portrait of a corporate executive in a sharp navy suit against a clean studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZMFkawvOdjm2eveazvakP_D3FvzKnv0zI-0D4gXnBlAqkIRjy3rYthInGdtsqUS0YHKklcnYIBxWlLcO09MSuzg2FAEAvrW0LIC15_J5ZcFp4eJ2dpVpiPDX54s8kkbubYJn4vWT8EH51pJ7ZLIsTDqJPS45jgztmmTL94t_dh7CQY9yxzYqvzIdxctQ41aRFBZFBlZwS6OyESC0JqLlINRvIaCVT0YEllp91sGwvLBxsNHIS5_IMgBRv8PoLyrbRtxRw_g-JneE"/>
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&h=80&fit=crop&crop=center" />
 <div class="overflow-hidden">
 <p class="text-xs font-bold truncate">Admin Avatar</p>
 <p class="text-[10px] text-slate-500 truncate">Marketplace Controller</p>
@@ -68,7 +68,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700 mx-2"></div>
 <div class="flex items-center gap-3">
 <span class="font-manrope text-sm font-semibold text-cyan-900 dark:text-cyan-100">Administrator</span>
-<img alt="Administrator Profile" class="w-8 h-8 rounded-full" data-alt="Close up portrait of a senior system administrator with a confident expression in a bright modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRQSQxSDmwNnBk2a8IqCD_apFRr3w-U9wbPszOBlPALNCvA1EnykTTm4OXKMWxAfPbKDCzZavyOUoNG8eVZpNIX9L-uT6cwC_TQNUxUOtAyv9P8iAWwvxHrkDZhZHO_UdRtBNa2DhrPU8TF-IuerV4aZXB_xy2yP3fjKDKs0L-Qze-aF5ihWqH3yhxYb50mX_UAmM_V2dO3bTdQnm7XMKUINPe_pm3XHGMvzIyDmGPNaxie0ou7JveKzajbWCK1kPmUhvtHsc39X0"/>
+<img alt="Administrator Profile" class="w-8 h-8 rounded-full" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=80&h=80&fit=crop&crop=center" />
 </div>
 </div>
 </header>
@@ -208,7 +208,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 <!-- Secondary Focus Section -->
 <div class="bg-primary-container p-12 rounded-3xl overflow-hidden relative">
 <div class="absolute top-0 right-0 w-1/3 h-full overflow-hidden opacity-20">
-<img class="w-full h-full object-cover grayscale" data-alt="Monochrome overhead view of a diverse group of professionals collaborating around a large wooden table in a high-end office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPR1uuVR9MU0_2jUtc_Psr9RuQXyLAH3zU_Q0tQASuJ75I2X08tgkA5PGBG1sRa-D0QlaUSwEoX2bsnI0O3CU_1amtfNV9pyT9owF_33_EAO8XWlUCZTFDvXVstv14kenIyh6ID84cLeQhmo-S7UKUt-PB2Bw71T8yQesw0-gh1Y4Tajf07kMFIN9GtYUWyGhaXtfqLNU6uaN6CXeU-X9TiA8v2QCMUTTzcVT6sB5ORawfFeEg1dNkjAEOj4g3HCVIH_xOiXbrjlM"/>
+<img class="w-full h-full object-cover grayscale" src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?w=1200&h=800&fit=crop&crop=center" />
 </div>
 <div class="relative z-10 max-w-xl">
 <h3 class="text-3xl font-black font-display text-primary mb-4 leading-tight">Strategic Market Insights</h3>
