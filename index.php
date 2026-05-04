@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/utils/Router.php';
 session_start();
-
+$_GET['p'];
 ?>
 <!DOCTYPE html>
 
