@@ -61,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $ok = @file_put_contents($settingsFile, json_encode($settings, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     if ($ok === false) {
-        $flash = 'Settings hazijaweza kuhifadhiwa. Kagua ruhusa ya kuandika kwenye data folder.';
+        $flash = 'Settings could not be saved. Check write permissions in the data folder.';
         $flashType = 'error';
     } else {
-        $flash = 'Settings zimehifadhiwa kikamilifu.';
+        $flash = 'Settings have been saved successfully.';
     }
 }
 ?>
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="max-w-6xl mx-auto space-y-8">
       <div>
         <h2 class="text-3xl font-black text-primary tracking-tight">Settings Hub</h2>
-        <p class="text-on-surface-variant mt-1">Sanidi mfumo wa admin, notifications, na business preferences.</p>
+        <p class="text-on-surface-variant mt-1">Configure admin system, notifications, and business preferences.</p>
       </div>
 
       <?php if ($flash !== ''): ?>
