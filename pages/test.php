@@ -17,6 +17,6 @@
             <p class="text-slate-600">This page is available for system checks and simple functional tests.</p>
         </section>
     </main>
-    <?php include __DIR__ . '/../partials/footer.php'; ?>
+    <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 </body>
 </html>

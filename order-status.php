@@ -26,6 +26,6 @@
             </tbody>
         </table>
     </main>
-    <?php include 'partials/footer.php'; ?>
+    <?php include __DIR__ . '/components/ui/footer.php'; ?>
 </body>
 </html>

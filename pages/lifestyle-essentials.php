@@ -127,99 +127,178 @@
             </div>
         </section>
 
-        <section class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-12 gap-8">
-            <div class="md:col-span-8 group">
-                <div class="relative bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:shadow-md">
-                    <div class="grid md:grid-cols-2 h-full">
-                        <div class="p-10 flex flex-col justify-between">
-                            <div>
-                                <div class="flex items-center gap-2 mb-4">
-                                    <span class="px-3 py-1 bg-secondary-container/10 text-secondary font-label text-[10px] uppercase tracking-widest font-bold rounded-full">Editorial Choice</span>
-                                </div>
-                                <h3 class="text-3xl font-display font-bold text-primary mb-4 leading-tight">The Heritage Weekender Bag</h3>
-                                <p class="text-on-surface-variant font-body leading-relaxed mb-6">Full-grain vegetable-tanned leather, handcrafted for the modern traveler. A companion for life, not just for the trip.</p>
-                                <span class="text-2xl font-display font-semibold text-primary">$480.00</span>
-                            </div>
-                            <div class="mt-8">
-                                <button class="bg-gradient-to-r from-secondary to-secondary-container text-on-secondary px-8 py-3 rounded-lg font-label font-bold text-sm scale-100 hover:scale-102 transition-transform duration-200">Add to Atelier</button>
-                            </div>
-                        </div>
-                        <div class="relative h-96 md:h-full overflow-hidden">
-                            <img alt="Heritage leather bag" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" />
-                        </div>
-                    </div>
+        <!-- Product Grid - 3 items per row with enhanced styling -->
+        <section class="max-w-7xl mx-auto px-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Product 1: Heritage Leather Bag -->
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Heritage Leather Bag"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
                 </div>
-            </div>
-
-            <div class="md:col-span-4 group">
-                <div class="bg-surface-container-lowest rounded-xl p-6 h-full shadow-sm transition-all duration-300 hover:shadow-md">
-                    <div class="relative aspect-square mb-6 overflow-hidden rounded-lg bg-surface-container-low">
-                        <img alt="Luxury notebook" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" />
-                        <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm text-primary flex items-center justify-center hover:bg-secondary hover:text-white transition-colors">
-                            <span class="material-symbols-outlined text-lg">favorite</span>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Leather Goods</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Heritage Leather Bag</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Full-grain vegetable-tanned leather, handcrafted for the modern traveler.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline/20">
+                        <span class="text-xl font-bold text-primary">$480</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="401" data-name="Heritage Leather Bag" data-price="480" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
                         </button>
                     </div>
-                    <div>
-                        <span class="text-outline text-xs font-label uppercase tracking-widest mb-1 block">Atelier Stationery</span>
-                        <h4 class="text-lg font-display font-bold text-primary mb-2">Gilded Edge Archive Journal</h4>
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-display font-semibold text-primary">$45.00</span>
-                            <button class="text-secondary font-label text-sm font-bold hover:underline">Quick Shop</button>
-                        </div>
+                </div>
+            </div>
+
+            <!-- Product 2: Obsidian Scent Candle -->
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Obsidian & Driftwood Scent"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Home Care</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Obsidian & Driftwood</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Premium scented candle with rich woodsy and mineral notes for ambiance.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline/20">
+                        <span class="text-xl font-bold text-primary">$62</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="402" data-name="Obsidian & Driftwood Scent" data-price="62" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="md:col-span-4 group">
-                <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
-                    <div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-lg bg-surface-container-low">
-                        <img alt="Scented candle" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" />
+            <!-- Product 3: Pebble Wallet -->
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Slimline Pebble Wallet"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Daily Carry</span>
                     </div>
-                    <div>
-                        <span class="text-outline text-xs font-label uppercase tracking-widest mb-1 block">Home Atmosphere</span>
-                        <h4 class="text-lg font-display font-bold text-primary mb-2">Obsidian &amp; Driftwood Scent</h4>
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-display font-semibold text-primary">$62.00</span>
-                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors">
-                                <span class="material-symbols-outlined text-sm">add</span>
-                            </button>
-                        </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Pebble Wallet</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Minimalist leather wallet designed for everyday essentials and travel.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline/20">
+                        <span class="text-xl font-bold text-primary">$85</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="403" data-name="Slimline Pebble Wallet" data-price="85" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="md:col-span-4 group">
-                <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
-                    <div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-lg bg-surface-container-low">
-                        <img alt="Leather card holder" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1200&q=80" />
+            <!-- Product 4: Eclipse Eyewear -->
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Eclipse Frame Eyewear"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Accessories</span>
                     </div>
-                    <div>
-                        <span class="text-outline text-xs font-label uppercase tracking-widest mb-1 block">Daily Carry</span>
-                        <h4 class="text-lg font-display font-bold text-primary mb-2">Slimline Pebble Wallet</h4>
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-display font-semibold text-primary">$85.00</span>
-                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors">
-                                <span class="material-symbols-outlined text-sm">add</span>
-                            </button>
-                        </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Eclipse Frame</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Premium titanium frames with anti-glare coating and adjustable fit.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline/20">
+                        <span class="text-xl font-bold text-primary">$185</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="404" data-name="Eclipse Frame Eyewear" data-price="185" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="md:col-span-4 group">
-                <div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm transition-all duration-300 hover:shadow-md">
-                    <div class="relative aspect-[4/5] mb-6 overflow-hidden rounded-lg bg-surface-container-low">
-                        <img alt="Luxury glasses" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" />
+            <!-- Product 5: Archive Journal -->
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Gilded Edge Journal"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Stationery</span>
                     </div>
-                    <div>
-                        <span class="text-outline text-xs font-label uppercase tracking-widest mb-1 block">Accessories</span>
-                        <h4 class="text-lg font-display font-bold text-primary mb-2">Eclipse Frame Eyewear</h4>
-                        <div class="flex items-center justify-between">
-                            <span class="text-lg font-display font-semibold text-primary">$185.00</span>
-                            <button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-secondary transition-colors">
-                                <span class="material-symbols-outlined text-sm">add</span>
-                            </button>
-                        </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Archive Journal</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Luxury hardcover journal with gilded edges and premium paper.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline/20">
+                        <span class="text-xl font-bold text-primary">$45</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="405" data-name="Gilded Edge Archive Journal" data-price="45" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6: Travel Gear -->
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Premium Travel Kit"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Travel</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Premium Travel Kit</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Compact organizer set designed for efficient travel and daily use.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline/20">
+                        <span class="text-xl font-bold text-primary">$95</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="406" data-name="Premium Travel Kit" data-price="95" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
