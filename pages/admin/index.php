@@ -7,6 +7,7 @@ require_once __DIR__ . '/_notifications.php';
 
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
 $notificationCount = adminNotificationCount();
+$activePage = 'dashboard';
 ?>
 
 <style>
@@ -98,71 +99,12 @@ $notificationCount = adminNotificationCount();
 
 <!-- SideNavBar Component -->
 <div class="admin-shell relative z-10 lg:flex lg:items-start lg:gap-0">
-<aside class="admin-sidebar h-screen w-64 fixed left-0 top-0 surface-glass border-r border-white/40 flex flex-col p-4 z-50">
-    <div class="mb-8 px-2 pt-2">
-        <h1 class="text-teal-900 font-black tracking-tighter text-2xl">Mpemba Heritage</h1>
-        <p class="font-['Epilogue'] tracking-tight font-bold text-sm text-slate-500">Digital Atelier Console</p>
-    </div>
-    <nav class="flex-1 space-y-1.5 pr-1 soft-scroll overflow-y-auto">
-        <a class="bg-white/85 text-teal-900 font-bold rounded-xl shadow-sm shadow-slate-200/50 flex items-center gap-3 px-4 py-3 transition-all duration-200" href="/admin/index">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="font-['Epilogue'] tracking-tight">Dashboard</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/inventory">
-            <span class="material-symbols-outlined">inventory_2</span>
-            <span class="font-['Epilogue'] tracking-tight">Inventory</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/categories">
-            <span class="material-symbols-outlined">category</span>
-            <span class="font-['Epilogue'] tracking-tight">Categories</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/orders">
-            <span class="material-symbols-outlined">shopping_cart</span>
-            <span class="font-['Epilogue'] tracking-tight">Orders</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/customers">
-            <span class="material-symbols-outlined">group</span>
-            <span class="font-['Epilogue'] tracking-tight">Users</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/feedback">
-            <span class="material-symbols-outlined">chat</span>
-            <span class="font-['Epilogue'] tracking-tight">Feedback</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/messages">
-            <span class="material-symbols-outlined">mail</span>
-            <span class="font-['Epilogue'] tracking-tight">Messages</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/subscribers"><span class="material-symbols-outlined">mark_email_read</span><span class="font-['Epilogue'] tracking-tight">Subscribers</span></a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/reports">
-            <span class="material-symbols-outlined">analytics</span>
-            <span class="font-['Epilogue'] tracking-tight">Analytics</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/settings">
-            <span class="material-symbols-outlined">settings</span>
-            <span class="font-['Epilogue'] tracking-tight">Settings</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white/80 transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-xl" href="/admin/permissions">
-            <span class="material-symbols-outlined">admin_panel_settings</span>
-            <span class="font-['Epilogue'] tracking-tight">Permissions</span>
-        </a>
-    </nav>
-    <div class="mt-4 p-4 bg-white/80 border border-white/60 rounded-2xl space-y-2">
-        <a class="group w-full bg-gradient-to-r from-primary via-primary-container to-primary text-on-primary py-3.5 rounded-xl font-black tracking-wide uppercase text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/25 border border-primary/20 hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/35 transition-all duration-300" href="/admin/reports">
-            <span class="material-symbols-outlined text-base group-hover:rotate-90 transition-transform duration-300">add</span>
-            NEW REPORT
-            <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-white/20 border border-white/30">AI</span>
-        </a>
-        <a class="w-full bg-surface-container-high text-primary py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors" href="/admin/logout">
-            <span class="material-symbols-outlined text-sm">logout</span>
-            Logout
-        </a>
-    </div>
-</aside>
+<?php require_once __DIR__ . '/_sidebar.php'; ?>
 
 <!-- Main Content Area -->
 <main class="admin-main ml-64 min-h-screen w-full">
     <!-- TopNavBar Component -->
-    <header class="admin-topbar fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white/85 backdrop-blur-xl border-b border-white/70 flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
+    <header class="admin-topbar fixed top-0 left-64 right-0 h-16 bg-white/85 backdrop-blur-xl border-b border-white/70 flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
         <div class="flex items-center flex-1">
             <div class="relative w-full max-w-md">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>

@@ -7,6 +7,7 @@ require_once __DIR__ . '/_notifications.php';
 
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
 $notificationCount = adminNotificationCount();
+$activePage = 'categories';
 $file = __DIR__ . '/../../data/categories.json';
 
 function readCategories(string $path): array
@@ -130,30 +131,56 @@ if (isset($_GET['deleted'])) {
 ?>
 <style>
   .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24; }
+
+  body {
+    background:
+      radial-gradient(circle at 10% 0%, rgba(20, 184, 166, 0.08) 0%, transparent 30%),
+      radial-gradient(circle at 100% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 35%),
+      #f5f7fb;
+  }
+
+  .admin-shell { position: relative; }
+  .admin-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(circle at center, black, transparent 78%);
+    z-index: 0;
+  }
+
+  .surface-glass {
+    background: rgba(255, 255, 255, 0.74);
+    backdrop-filter: blur(16px);
+  }
+
+  .admin-sidebar {
+    border-right: 1px solid rgba(255, 255, 255, 0.45);
+    box-shadow: 0 24px 40px -32px rgba(15, 23, 42, 0.5);
+  }
+
+  .admin-topbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow: 0 12px 28px -24px rgba(15, 23, 42, 0.35);
+  }
+
+  .admin-main { width: calc(100% - 16rem); }
+  .admin-content { position: relative; z-index: 1; }
+
+  @media (max-width: 1024px) {
+    .admin-sidebar { position: static; width: 100%; height: auto; margin-bottom: 1rem; }
+    .admin-topbar { position: static; left: auto; right: auto; width: 100%; margin: 0 1rem 1rem; border-radius: 1rem; }
+    .admin-main { width: 100%; margin-left: 0; }
+    .admin-content { padding-top: 1.25rem; }
+  }
 </style>
 
-<div class="bg-background text-on-background min-h-screen">
-  <aside class="h-screen w-64 fixed left-0 top-0 bg-slate-50 flex flex-col p-4 z-50">
-    <div class="mb-10 px-2">
-      <h1 class="text-teal-900 font-black tracking-tighter text-2xl">Mpemba Heritage</h1>
-      <p class="font-['Epilogue'] tracking-tight font-bold text-sm text-slate-500">Digital Atelier Console</p>
-    </div>
-    <nav class="flex-1 space-y-1">
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/index"><span class="material-symbols-outlined">dashboard</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Dashboard</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/inventory"><span class="material-symbols-outlined">inventory_2</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Inventory</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 bg-white text-teal-900 font-bold rounded-lg shadow-sm shadow-slate-200/50 scale-102 transition-transform duration-200" href="/admin/categories"><span class="material-symbols-outlined">category</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Categories</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/orders"><span class="material-symbols-outlined">shopping_cart</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Orders</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/customers"><span class="material-symbols-outlined">group</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Users</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/feedback"><span class="material-symbols-outlined">chat</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/messages"><span class="material-symbols-outlined">mail</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Messages</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/subscribers"><span class="material-symbols-outlined">mark_email_read</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Subscribers</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports"><span class="material-symbols-outlined">analytics</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/settings"><span class="material-symbols-outlined">settings</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Settings</span></a>
-      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/permissions"><span class="material-symbols-outlined">admin_panel_settings</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Permissions</span></a>
-    </nav>
-  </aside>
+<div class="admin-shell bg-background text-on-background min-h-screen lg:flex lg:items-start lg:gap-0">
+  <?php require_once __DIR__ . '/_sidebar.php'; ?>
 
-  <header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
+  <header class="admin-topbar fixed top-0 left-64 right-0 h-16 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
     <h2 class="font-black text-primary text-xl tracking-tight">Category Editor</h2>
     <div class="flex items-center gap-6">
       <a class="relative text-slate-600 hover:text-amber-700 transition-colors" href="/admin/messages" title="Open notifications"><span class="material-symbols-outlined">notifications</span><?php if ($notificationCount > 0): ?><span class="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold"><?php echo $notificationCount > 99 ? '99+' : $notificationCount; ?></span><?php endif; ?></a>
@@ -164,7 +191,7 @@ if (isset($_GET['deleted'])) {
     </div>
   </header>
 
-  <main class="ml-64 pt-24 p-8 min-h-screen">
+  <main class="admin-main admin-content ml-64 pt-24 p-8 min-h-screen">
     <div class="max-w-6xl mx-auto space-y-6">
       <?php if ($flash !== ''): ?>
       <div class="px-4 py-3 rounded-xl <?php echo $flashType === 'error' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'; ?> text-sm font-semibold"><?php echo htmlspecialchars($flash); ?></div>
