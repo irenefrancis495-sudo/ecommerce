@@ -1,3 +1,33 @@
+<?php
+// Handle form submission
+$submitResult = null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
+    $name    = trim(htmlspecialchars($_POST['name']    ?? '', ENT_QUOTES, 'UTF-8'));
+    $email   = trim(htmlspecialchars($_POST['email']   ?? '', ENT_QUOTES, 'UTF-8'));
+    $subject = trim(htmlspecialchars($_POST['subject'] ?? '', ENT_QUOTES, 'UTF-8'));
+    $message = trim(htmlspecialchars($_POST['message'] ?? '', ENT_QUOTES, 'UTF-8'));
+
+    if (!$name || !$email || !$subject || !$message) {
+        $submitResult = ['success' => false, 'msg' => 'Please fill in all required fields.'];
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $submitResult = ['success' => false, 'msg' => 'Please enter a valid email address.'];
+    } else {
+        $file     = __DIR__ . '/../data/contact_messages.json';
+        $messages = json_decode(file_get_contents($file), true) ?: [];
+        $messages[] = [
+            'id'         => count($messages) + 1,
+            'name'       => $name,
+            'email'      => $email,
+            'subject'    => $subject,
+            'message'    => $message,
+            'status'     => 'new',
+            'created_at' => date('Y-m-d H:i:s'),
+        ];
+        file_put_contents($file, json_encode($messages, JSON_PRETTY_PRINT));
+        $submitResult = ['success' => true, 'msg' => 'Thank you, ' . $name . '! Your message has been received. We\'ll get back to you within 24 hours.'];
+    }
+}
+?>
 <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
 
 <main class="min-h-screen">
@@ -68,49 +98,48 @@
             <!-- Contact Form -->
             <div class="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-8 lg:p-12">
                 <h2 class="text-2xl font-black text-slate-900 mb-8">Send us a Message</h2>
-                <form class="grid gap-6" onsubmit="event.preventDefault();">
+                <form class="grid gap-6" method="POST" action="/contact">
+                    <input type="hidden" name="contact_form" value="1" />
                     <!-- Name -->
                     <div class="grid gap-2">
                         <label class="text-sm font-semibold text-slate-900">Full Name</label>
-                        <input type="text" placeholder="John Doe" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary" />
+                        <input type="text" name="name" value="<?= htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="John Doe" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary" />
                     </div>
 
                     <!-- Email -->
                     <div class="grid gap-2">
                         <label class="text-sm font-semibold text-slate-900">Email Address</label>
-                        <input type="email" placeholder="john@example.com" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary" />
+                        <input type="email" name="email" value="<?= htmlspecialchars($_POST['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" placeholder="john@example.com" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary" />
                     </div>
 
                     <!-- Subject -->
                     <div class="grid gap-2">
                         <label class="text-sm font-semibold text-slate-900">Subject</label>
-                        <select required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary">
+                        <select name="subject" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary">
                             <option value="">Select a subject</option>
-                            <option value="general">General Inquiry</option>
-                            <option value="order">Order & Shipping</option>
-                            <option value="return">Returns & Refunds</option>
-                            <option value="artisan">Artisan Partnership</option>
-                            <option value="media">Media & Press</option>
-                            <option value="other">Other</option>
+                            <?php foreach (['general' => 'General Inquiry', 'order' => 'Order & Shipping', 'return' => 'Returns & Refunds', 'artisan' => 'Artisan Partnership', 'media' => 'Media & Press', 'other' => 'Other'] as $val => $label): ?>
+                            <option value="<?= $val ?>" <?= (($_POST['subject'] ?? '') === $val) ? 'selected' : '' ?>><?= $label ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
 
                     <!-- Message -->
                     <div class="grid gap-2">
                         <label class="text-sm font-semibold text-slate-900">Message</label>
-                        <textarea placeholder="Tell us how we can help..." rows="6" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary resize-none"></textarea>
+                        <textarea name="message" placeholder="Tell us how we can help..." rows="6" required class="rounded-xl border border-slate-300 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary resize-none"><?= htmlspecialchars($_POST['message'] ?? '', ENT_QUOTES, 'UTF-8') ?></textarea>
                     </div>
 
                     <!-- Checkbox -->
                     <div class="flex items-start gap-3">
-                        <input type="checkbox" id="agree" required class="mt-1 rounded cursor-pointer" />
+                        <input type="checkbox" id="agree" name="agree" required class="mt-1 rounded cursor-pointer" />
                         <label for="agree" class="text-sm text-slate-600">
-                            I agree to the privacy policy and consent to being contacted via email.
+                            I agree to the <a href="/privacy-policy" class="text-primary underline">privacy policy</a> and consent to being contacted via email.
                         </label>
                     </div>
 
                     <!-- Submit -->
-                    <button type="submit" class="mt-4 w-full rounded-xl bg-primary text-white px-6 py-3 font-bold hover:bg-primary/90 transition">
+                    <button type="submit" id="submitBtn" class="mt-4 w-full rounded-xl bg-primary text-white px-6 py-3 font-bold hover:bg-primary/90 transition flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined text-lg">send</span>
                         Send Message
                     </button>
                 </form>
@@ -175,3 +204,27 @@
 </main>
 
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+
+<script src="/assets/sweetalert2/sweetalert2.all.min.js"></script>
+<?php if ($submitResult): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    <?php if ($submitResult['success']): ?>
+    Swal.fire({
+        icon: 'success',
+        title: 'Message Sent!',
+        text: <?= json_encode($submitResult['msg']) ?>,
+        confirmButtonColor: 'var(--color-primary)',
+        confirmButtonText: 'Great, thanks!'
+    });
+    <?php else: ?>
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: <?= json_encode($submitResult['msg']) ?>,
+        confirmButtonColor: 'var(--color-primary)'
+    });
+    <?php endif; ?>
+});
+</script>
+<?php endif; ?>
