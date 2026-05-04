@@ -120,8 +120,8 @@ $commentsCount = count($customerComments);
       <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/messages">
         <span class="material-symbols-outlined">mail</span>
         <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Messages</span>
-        <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/subscribers"><span class="material-symbols-outlined">mark_email_read</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Subscribers</span></a>
       </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/subscribers"><span class="material-symbols-outlined">mark_email_read</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Subscribers</span></a>
       <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports">
         <span class="material-symbols-outlined">analytics</span>
         <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span>
@@ -152,7 +152,7 @@ $commentsCount = count($customerComments);
     <div class="flex items-center gap-6 w-1/2">
       <div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-teal-900/10 rounded-lg">
         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-        <input class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-0" placeholder="Search users, emails, usernames..." type="text"/>
+        <input id="custSearch" class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-0" placeholder="Search users, emails, usernames..." type="text"/>
       </div>
     </div>
     <div class="flex items-center gap-6">
@@ -180,7 +180,7 @@ $commentsCount = count($customerComments);
             <span class="material-symbols-outlined text-lg">group</span>
             All Users
           </button>
-          <button class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20" type="button">
+          <button id="exportUsersBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20" type="button">
             <span class="material-symbols-outlined text-lg">download</span>
             Export Users
           </button>
@@ -495,5 +495,36 @@ $commentsCount = count($customerComments);
   }
 
   document.getElementById('add-user-form').addEventListener('submit', addUser);
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  var custSearch = document.getElementById('custSearch');
+  if (custSearch) {
+    custSearch.addEventListener('input', function() {
+      var q = this.value.toLowerCase().trim();
+      document.querySelectorAll('#usersTable tbody tr').forEach(function(row) {
+        var txt = row.textContent.toLowerCase();
+        row.style.display = (!q || txt.includes(q)) ? '' : 'none';
+      });
+    });
+  }
+
+  // ── Export Users CSV ─────────────────────────────────────────────────────
+  document.getElementById('exportUsersBtn')?.addEventListener('click', function() {
+    var rows = document.querySelectorAll('#usersTable tbody tr:not([style*="display: none"])');
+    var csv  = ['ID,Name,Email,Role,Status'];
+    rows.forEach(function(row) {
+      var cells = row.querySelectorAll('td');
+      if (cells.length < 3) return;
+      var name   = (cells[1]?.textContent.trim() || '').replace(/"/g,'""');
+      var email  = (cells[2]?.textContent.trim() || '').replace(/"/g,'""');
+      var role   = (cells[3]?.textContent.trim() || '').replace(/"/g,'""');
+      var status = (cells[4]?.textContent.trim() || '').replace(/"/g,'""');
+      var id     = row.dataset.id || '';
+      csv.push(id + ',"' + name + '","' + email + '","' + role + '","' + status + '"');
+    });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv.join('\n')], {type:'text/csv'}));
+    a.download = 'users.csv'; a.click();
+  });
 </script>
 <script src="/js/admin.js"></script>

@@ -99,7 +99,7 @@ $readComments = $totalComments - $newComments;
         <div class="flex items-center gap-6 w-1/2">
             <div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-teal-900/10 rounded-lg">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                <input class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm font-['Manrope'] focus:ring-0" placeholder="Search feedback..." type="text"/>
+                <input id="fbSearch" class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm font-['Manrope'] focus:ring-0" placeholder="Search feedback..." type="text"/>
             </div>
         </div>
         <div class="flex items-center gap-6">
@@ -132,11 +132,11 @@ $readComments = $totalComments - $newComments;
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="flex bg-surface-container rounded-full p-1">
-                        <button class="px-4 py-1.5 rounded-full text-xs font-bold bg-primary text-on-primary shadow-sm" type="button">All Feedback</button>
-                        <button class="px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" type="button">New</button>
-                        <button class="px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" type="button">Read</button>
+                        <button class="fb-filter-tab px-4 py-1.5 rounded-full text-xs font-bold bg-primary text-on-primary shadow-sm" data-filter="all" type="button">All Feedback</button>
+                        <button class="fb-filter-tab px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" data-filter="new" type="button">New</button>
+                        <button class="fb-filter-tab px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" data-filter="read" type="button">Read</button>
                     </div>
-                    <button class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20 hover:scale-102 transition-transform" type="button">
+                    <button id="exportFbBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20 hover:scale-102 transition-transform" type="button">
                         <span class="material-symbols-outlined text-lg">download</span>
                         Export Data
                     </button>
@@ -206,7 +206,7 @@ $readComments = $totalComments - $newComments;
                                     $initials = strtoupper(substr($name, 0, 1) . substr(strrchr(' ' . $name, ' '), 1, 1));
                                     $isNew = $status === 'new';
                                 ?>
-                                <tr class="hover:bg-surface-bright transition-colors group <?php echo $isNew ? 'bg-teal-50/30' : ''; ?>">
+                                <tr class="fb-row hover:bg-surface-bright transition-colors group <?php echo $isNew ? 'bg-teal-50/30' : ''; ?>" data-status="<?php echo htmlspecialchars($status); ?>" data-name="<?php echo htmlspecialchars(strtolower($name)); ?>">
                                     <td class="px-8 py-5">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-[10px] font-black"><?php echo htmlspecialchars($initials); ?></div>
@@ -337,4 +337,50 @@ $readComments = $totalComments - $newComments;
             status.className = 'text-sm text-error';
         }
     }
+
+    // ── Filter tabs ───────────────────────────────────────────────────────
+    var fbActiveFilter = 'all';
+    function applyFbFilter() {
+        var q = (document.getElementById('fbSearch')?.value || '').toLowerCase().trim();
+        document.querySelectorAll('.fb-row').forEach(function(row) {
+            var statusMatch = fbActiveFilter === 'all' || row.dataset.status === fbActiveFilter;
+            var nameMatch   = !q || row.dataset.name.includes(q) || row.textContent.toLowerCase().includes(q);
+            var replyRow    = row.nextElementSibling;
+            var show = statusMatch && nameMatch;
+            row.style.display = show ? '' : 'none';
+            if (replyRow && replyRow.id && replyRow.id.startsWith('reply-row-')) {
+                if (!show) replyRow.style.display = 'none';
+            }
+        });
+    }
+    document.querySelectorAll('.fb-filter-tab').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            fbActiveFilter = this.dataset.filter;
+            document.querySelectorAll('.fb-filter-tab').forEach(function(b) {
+                b.classList.remove('bg-primary','text-on-primary','shadow-sm');
+                b.classList.add('text-on-surface-variant');
+            });
+            this.classList.add('bg-primary','text-on-primary','shadow-sm');
+            this.classList.remove('text-on-surface-variant');
+            applyFbFilter();
+        });
+    });
+    document.getElementById('fbSearch')?.addEventListener('input', applyFbFilter);
+
+    // ── Export Feedback CSV ───────────────────────────────────────────────
+    document.getElementById('exportFbBtn')?.addEventListener('click', function() {
+        var rows = document.querySelectorAll('.fb-row:not([style*="display: none"])');
+        var csv  = ['Name,Message,Date,Status'];
+        rows.forEach(function(row) {
+            var cells = row.querySelectorAll('td');
+            var name    = (cells[0]?.textContent.trim() || '').replace(/"/g,'""');
+            var message = (cells[1]?.textContent.trim() || '').replace(/"/g,'""');
+            var date    = (cells[2]?.textContent.trim() || '').replace(/"/g,'""');
+            var status  = (cells[3]?.textContent.trim() || '').replace(/"/g,'""');
+            csv.push('"' + name + '","' + message + '","' + date + '","' + status + '"');
+        });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(new Blob([csv.join('\n')], {type:'text/csv'}));
+        a.download = 'feedback.csv'; a.click();
+    });
 </script>

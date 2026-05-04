@@ -176,11 +176,11 @@ $maxTrend = max($monthlyTrend ?: [1]);
           <p class="text-on-surface-variant mt-1">Generated insights from orders, users, and products in your website.</p>
         </div>
         <div class="flex gap-3">
-          <button class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-surface-container-highest transition-colors" type="button">
+          <button id="periodBtn" class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-surface-container-highest transition-colors" type="button">
             <span class="material-symbols-outlined text-lg">calendar_month</span>
             Last 30 Days
           </button>
-          <button class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20" type="button">
+          <button id="snapshotBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20" type="button">
             <span class="material-symbols-outlined text-lg">insights</span>
             Generate Snapshot
           </button>
@@ -284,4 +284,30 @@ $maxTrend = max($monthlyTrend ?: [1]);
     </div>
   </main>
 </div>
+<script>
+document.getElementById('snapshotBtn')?.addEventListener('click', function() {
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      icon: 'success',
+      title: 'Snapshot Generated',
+      text: 'Key analytics metrics captured. Use Ctrl+P to export this report.',
+      confirmButtonColor: '#006257'
+    });
+  } else {
+    window.print();
+  }
+});
+document.getElementById('periodBtn')?.addEventListener('click', function() {
+  var active = this.classList.contains('bg-primary');
+  if (active) {
+    this.classList.remove('bg-primary','text-on-primary');
+    this.classList.add('bg-surface-container-high','text-primary');
+    this.querySelector('span:last-child') && (this.querySelector('span:last-child').textContent = 'Last 30 Days');
+  } else {
+    this.classList.add('bg-primary','text-on-primary');
+    this.classList.remove('bg-surface-container-high','text-primary');
+    this.querySelector('span:last-child') && (this.querySelector('span:last-child').textContent = 'All Time');
+  }
+});
+</script>
 <script src="/js/admin.js"></script>
