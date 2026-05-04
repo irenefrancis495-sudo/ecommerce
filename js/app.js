@@ -230,6 +230,7 @@ function attachGlobalSearchInputs() {
 
 async function submitCustomerFeedback(form) {
     const status = document.getElementById('feedback-form-status');
+    const submitBtn = form.querySelector('button[type="submit"]');
     if (!status) return;
 
     const name = form.name.value.trim();
@@ -237,13 +238,18 @@ async function submitCustomerFeedback(form) {
     const message = form.message.value.trim();
 
     if (!name || !email || !message) {
-        status.textContent = 'Please fill in your name, email, and message.';
+        status.textContent = 'Please fill in all fields.';
         status.className = 'text-sm text-error';
         return;
     }
 
-    status.textContent = 'Sending feedback...';
+    status.textContent = 'Sending...';
     status.className = 'text-sm text-slate-300';
+
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    }
 
     try {
         const response = await fetch('/api/comments.php', {
@@ -254,16 +260,25 @@ async function submitCustomerFeedback(form) {
         const result = await response.json();
 
         if (result.status === 'success') {
-            status.textContent = 'Thank you — your feedback has been received.';
-            status.className = 'text-sm text-teal-500';
+            status.textContent = 'Thank you! Your feedback has been received. ✓';
+            status.className = 'text-sm text-teal-500 font-semibold';
             form.reset();
+            setTimeout(() => {
+                status.textContent = '';
+            }, 4000);
         } else {
-            status.textContent = result.message || 'Unable to submit feedback at this time.';
+            status.textContent = result.message || 'Unable to send feedback right now.';
             status.className = 'text-sm text-error';
         }
     } catch (error) {
-        status.textContent = 'Submission failed. Please try again.';
+        console.error('Feedback error:', error);
+        status.textContent = 'Failed. Please try again.';
         status.className = 'text-sm text-error';
+    } finally {
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
     }
 }
 
@@ -277,7 +292,94 @@ function attachFeedbackForm() {
     });
 }
 
+function attachFeedbackReplyLookup() {
+    const replyButton = document.getElementById('feedback-view-replies-btn');
+    const replyEmail = document.getElementById('feedback-reply-email');
+    if (!replyButton || !replyEmail) return;
+
+    replyButton.addEventListener('click', function () {
+        const email = replyEmail.value.trim();
+        if (!email) {
+            renderFeedbackRepliesMessage('Please enter your email to view replies.', 'error');
+            return;
+        }
+        fetchFeedbackReplies(email);
+    });
+
+    const savedEmail = localStorage.getItem('feedbackEmail');
+    if (savedEmail && replyEmail.value.trim() === '') {
+        replyEmail.value = savedEmail;
+    }
+}
+
+async function fetchFeedbackReplies(email) {
+    const resultsContainer = document.getElementById('feedback-reply-results');
+    if (!resultsContainer) return;
+
+    resultsContainer.innerHTML = '<p class="text-sm text-slate-400">Loading replies...</p>';
+
+    try {
+        const response = await fetch(`/api/comments.php?email=${encodeURIComponent(email)}`);
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            localStorage.setItem('feedbackEmail', email);
+            renderFeedbackReplies(result.comments || []);
+        } else {
+            renderFeedbackRepliesMessage(result.message || 'No replies found.', 'error');
+        }
+    } catch (error) {
+        console.error('Error fetching feedback replies:', error);
+        renderFeedbackRepliesMessage('Unable to load replies at this time.', 'error');
+    }
+}
+
+function escapeHTML(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/`/g, '&#096;');
+}
+
+function renderFeedbackReplies(comments) {
+    const resultsContainer = document.getElementById('feedback-reply-results');
+    if (!resultsContainer) return;
+
+    if (!comments.length) {
+        resultsContainer.innerHTML = '<p class="text-sm text-slate-400">No replies found for this email yet.</p>';
+        return;
+    }
+
+    resultsContainer.innerHTML = comments.map(comment => {
+        const safeMessage = escapeHTML(comment.message || '');
+        const safeReply = escapeHTML(comment.reply || '');
+        const safeCreatedAt = escapeHTML(comment.created_at || '');
+        const safeRepliedAt = escapeHTML(comment.replied_at || safeCreatedAt || 'recently');
+
+        const reply = comment.reply ? `<div class="mt-3 rounded-2xl bg-teal-50 p-4 text-slate-900 border border-teal-200"><p class="text-xs uppercase tracking-[0.2em] text-teal-700 font-bold mb-2">Admin reply</p><p class="text-sm leading-6">${safeReply}</p><p class="mt-2 text-[10px] text-slate-500">Replied ${safeRepliedAt}</p></div>` : '<p class="text-sm text-slate-400">No reply for this message yet.</p>';
+        return `<div class="rounded-3xl border border-white/10 bg-slate-950/80 p-4">
+            <p class="text-xs text-slate-400">Message sent on ${safeCreatedAt}</p>
+            <p class="mt-2 text-sm text-white">${safeMessage}</p>
+            ${reply}
+        </div>`;
+    }).join('');
+}
+
+function renderFeedbackRepliesMessage(message, type) {
+    const resultsContainer = document.getElementById('feedback-reply-results');
+    if (!resultsContainer) return;
+    const colorClass = type === 'error' ? 'text-error' : 'text-slate-400';
+    resultsContainer.innerHTML = `<p class="text-sm ${colorClass}">${escapeHTML(message)}</p>`;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Feedback form
+    attachFeedbackForm();
+    attachFeedbackReplyLookup();
+
     document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.addEventListener('click', function() {
             const product = findProductDataFromButton(this);
@@ -310,7 +412,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartCount();
     if (typeof renderCart === 'function') renderCart();
     attachGlobalSearchInputs();
-    attachFeedbackForm();
 
     const loginForm = document.getElementById('login-form');
     if (loginForm) {

@@ -111,6 +111,10 @@ $commentsCount = count($customerComments);
         <span class="material-symbols-outlined">chat</span>
         <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span>
       </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/messages">
+        <span class="material-symbols-outlined">mail</span>
+        <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Messages</span>
+      </a>
       <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports">
         <span class="material-symbols-outlined">analytics</span>
         <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span>

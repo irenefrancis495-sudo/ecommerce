@@ -57,6 +57,10 @@ $readComments = $totalComments - $newComments;
                 <span class="material-symbols-outlined">chat</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span>
             </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/messages">
+                <span class="material-symbols-outlined">mail</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Messages</span>
+            </a>
             <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports">
                 <span class="material-symbols-outlined">analytics</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span>
@@ -199,27 +203,57 @@ $readComments = $totalComments - $newComments;
                                         </div>
                                     </td>
                                     <td class="px-6 py-5">
-                                        <div class="max-w-xs">
+                                        <div class="max-w-xs space-y-3">
                                             <p class="text-sm text-on-surface-variant line-clamp-2"><?php echo htmlspecialchars(substr($message, 0, 100) . (strlen($message) > 100 ? '...' : '')); ?></p>
+                                            <?php if (!empty($comment['reply'])): ?>
+                                            <div class="rounded-2xl bg-teal-50 p-4 border border-teal-200">
+                                                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-teal-700 mb-2">Admin reply</p>
+                                                <p class="text-sm text-slate-700"><?php echo htmlspecialchars($comment['reply']); ?></p>
+                                                <?php if (!empty($comment['replied_at'])): ?>
+                                                    <p class="mt-2 text-[10px] text-slate-500">Replied <?php echo htmlspecialchars(date('M d, Y H:i', strtotime($comment['replied_at']))); ?></p>
+                                                <?php endif; ?>
+                                            </div>
+                                            <?php endif; ?>
                                         </div>
                                     </td>
                                     <td class="px-6 py-5 text-sm text-on-surface-variant">
                                         <?php echo htmlspecialchars(date('M d, Y H:i', strtotime($createdAt))); ?>
                                     </td>
                                     <td class="px-6 py-5">
-                                        <?php if ($isNew): ?>
+                                        <?php if ($status === 'new'): ?>
                                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold">
                                                 <span class="w-1 h-1 rounded-full bg-tertiary animate-pulse"></span> New
                                             </span>
-                                        <?php else: ?>
+                                        <?php elseif ($status === 'replied'): ?>
                                             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold">
-                                                <span class="w-1 h-1 rounded-full bg-teal-700"></span> Read
+                                                <span class="w-1 h-1 rounded-full bg-teal-700"></span> Replied
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-50 text-slate-700 text-[10px] font-bold">
+                                                <span class="w-1 h-1 rounded-full bg-slate-700"></span> Read
                                             </span>
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-8 py-5 text-right space-x-2">
-                                        <button class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">View</button>
-                                        <button class="bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"><span class="material-symbols-outlined text-sm">more_vert</span></button>
+                                        <button onclick="toggleReplyForm(<?php echo (int) $comment['id']; ?>)" class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">Reply</button>
+                                    </td>
+                                </tr>
+                                <tr id="reply-row-<?php echo (int) $comment['id']; ?>" class="hidden bg-slate-50">
+                                    <td colspan="5" class="px-8 py-5">
+                                        <div class="grid gap-4 rounded-3xl border border-slate-200 bg-white p-4">
+                                            <div class="flex items-center justify-between gap-4">
+                                                <div>
+                                                    <p class="text-sm font-bold text-slate-900">Reply to <?php echo htmlspecialchars($name); ?></p>
+                                                    <p class="text-xs text-slate-500">Send a reply that the customer can view by email.</p>
+                                                </div>
+                                                <button onclick="toggleReplyForm(<?php echo (int) $comment['id']; ?>)" class="text-sm font-semibold text-slate-500 hover:text-slate-800">Cancel</button>
+                                            </div>
+                                            <textarea id="reply-text-<?php echo (int) $comment['id']; ?>" rows="3" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900" placeholder="Write your reply here..."><?php echo htmlspecialchars($comment['reply'] ?? ''); ?></textarea>
+                                            <div class="flex items-center justify-between gap-3">
+                                                <p id="reply-status-<?php echo (int) $comment['id']; ?>" class="text-sm text-slate-500"></p>
+                                                <button onclick="submitReply(<?php echo (int) $comment['id']; ?>)" class="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-bold text-white hover:bg-primary/90">Send reply</button>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>
@@ -240,3 +274,53 @@ $readComments = $totalComments - $newComments;
         </div>
     </main>
 </div>
+
+<script>
+    function toggleReplyForm(id) {
+        const row = document.getElementById(`reply-row-${id}`);
+        if (!row) return;
+        row.classList.toggle('hidden');
+    }
+
+    async function submitReply(id) {
+        const textarea = document.getElementById(`reply-text-${id}`);
+        const status = document.getElementById(`reply-status-${id}`);
+        if (!textarea || !status) return;
+
+        const reply = textarea.value.trim();
+        if (!reply) {
+            status.textContent = 'Please enter a reply before sending.';
+            status.className = 'text-sm text-error';
+            return;
+        }
+
+        status.textContent = 'Saving reply...';
+        status.className = 'text-sm text-slate-500';
+
+        try {
+            const response = await fetch('/api/comments.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'reply', id, reply })
+            });
+            const result = await response.json();
+
+            if (result.status === 'success') {
+                status.textContent = 'Reply saved successfully.';
+                status.className = 'text-sm text-teal-600';
+                setTimeout(() => {
+                    status.textContent = '';
+                    toggleReplyForm(id);
+                    window.location.reload();
+                }, 800);
+            } else {
+                status.textContent = result.message || 'Could not save reply.';
+                status.className = 'text-sm text-error';
+            }
+        } catch (error) {
+            console.error('Reply submission error:', error);
+            status.textContent = 'Failed to send reply. Try again.';
+            status.className = 'text-sm text-error';
+        }
+    }
+</script>
