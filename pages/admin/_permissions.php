@@ -119,6 +119,7 @@ function adminEnforcePagePermission(): void
     $path = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
 
     $map = [
+        'admin' => 'dashboard.view',
         'admin/index' => 'dashboard.view',
         'admin/inventory' => 'inventory.manage',
         'admin/add-product' => 'inventory.manage',
