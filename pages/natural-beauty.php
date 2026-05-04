@@ -50,191 +50,234 @@
         </div>
     </section>
 
-    <section class="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&crop=center" alt="Organic Face Serum">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+    <!-- Product Grid - 3-4 items per row with enhanced styling -->
+    <section class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <!-- Product 1: Organic Face Serum -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Organic Face Serum"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-amber-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-700">Skincare</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.8</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-amber-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-700">Skincare</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.8</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Organic Face Serum</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Hydrating serum with aloe vera and hyaluronic acid for radiant, healthy skin.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$49</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="11" data-name="Organic Face Serum" data-price="49">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Organic Face Serum</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Hydrating serum with aloe vera and hyaluronic acid for radiant, healthy skin.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$49</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="11" data-name="Organic Face Serum" data-price="49" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
         </article>
 
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1585232351009-aa874380f189?w=600&h=750&fit=crop&crop=center" alt="Natural Shampoo">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+        <!-- Product 2: Natural Shampoo -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-cyan-50 to-blue-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1585232351009-aa874380f189?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Natural Shampoo"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-cyan-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-800">Hair Care</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.9</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-cyan-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-cyan-800">Hair Care</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.9</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Natural Shampoo</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Organic botanical shampoo with aloe vera and essential oils for healthy hair.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$19</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="12" data-name="Natural Shampoo" data-price="19">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Natural Shampoo</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Organic botanical shampoo with aloe vera and essential oils for healthy hair.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$19</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="12" data-name="Natural Shampoo" data-price="19" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
         </article>
 
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1556228578-0d191d7056ac?w=600&h=750&fit=crop&crop=center" alt="Moisturizing Cream">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+        <!-- Product 3: Moisturizing Cream -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-emerald-50 to-green-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1556228578-0d191d7056ac?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Moisturizing Cream"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-emerald-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-emerald-800">Skincare</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.7</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-emerald-800">Skincare</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.7</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Moisturizing Cream</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Hydrating face cream with shea butter and natural oils for deep nourishment.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$39</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="13" data-name="Moisturizing Cream" data-price="39">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Moisturizing Cream</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Hydrating face cream with shea butter and natural oils for deep nourishment.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$39</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="13" data-name="Moisturizing Cream" data-price="39" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
         </article>
 
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&h=750&fit=crop&crop=center" alt="Essential Oil Blend">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+        <!-- Product 4: Essential Oil Blend -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-purple-50 to-violet-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Essential Oil Blend"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-purple-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-purple-800">Essential Oils</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.8</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-purple-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-purple-800">Essential Oils</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.8</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Essential Oil Blend</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Therapeutic essential oil blend with lavender and chamomile for relaxation.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$24</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="14" data-name="Essential Oil Blend" data-price="24">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Essential Oil Blend</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Therapeutic essential oil blend with lavender and chamomile for relaxation.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$24</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="14" data-name="Essential Oil Blend" data-price="24" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
         </article>
 
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=600&h=750&fit=crop&crop=center" alt="Herbal Face Mask">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+        <!-- Product 5: Herbal Face Mask -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-green-50 to-lime-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1570194065650-d99fb4bedf0a?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Herbal Face Mask"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-green-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-green-800">Skincare</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.5</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-green-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-green-800">Skincare</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.5</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Herbal Face Mask</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Clay face mask with herbal extracts for deep cleansing and detoxification.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$16</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="15" data-name="Herbal Face Mask" data-price="16">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Herbal Face Mask</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Clay face mask with herbal extracts for deep cleansing and detoxification.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$16</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="15" data-name="Herbal Face Mask" data-price="16" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
         </article>
 
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1585232351009-aa874380f189?w=600&h=750&fit=crop&crop=center" alt="Botanical Hair Oil">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+        <!-- Product 6: Botanical Hair Oil -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-orange-50 to-amber-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1585232351009-aa874380f189?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Botanical Hair Oil"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-orange-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-orange-800">Hair Care</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.7</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-orange-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-orange-800">Hair Care</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.7</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Botanical Hair Oil</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Nourishing hair oil blend with argan and jojoba oils for healthy, shiny hair.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$22</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="17" data-name="Botanical Hair Oil" data-price="22">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Botanical Hair Oil</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Nourishing hair oil blend with argan and jojoba oils for healthy, shiny hair.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$22</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="17" data-name="Botanical Hair Oil" data-price="22" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
         </article>
 
-        <article class="group rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:shadow-xl">
-            <div class="relative overflow-hidden rounded-t-[2rem] aspect-[4/5] bg-slate-100">
-                <img class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&crop=center" alt="Natural Lip Balm">
-                <div class="absolute top-4 right-4 rounded-full bg-white/90 p-3 shadow-sm">
-                    <span class="material-symbols-outlined text-slate-900">favorite</span>
-                </div>
+        <!-- Product 7: Natural Lip Balm -->
+        <article class="group bg-white rounded-3xl border border-slate-200 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="relative overflow-hidden bg-gradient-to-br from-rose-50 to-pink-50 aspect-[3/4]">
+                <img 
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                    src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&h=750&fit=crop&crop=center&q=80" 
+                    alt="Natural Lip Balm"
+                    loading="lazy">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <span class="material-symbols-outlined text-slate-700 text-xl">favorite</span>
+                </button>
             </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between gap-3 mb-4">
-                    <span class="rounded-full bg-rose-100 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-rose-800">Lip Care</span>
-                    <div class="flex items-center gap-1 text-sm text-slate-600">
-                        <span class="material-symbols-outlined text-yellow-500">star</span>
-                        <span>4.3</span>
+            <div class="p-5 flex flex-col flex-grow">
+                <div class="flex items-center justify-between gap-2 mb-3">
+                    <span class="inline-block rounded-full bg-rose-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-rose-800">Lip Care</span>
+                    <div class="flex items-center gap-1 text-xs">
+                        <span class="material-symbols-outlined text-yellow-500 text-sm">star</span>
+                        <span class="font-semibold text-slate-700">4.3</span>
                     </div>
                 </div>
-                <h2 class="text-xl font-semibold text-slate-950 mb-3">Natural Lip Balm</h2>
-                <p class="text-sm leading-6 text-slate-600 mb-6">Beeswax lip balm with natural oils for soft, hydrated lips.</p>
-                <div class="flex items-center justify-between gap-4">
-                    <span class="text-2xl font-bold text-slate-950">$8</span>
-                    <button class="add-to-cart inline-flex items-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-white transition hover:bg-primary/90" data-id="16" data-name="Natural Lip Balm" data-price="8">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                        Add
+                <h3 class="text-lg font-bold text-slate-950 mb-2 line-clamp-2">Natural Lip Balm</h3>
+                <p class="text-sm text-slate-600 mb-4 flex-grow line-clamp-2">Beeswax lip balm with natural oils for soft, hydrated lips.</p>
+                <div class="flex items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <span class="text-xl font-bold text-slate-950">$8</span>
+                    <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                        data-id="16" data-name="Natural Lip Balm" data-price="8" title="Add to cart">
+                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
                     </button>
                 </div>
             </div>
@@ -264,125 +307,3 @@
 
 <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="/js/app.js"></script>
-
-        <!-- Product Card 2 -->
-        <div class="group bg-surface rounded-2xl shadow-sm border border-outline/50 overflow-hidden hover:shadow-lg transition-all duration-300">
-            <div class="aspect-square bg-gradient-to-br from-secondary/5 to-tertiary/5 relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=400&fit=crop&crop=center" alt="Natural Shampoo" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                <button class="absolute top-4 right-4 w-10 h-10 bg-surface/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined text-lg">favorite</span>
-                </button>
-            </div>
-                    <span class="material-symbols-outlined text-lg">favorite</span>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="px-3 py-1 bg-secondary-container text-on-secondary-container text-xs font-medium rounded-full">Hair Care</span>
-                    <div class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm text-yellow-500">star</span>
-                        <span class="text-sm font-medium">4.9</span>
-                        <span class="text-sm text-on-surface-variant">(89)</span>
-                    </div>
-                </div>
-                <h3 class="font-semibold text-lg mb-2">Natural Shampoo</h3>
-                <p class="text-on-surface-variant text-sm mb-4 line-clamp-2">Organic shampoo for all hair types</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-2xl font-bold text-primary">$19.99</span>
-                    <button onclick="addToCart('Natural Shampoo', 19.99)" class="px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Product Card 3 -->
-        <div class="group bg-surface rounded-2xl shadow-sm border border-outline/50 overflow-hidden hover:shadow-lg transition-all duration-300">
-            <div class="aspect-square bg-gradient-to-br from-tertiary/5 to-primary/5 relative overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1556228578-0d191d7056ac?w=400&h=400&fit=crop&crop=center" alt="Moisturizing Cream" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                <button class="absolute top-4 right-4 w-10 h-10 bg-surface/80 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <span class="material-symbols-outlined text-lg">favorite</span>
-                </button>
-            </div>
-                    <span class="material-symbols-outlined text-lg">favorite</span>
-                </button>
-            </div>
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-2">
-                    <span class="px-3 py-1 bg-primary-container text-on-primary-container text-xs font-medium rounded-full">Skincare</span>
-                    <div class="flex items-center gap-1">
-                        <span class="material-symbols-outlined text-sm text-yellow-500">star</span>
-                        <span class="text-sm font-medium">4.7</span>
-                        <span class="text-sm text-on-surface-variant">(156)</span>
-                    </div>
-                </div>
-                <h3 class="font-semibold text-lg mb-2">Moisturizing Cream</h3>
-                <p class="text-on-surface-variant text-sm mb-4 line-clamp-2">Hydrating cream for dry skin</p>
-                <div class="flex items-center justify-between">
-                    <span class="text-2xl font-bold text-primary">$39.99</span>
-                    <button onclick="addToCart('Moisturizing Cream', 39.99)" class="px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors">
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center">
-        <div class="flex items-center gap-2">
-            <button class="px-4 py-2 rounded-lg bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors">
-                <span class="material-symbols-outlined text-lg">chevron_left</span>
-            </button>
-            <button class="px-4 py-2 rounded-lg bg-primary text-on-primary font-medium">1</button>
-            <button class="px-4 py-2 rounded-lg bg-surface text-on-surface hover:bg-surface-variant transition-colors">2</button>
-            <button class="px-4 py-2 rounded-lg bg-surface text-on-surface hover:bg-surface-variant transition-colors">3</button>
-            <button class="px-4 py-2 rounded-lg bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors">
-                <span class="material-symbols-outlined text-lg">chevron_right</span>
-            </button>
-        </div>
-    </div>
-</main>
-
-<script>
-function addToCart(productName, price) {
-    // Get existing cart from localStorage
-    let cart = JSON.parse(localStorage.getItem('mpemba_cart') || '[]');
-
-    // Check if product already exists
-    const existingProduct = cart.find(item => item.name === productName);
-
-    if (existingProduct) {
-        existingProduct.quantity += 1;
-    } else {
-        cart.push({
-            name: productName,
-            price: price,
-            quantity: 1,
-            addedAt: new Date().toISOString()
-        });
-    }
-
-    // Save back to localStorage
-    localStorage.setItem('mpemba_cart', JSON.stringify(cart));
-
-    // Show success message
-    if (typeof Swal !== 'undefined') {
-        Swal.fire({
-            title: 'Added to Cart!',
-            text: `${productName} has been added to your cart.`,
-            icon: 'success',
-            timer: 2000,
-            showConfirmButton: false
-        });
-    } else {
-        alert(`${productName} has been added to your cart!`);
-    }
-
-    // Update cart count in navbar if function exists
-    if (typeof updateCartCount === 'function') {
-        updateCartCount();
-    }
-}
-</script>

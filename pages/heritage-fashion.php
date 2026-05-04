@@ -143,104 +143,178 @@
             </div>
         </section>
 
-        <section class="max-w-7xl mx-auto px-8 py-16 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="md:col-span-2 md:row-span-2 group">
-                <div class="relative aspect-[4/5] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
-                    <img alt="Editorial look" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80" />
-                    <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-md px-4 py-1 rounded-full text-white text-xs font-bold uppercase tracking-widest">Masterpiece</div>
-                    <button class="add-to-cart absolute bottom-6 right-6 w-14 h-14 bg-secondary text-white rounded-full flex items-center justify-center shadow-xl opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-id="401" data-name="The Saharan Nomad Robe" data-price="420" aria-label="Add The Saharan Nomad Robe to cart">
-                        <span class="material-symbols-outlined">add_shopping_cart</span>
+        <!-- Product Grid - 3 items per row with enhanced styling -->
+        <section class="max-w-7xl mx-auto px-8 py-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <!-- Product 1: Saharan Nomad Robe -->
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="The Saharan Nomad Robe"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
-                <div class="px-2">
-                    <div class="flex justify-between items-start mb-1">
-                        <h3 class="text-2xl font-bold text-primary tracking-tight">The Saharan Nomad Robe</h3>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Artisan Wear</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Saharan Nomad Robe</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Hand-woven organic cotton with artisanal indigo vat-dyeing process.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline-variant/20">
                         <span class="text-xl font-bold text-primary">$420</span>
-                    </div>
-                    <p class="text-on-surface-variant text-sm mb-4">Hand-woven organic cotton with artisanal indigo vat-dyeing process.</p>
-                    <div class="flex gap-2">
-                        <span class="text-[10px] uppercase font-black text-secondary tracking-tighter">Artisan Made</span>
-                        <span class="text-[10px] uppercase font-black text-secondary tracking-tighter">•</span>
-                        <span class="text-[10px] uppercase font-black text-secondary tracking-tighter">Sustainable</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="401" data-name="The Saharan Nomad Robe" data-price="420" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="group">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
-                    <img alt="Linen vest" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="add-to-cart absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-id="402" data-name="Veldt Tailored Vest" data-price="185" aria-label="Add Veldt Tailored Vest to cart">
-                        <span class="material-symbols-outlined text-sm">shopping_bag</span>
+            <!-- Product 2: Veldt Tailored Vest -->
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Veldt Tailored Vest"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
-                <div class="px-2">
-                    <h3 class="text-lg font-bold text-primary tracking-tight">Veldt Tailored Vest</h3>
-                    <div class="flex justify-between items-center">
-                        <p class="text-on-surface-variant text-xs">Sustainable Linen</p>
-                        <span class="text-md font-bold text-primary">$185</span>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Vest</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Veldt Tailored Vest</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Sustainable linen vest with precision tailoring and comfort fit.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline-variant/20">
+                        <span class="text-xl font-bold text-primary">$185</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="402" data-name="Veldt Tailored Vest" data-price="185" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="group">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
-                    <img alt="Wrap skirt" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="add-to-cart absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-id="403" data-name="Bogolan Wrap Skirt" data-price="210" aria-label="Add Bogolan Wrap Skirt to cart">
-                        <span class="material-symbols-outlined text-sm">shopping_bag</span>
+            <!-- Product 3: Bogolan Wrap Skirt -->
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Bogolan Wrap Skirt"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
-                <div class="px-2">
-                    <h3 class="text-lg font-bold text-primary tracking-tight">Bogolan Wrap Skirt</h3>
-                    <div class="flex justify-between items-center">
-                        <p class="text-on-surface-variant text-xs">Traditional Mudcloth</p>
-                        <span class="text-md font-bold text-primary">$210</span>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Skirt</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Bogolan Wrap Skirt</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Traditional mudcloth with authentic African patterns and wrap design.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline-variant/20">
+                        <span class="text-xl font-bold text-primary">$210</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="403" data-name="Bogolan Wrap Skirt" data-price="210" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="md:row-span-2 group">
-                <div class="relative h-full flex flex-col">
-                    <div class="flex-grow overflow-hidden rounded-2xl bg-surface-container-low mb-4">
-                        <img alt="Silk gown" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" />
-                    </div>
-                    <div class="px-2">
-                        <h3 class="text-lg font-bold text-primary tracking-tight">Midnight Silk Gown</h3>
-                        <div class="flex justify-between items-center">
-                            <p class="text-on-surface-variant text-xs">Agbada-inspired Drape</p>
-                            <span class="text-md font-bold text-primary">$540</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="group">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
-                    <img alt="Leather sandals" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="add-to-cart absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-id="404" data-name="Kwara Bead Sandals" data-price="130" aria-label="Add Kwara Bead Sandals to cart">
-                        <span class="material-symbols-outlined text-sm">shopping_bag</span>
+            <!-- Product 4: Midnight Silk Gown -->
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Midnight Silk Gown"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
-                <div class="px-2">
-                    <h3 class="text-lg font-bold text-primary tracking-tight">Kwara Bead Sandals</h3>
-                    <div class="flex justify-between items-center">
-                        <p class="text-on-surface-variant text-xs">Hand-stitched Leather</p>
-                        <span class="text-md font-bold text-primary">$130</span>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Gown</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Midnight Silk Gown</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Elegant agbada-inspired drape in premium silk with luxurious finish.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline-variant/20">
+                        <span class="text-xl font-bold text-primary">$540</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="404" data-name="Midnight Silk Gown" data-price="540" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="group">
-                <div class="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-low mb-4">
-                    <img alt="Minimalist shirt" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" />
-                    <button class="add-to-cart absolute bottom-4 right-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center shadow-lg opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300" data-id="405" data-name="Axum Minimalist Shirt" data-price="160" aria-label="Add Axum Minimalist Shirt to cart">
-                        <span class="material-symbols-outlined text-sm">shopping_bag</span>
+            <!-- Product 5: Kwara Bead Sandals -->
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Kwara Bead Sandals"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
-                <div class="px-2">
-                    <h3 class="text-lg font-bold text-primary tracking-tight">Axum Minimalist Shirt</h3>
-                    <div class="flex justify-between items-center">
-                        <p class="text-on-surface-variant text-xs">Mercerized Organic Cotton</p>
-                        <span class="text-md font-bold text-primary">$160</span>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Sandals</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Kwara Bead Sandals</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Hand-stitched leather sandals with traditional beadwork detail.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline-variant/20">
+                        <span class="text-xl font-bold text-primary">$130</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="405" data-name="Kwara Bead Sandals" data-price="130" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product 6: Axum Minimalist Shirt -->
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+                <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
+                    <img 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                        src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=600&h=750&fit=crop&crop=center&q=80" 
+                        alt="Axum Minimalist Shirt"
+                        loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                        <span class="material-symbols-outlined text-primary text-lg">favorite</span>
+                    </button>
+                </div>
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                        <span class="inline-block rounded-full bg-secondary-fixed px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-on-secondary-fixed">Shirt</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-primary mb-2 line-clamp-2">Axum Minimalist Shirt</h3>
+                    <p class="text-sm text-on-surface-variant mb-4 flex-grow line-clamp-2">Mercerized organic cotton with minimalist design and comfort fit.</p>
+                    <div class="flex items-center justify-between gap-3 pt-3 border-t border-outline-variant/20">
+                        <span class="text-xl font-bold text-primary">$160</span>
+                        <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary/90 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
+                            data-id="406" data-name="Axum Minimalist Shirt" data-price="160" title="Add to cart">
+                            <span class="material-symbols-outlined text-lg">add</span>
+                        </button>
                     </div>
                 </div>
             </div>
