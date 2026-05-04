@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/_customer_permissions.php'; customerRequirePermission('shop.cart'); ?>
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"/>

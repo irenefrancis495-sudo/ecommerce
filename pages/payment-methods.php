@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/_customer_permissions.php'; customerRequirePermission('shop.checkout'); ?>
 <!DOCTYPE html>
 
 <html class="light" lang="en"><head>

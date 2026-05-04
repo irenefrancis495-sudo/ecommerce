@@ -4,6 +4,7 @@ function adminDefaultRolePermissions(): array
 {
     return [
         'admin' => [
+            // Admin panel permissions
             'dashboard.view' => true,
             'inventory.manage' => true,
             'categories.manage' => true,
@@ -15,8 +16,16 @@ function adminDefaultRolePermissions(): array
             'reports.view' => true,
             'settings.manage' => true,
             'permissions.manage' => true,
+            // Storefront customer permissions
+            'shop.browse' => true,
+            'shop.cart' => true,
+            'shop.checkout' => true,
+            'shop.orders' => true,
+            'shop.profile' => true,
+            'shop.reviews' => true,
         ],
         'customer' => [
+            // Admin panel permissions (customers cannot access admin)
             'dashboard.view' => false,
             'inventory.manage' => false,
             'categories.manage' => false,
@@ -28,6 +37,13 @@ function adminDefaultRolePermissions(): array
             'reports.view' => false,
             'settings.manage' => false,
             'permissions.manage' => false,
+            // Storefront customer permissions (customers can do all shop actions)
+            'shop.browse' => true,
+            'shop.cart' => true,
+            'shop.checkout' => true,
+            'shop.orders' => true,
+            'shop.profile' => true,
+            'shop.reviews' => true,
         ],
     ];
 }
