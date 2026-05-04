@@ -102,10 +102,10 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                         <span class="material-symbols-outlined text-sm">filter_list</span>
                         Advanced Filters
                     </button>
-                    <button class="px-8 py-3 bg-gradient-to-r from-secondary to-secondary-container text-on-secondary rounded-xl font-bold text-sm flex items-center gap-2 shadow-lg shadow-secondary/20 hover:scale-102 transition-transform duration-200" type="button">
+                    <a href="/admin/add-product" class="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-secondary to-secondary-container text-on-secondary rounded-xl font-bold text-sm gap-2 shadow-lg shadow-secondary/20 hover:scale-102 transition-transform duration-200">
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
                         Add New Product
-                    </button>
+                    </a>
                 </div>
             </div>
 

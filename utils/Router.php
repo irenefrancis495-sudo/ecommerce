@@ -66,6 +66,7 @@ class Router {
             'admin/customers' => 'Customers - Mpemba Admin',
             'admin/reports' => 'Reports - Mpemba Admin',
             'admin/settings' => 'Settings Hub - Mpemba Admin',
+            'admin/add-product' => 'Add Product - Mpemba Admin',
             'admin/login' => 'Admin Login - Mpemba',
         ];
 
