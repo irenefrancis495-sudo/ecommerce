@@ -74,6 +74,8 @@ class Router {
             'contact' => 'Contact Us - Mpemba Store',
                     'admin/messages' => 'Messages - Mpemba Admin',
                     'admin/subscribers' => 'Subscribers - Mpemba Admin',
+                    'admin/categories' => 'Categories - Mpemba Admin',
+                    'admin/permissions' => 'Permissions - Mpemba Admin',
         ];
 
         return $pageNames[$path] ?? $default;

@@ -35,6 +35,10 @@ $notificationCount = adminNotificationCount();
                 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Inventory</span>
             </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-teal-800 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 rounded-lg" href="/admin/categories">
+                <span class="material-symbols-outlined">category</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Categories</span>
+            </a>
             <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-teal-800 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 rounded-lg" href="/admin/orders">
                 <span class="material-symbols-outlined">shopping_cart</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Orders</span>
@@ -59,6 +63,10 @@ $notificationCount = adminNotificationCount();
             <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-teal-800 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 rounded-lg" href="/admin/settings">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Settings</span>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-teal-800 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 rounded-lg" href="/admin/permissions">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Permissions</span>
             </a>
         </nav>
         <div class="mt-auto p-2 bg-slate-100 dark:bg-slate-900 rounded-xl space-y-2">

@@ -22,6 +22,27 @@ class UserController {
         ];
     }
 
+    private function buildAdminSession(array $user): array {
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_user'] = [
+            'id' => $user['id'] ?? 0,
+            'username' => $user['username'] ?? 'admin',
+            'email' => $user['email'] ?? 'admin@mpemba.local',
+            'first_name' => $user['first_name'] ?? 'Site',
+            'last_name' => $user['last_name'] ?? 'Admin',
+            'role' => $user['role'] ?? 'admin',
+            'name' => trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) ?: ($user['username'] ?? 'Admin')
+        ];
+        $_SESSION['user'] = $_SESSION['admin_user'];
+
+        return [
+            'success' => true,
+            'message' => 'Admin login successful',
+            'user' => $_SESSION['admin_user'],
+            'redirect' => '/admin/index'
+        ];
+    }
+
     public function loginAdmin($login, $password) {
         $adminUser = $this->getAdminUser();
         $loginNormalized = strtolower($login);
@@ -30,23 +51,27 @@ class UserController {
             $isValidPassword = hash_equals($adminUser['password'], $password) || strcasecmp($adminUser['password'], $password) === 0;
 
             if ($isValidPassword) {
-                $_SESSION['admin_logged_in'] = true;
-                $_SESSION['admin_user'] = [
-                    'id' => $adminUser['id'],
-                    'username' => $adminUser['username'],
-                    'email' => $adminUser['email'],
-                    'first_name' => $adminUser['first_name'],
-                    'last_name' => $adminUser['last_name'],
-                    'role' => $adminUser['role']
-                ];
-                $_SESSION['user'] = $_SESSION['admin_user'];
+                return $this->buildAdminSession($adminUser);
+            }
 
-                return [
-                    'success' => true,
-                    'message' => 'Admin login successful',
-                    'user' => $_SESSION['admin_user'],
-                    'redirect' => '/admin/index'
-                ];
+            return ['success' => false, 'message' => 'Invalid username or password'];
+        }
+
+        $users = $this->db->getUsers();
+        foreach ($users as $user) {
+            $role = strtolower((string) ($user['role'] ?? 'customer'));
+            if ($role !== 'admin') {
+                continue;
+            }
+
+            $userLogin = strtolower((string) ($user['username'] ?? ''));
+            $userEmail = strtolower((string) ($user['email'] ?? ''));
+            if ($loginNormalized !== $userLogin && $loginNormalized !== $userEmail) {
+                continue;
+            }
+
+            if (!empty($user['password']) && password_verify($password, (string) $user['password'])) {
+                return $this->buildAdminSession($user);
             }
 
             return ['success' => false, 'message' => 'Invalid username or password'];

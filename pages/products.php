@@ -144,7 +144,7 @@ function createProductCard(product) {
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-2xl font-bold text-primary">$${product.price}</span>
-                <button class="add-to-cart px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors" data-id="${product.id}" data-name="${product.name.replace(/"/g, '&quot;')}" data-price="${product.price}">
+                <button class="add-to-cart px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors" data-id="${product.id}" data-name="${product.name.replace(/"/g, '&quot;')}" data-price="${product.price}" data-image="${(product.image_url || '').replace(/"/g, '&quot;')}">
                     Add to Cart
                 </button>
             </div>

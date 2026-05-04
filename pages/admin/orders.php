@@ -81,6 +81,10 @@ usort($orders, function($a, $b) {
                 <span class="material-symbols-outlined">inventory_2</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Inventory</span>
             </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/categories">
+                <span class="material-symbols-outlined">category</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Categories</span>
+            </a>
             <a class="flex items-center gap-3 px-4 py-3 bg-white text-teal-900 font-bold rounded-lg shadow-sm shadow-slate-200/50 scale-102 transition-transform duration-200" href="/admin/orders">
                 <span class="material-symbols-outlined">shopping_cart</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Orders</span>
@@ -105,6 +109,10 @@ usort($orders, function($a, $b) {
             <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/settings">
                 <span class="material-symbols-outlined">settings</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Settings</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/permissions">
+                <span class="material-symbols-outlined">admin_panel_settings</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Permissions</span>
             </a>
         </nav>
         <div class="mt-auto space-y-2">

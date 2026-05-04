@@ -1,15 +1,112 @@
 // Cart logic using localStorage
+function normalizeCartItem(item) {
+    const id = Number.parseInt(item?.id, 10);
+    const name = String(item?.name || '').trim();
+    const price = Number.parseFloat(item?.price);
+    const qty = Math.max(1, Number.parseInt(item?.qty, 10) || 1);
+    const image = item?.image || '';
+
+    if (!Number.isFinite(id) || !name || !Number.isFinite(price)) {
+        return null;
+    }
+
+    const normalizedName = name.toLowerCase().replace(/\s+/g, ' ').trim();
+    const key = item?.key || `${id}::${normalizedName}`;
+
+    return {
+        key,
+        id,
+        name,
+        price,
+        qty,
+        image
+    };
+}
+
+const CART_IMAGE_FALLBACK = 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop&crop=center';
+
 function getCart() {
-    return JSON.parse(localStorage.getItem('cart') || '[]');
+    const rawCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (!Array.isArray(rawCart)) {
+        return [];
+    }
+
+    return rawCart
+        .map(normalizeCartItem)
+        .filter(Boolean);
 }
 
 function setCart(cart) {
-    localStorage.setItem('cart', JSON.stringify(cart));
+    const cleanCart = (Array.isArray(cart) ? cart : [])
+        .map(normalizeCartItem)
+        .filter(Boolean);
+    localStorage.setItem('cart', JSON.stringify(cleanCart));
+}
+
+async function hydrateCartImages() {
+    const cart = getCart();
+    const needsImages = cart.some(item => !String(item.image || '').trim());
+    if (!needsImages) {
+        return false;
+    }
+
+    try {
+        const response = await fetch('/data/products.json', { cache: 'no-store' });
+        if (!response.ok) {
+            return false;
+        }
+
+        const products = await response.json();
+        if (!Array.isArray(products)) {
+            return false;
+        }
+
+        const byId = new Map();
+        const byName = new Map();
+        products.forEach(product => {
+            if (!product) {
+                return;
+            }
+            const id = Number.parseInt(product.id, 10);
+            const nameKey = String(product.name || '').trim().toLowerCase();
+            const image = String(product.image_url || '').trim();
+            if (Number.isFinite(id) && image) {
+                byId.set(id, image);
+            }
+            if (nameKey && image) {
+                byName.set(nameKey, image);
+            }
+        });
+
+        let changed = false;
+        const hydrated = cart.map(item => {
+            if (String(item.image || '').trim()) {
+                return item;
+            }
+
+            const resolvedImage = byId.get(item.id) || byName.get(String(item.name || '').trim().toLowerCase()) || '';
+            if (!resolvedImage) {
+                return item;
+            }
+
+            changed = true;
+            return { ...item, image: resolvedImage };
+        });
+
+        if (changed) {
+            setCart(hydrated);
+        }
+
+        return changed;
+    } catch (error) {
+        console.error('Failed to hydrate cart images:', error);
+        return false;
+    }
 }
 
 function updateCartCount() {
-    let cart = getCart();
-    let count = cart.reduce((sum, item) => sum + item.qty, 0);
+    const cart = getCart();
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
     document.querySelectorAll('#cart-count').forEach(el => {
         el.textContent = count > 0 ? count : '';
     });
@@ -44,7 +141,7 @@ function renderCart() {
         itemElement.className = 'flex flex-col md:flex-row gap-6 p-6 bg-surface-container-lowest rounded-xl group transition-all duration-300 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)]';
         itemElement.innerHTML = `
             <div class="w-full md:w-48 h-48 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-low flex items-center justify-center text-on-surface-variant">
-                <img src="${item.image || ''}" alt="${item.name}" class="w-full h-full object-cover" />
+                <img src="${item.image || CART_IMAGE_FALLBACK}" alt="${item.name}" class="w-full h-full object-cover" />
             </div>
             <div class="flex flex-col flex-grow justify-between">
                 <div class="flex justify-between items-start">
@@ -52,15 +149,15 @@ function renderCart() {
                         <h3 class="font-headline text-xl font-bold text-primary mb-1">${item.name}</h3>
                         <p class="font-label text-sm text-on-surface-variant">Qty: ${item.qty}</p>
                     </div>
-                    <button class="text-outline hover:text-error transition-colors remove-from-cart" type="button" data-id="${item.id}">
+                    <button class="text-outline hover:text-error transition-colors remove-from-cart" type="button" data-key="${item.key}">
                         <span class="material-symbols-outlined">delete</span>
                     </button>
                 </div>
                 <div class="flex justify-between items-end mt-6">
                     <div class="flex items-center bg-surface-container-high rounded-full px-4 py-2 space-x-4">
-                        <button class="text-primary font-bold hover:scale-125 transition-transform quantity-decrease" type="button" data-id="${item.id}">—</button>
+                        <button class="text-primary font-bold hover:scale-125 transition-transform quantity-decrease" type="button" data-key="${item.key}">-</button>
                         <span class="font-label font-semibold text-primary">${item.qty}</span>
-                        <button class="text-primary font-bold hover:scale-125 transition-transform quantity-increase" type="button" data-id="${item.id}">+</button>
+                        <button class="text-primary font-bold hover:scale-125 transition-transform quantity-increase" type="button" data-key="${item.key}">+</button>
                     </div>
                     <span class="font-headline text-lg font-bold text-primary">$${itemTotal.toFixed(2)}</span>
                 </div>
@@ -80,23 +177,26 @@ function renderCart() {
 
 function attachCartControls() {
     document.querySelectorAll('.remove-from-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.dataset.id);
-            removeFromCart(productId);
+        button.addEventListener('click', function () {
+            const productKey = this.dataset.key;
+            if (!productKey) return;
+            removeFromCart(productKey);
         });
     });
 
     document.querySelectorAll('.quantity-decrease').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.dataset.id);
-            changeQty(productId, -1);
+        button.addEventListener('click', function () {
+            const productKey = this.dataset.key;
+            if (!productKey) return;
+            changeQty(productKey, -1);
         });
     });
 
     document.querySelectorAll('.quantity-increase').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = parseInt(this.dataset.id);
-            changeQty(productId, 1);
+        button.addEventListener('click', function () {
+            const productKey = this.dataset.key;
+            if (!productKey) return;
+            changeQty(productKey, 1);
         });
     });
 }
@@ -139,13 +239,14 @@ function showCartNotification(message) {
 }
 
 function findProductDataFromButton(button) {
-    const id = parseInt(button.dataset.id) || parseInt(button.closest('[data-id]')?.dataset.id);
+    const id = parseInt(button.dataset.id, 10) || parseInt(button.closest('[data-id]')?.dataset.id, 10);
     const name = button.dataset.name || button.closest('[data-name]')?.dataset.name || button.closest('article,div')?.querySelector('h3, h2, .product-name')?.textContent.trim();
     const price = parseFloat(button.dataset.price) || parseFloat(button.closest('[data-price]')?.dataset.price) || parseFloat(button.closest('article,div')?.querySelector('[data-price]')?.dataset.price);
+    const image = button.dataset.image || button.closest('[data-image]')?.dataset.image || button.closest('article,div')?.querySelector('img')?.currentSrc || button.closest('article,div')?.querySelector('img')?.src || '';
     if (!id || !name || !price) {
         return null;
     }
-    return { id, name, price };
+    return { id, name, price, image };
 }
 
 function setButtonAddedState(button) {
@@ -164,30 +265,34 @@ function setButtonAddedState(button) {
 }
 
 function addToCart(product) {
-    let cart = getCart();
-    const index = cart.findIndex(item => item.id === product.id);
+    const normalizedProduct = normalizeCartItem({ ...product, qty: 1 });
+    if (!normalizedProduct) {
+        return;
+    }
+
+    const cart = getCart();
+    const index = cart.findIndex(item => item.key === normalizedProduct.key);
     if (index > -1) {
         cart[index].qty += 1;
     } else {
-        cart.push({ ...product, qty: 1 });
+        cart.push(normalizedProduct);
     }
     setCart(cart);
     updateCartCount();
-    showCartNotification(`${product.name} imeongezwa kwenye cart`);
+    showCartNotification(`${normalizedProduct.name} imeongezwa kwenye cart`);
     if (typeof renderCart === 'function') renderCart();
 }
 
-function removeFromCart(productId) {
-    let cart = getCart();
-    cart = cart.filter(item => item.id !== productId);
+function removeFromCart(productKey) {
+    const cart = getCart().filter(item => item.key !== productKey);
     setCart(cart);
     updateCartCount();
     if (typeof renderCart === 'function') renderCart();
 }
 
-function changeQty(productId, delta) {
-    let cart = getCart();
-    const index = cart.findIndex(item => item.id === productId);
+function changeQty(productKey, delta) {
+    const cart = getCart();
+    const index = cart.findIndex(item => item.key === productKey);
     if (index > -1) {
         cart[index].qty += delta;
         if (cart[index].qty < 1) cart[index].qty = 1;
@@ -375,7 +480,7 @@ function renderFeedbackRepliesMessage(message, type) {
     resultsContainer.innerHTML = `<p class="text-sm ${colorClass}">${escapeHTML(message)}</p>`;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function () {
     // Feedback form
     attachFeedbackForm();
     attachFeedbackReplyLookup();
@@ -409,6 +514,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    await hydrateCartImages();
     updateCartCount();
     if (typeof renderCart === 'function') renderCart();
     attachGlobalSearchInputs();
