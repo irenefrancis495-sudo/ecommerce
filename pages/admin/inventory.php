@@ -41,6 +41,10 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                 <span class="material-symbols-outlined">group</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Users</span>
             </a>
+            <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-teal-800 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 rounded-lg" href="/admin/feedback">
+                <span class="material-symbols-outlined">chat</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span>
+            </a>
             <a class="flex items-center gap-3 px-3 py-2.5 text-slate-500 dark:text-slate-400 hover:text-teal-800 hover:bg-white dark:hover:bg-slate-900 transition-all duration-300 rounded-lg" href="/admin/reports">
                 <span class="material-symbols-outlined">analytics</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span>

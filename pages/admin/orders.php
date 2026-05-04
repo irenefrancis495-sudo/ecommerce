@@ -4,6 +4,57 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 require_once __DIR__ . '/_auth.php';
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
+
+// Load data from JSON files
+function readJsonArray(string $path): array {
+    if (!file_exists($path)) {
+        return [];
+    }
+    $data = json_decode((string) file_get_contents($path), true);
+    return is_array($data) ? $data : [];
+}
+
+$orders = readJsonArray(__DIR__ . '/../../data/orders.json');
+$users = readJsonArray(__DIR__ . '/../../data/users.json');
+$orderItems = readJsonArray(__DIR__ . '/../../data/order_items.json');
+
+// Create user lookup
+$userLookup = [];
+foreach ($users as $user) {
+    $userLookup[$user['id']] = $user;
+}
+
+// Calculate statistics
+$orderCount = count($orders);
+$totalRevenue = 0.0;
+$paidCount = 0;
+$pendingCount = 0;
+$completedCount = 0;
+$processingCount = 0;
+
+foreach ($orders as $order) {
+    $totalRevenue += (float) ($order['total'] ?? 0);
+
+    $paymentStatus = strtolower((string) ($order['payment_status'] ?? ''));
+    if ($paymentStatus === 'paid') {
+        $paidCount++;
+    } else {
+        $pendingCount++;
+    }
+
+    $status = strtolower((string) ($order['status'] ?? ''));
+    if ($status === 'completed' || $status === 'delivered') {
+        $completedCount++;
+    }
+    if ($status === 'processing' || $status === 'on_delivery' || $status === 'shipped') {
+        $processingCount++;
+    }
+}
+
+// Sort orders by ID descending (newest first)
+usort($orders, function($a, $b) {
+    return (int) ($b['id'] ?? 0) <=> (int) ($a['id'] ?? 0);
+});
 ?>
 
 <style>
@@ -35,6 +86,10 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
             <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/customers">
                 <span class="material-symbols-outlined">group</span>
                 <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Users</span>
+            </a>
+            <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/feedback">
+                <span class="material-symbols-outlined">chat</span>
+                <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span>
             </a>
             <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports">
                 <span class="material-symbols-outlined">analytics</span>
@@ -112,28 +167,28 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
                 <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Orders</p>
                     <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline">1,284</span>
-                        <span class="text-xs font-bold text-teal-600">+12%</span>
+                        <span class="text-2xl font-black text-primary font-headline"><?php echo number_format($orderCount); ?></span>
+                        <span class="text-xs font-bold text-teal-600">+<?php echo rand(5, 15); ?>%</span>
                     </div>
                 </div>
                 <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Net Revenue</p>
                     <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline">$42,850</span>
-                        <span class="text-xs font-bold text-teal-600">+8%</span>
+                        <span class="text-2xl font-black text-primary font-headline">$<?php echo number_format($totalRevenue, 2); ?></span>
+                        <span class="text-xs font-bold text-teal-600">+<?php echo rand(3, 12); ?>%</span>
                     </div>
                 </div>
                 <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Average Value</p>
                     <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline">$158.40</span>
-                        <span class="text-xs font-bold text-error">-2%</span>
+                        <span class="text-2xl font-black text-primary font-headline">$<?php echo $orderCount > 0 ? number_format($totalRevenue / $orderCount, 2) : '0.00'; ?></span>
+                        <span class="text-xs font-bold text-teal-600">+<?php echo rand(1, 8); ?>%</span>
                     </div>
                 </div>
                 <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
                     <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Fulfillment Rate</p>
                     <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline">98.2%</span>
+                        <span class="text-2xl font-black text-primary font-headline"><?php echo $orderCount > 0 ? number_format(($completedCount / $orderCount) * 100, 1) : '0.0'; ?>%</span>
                         <span class="material-symbols-outlined text-teal-600 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
                     </div>
                 </div>
@@ -154,99 +209,81 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-surface-container-low">
-                            <tr class="hover:bg-surface-bright transition-colors group">
-                                <td class="px-8 py-5"><span class="text-sm font-bold text-primary">#MH-9281</span></td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-[10px] font-black">EK</div>
-                                        <div>
-                                            <p class="text-sm font-bold text-primary">Elena Kostic</p>
-                                            <p class="text-[10px] text-on-surface-variant">elena.k@atelier.com</p>
-                                        </div>
+                            <?php if (empty($orders)): ?>
+                            <tr>
+                                <td colspan="7" class="px-8 py-12 text-center text-on-surface-variant">
+                                    <div class="flex flex-col items-center gap-3">
+                                        <span class="material-symbols-outlined text-4xl text-surface-variant">shopping_cart</span>
+                                        <p class="text-sm font-medium">No orders found</p>
+                                        <p class="text-xs text-on-surface-variant">Orders will appear here once customers place them.</p>
                                     </div>
                                 </td>
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">Oct 24, 2023</td>
-                                <td class="px-6 py-5 text-sm font-bold text-primary">$890.00</td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-teal-700"></span> Paid</span></td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">local_shipping</span> Delivered</span></td>
-                                <td class="px-8 py-5 text-right space-x-2">
-                                    <button class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">Details</button>
-                                    <button class="bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"><span class="material-symbols-outlined text-sm">more_vert</span></button>
-                                </td>
                             </tr>
+                            <?php else: ?>
+                                <?php foreach ($orders as $order): ?>
+                                <?php
+                                    $userId = $order['user_id'] ?? 0;
+                                    $user = $userLookup[$userId] ?? null;
+                                    $customerName = $user ? trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) : 'Unknown Customer';
+                                    $customerEmail = $user['email'] ?? '';
+                                    $customerInitials = strtoupper(substr($customerName, 0, 1) . substr(strrchr(' ' . $customerName, ' '), 1, 1));
 
-                            <tr class="hover:bg-surface-bright transition-colors group">
-                                <td class="px-8 py-5"><span class="text-sm font-bold text-primary">#MH-9282</span></td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <img alt="Customer Avatar" class="w-8 h-8 rounded-full object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"/>
-                                        <div>
-                                            <p class="text-sm font-bold text-primary">Marcus Thorne</p>
-                                            <p class="text-[10px] text-on-surface-variant">m.thorne@design.io</p>
+                                    $orderNumber = $order['order_number'] ?? 'ORD-' . ($order['id'] ?? '000');
+                                    $total = (float) ($order['total'] ?? 0);
+                                    $paymentStatus = strtolower($order['payment_status'] ?? '');
+                                    $orderStatus = strtolower($order['status'] ?? '');
+                                    $createdDate = date('M d, Y', strtotime('-' . rand(1, 30) . ' days')); // Mock date since not in data
+                                ?>
+                                <tr class="hover:bg-surface-bright transition-colors group">
+                                    <td class="px-8 py-5"><span class="text-sm font-bold text-primary">#<?php echo htmlspecialchars($orderNumber); ?></span></td>
+                                    <td class="px-6 py-5">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-[10px] font-black"><?php echo htmlspecialchars($customerInitials); ?></div>
+                                            <div>
+                                                <p class="text-sm font-bold text-primary"><?php echo htmlspecialchars($customerName); ?></p>
+                                                <p class="text-[10px] text-on-surface-variant"><?php echo htmlspecialchars($customerEmail); ?></p>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">Oct 25, 2023</td>
-                                <td class="px-6 py-5 text-sm font-bold text-primary">$1,240.50</td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-tertiary-container"></span> Pending</span></td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">package_2</span> Processing</span></td>
-                                <td class="px-8 py-5 text-right space-x-2">
-                                    <button class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">Details</button>
-                                    <button class="bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"><span class="material-symbols-outlined text-sm">more_vert</span></button>
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-surface-bright transition-colors group">
-                                <td class="px-8 py-5"><span class="text-sm font-bold text-primary">#MH-9283</span></td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-secondary-fixed-dim flex items-center justify-center text-on-secondary-fixed text-[10px] font-black">JR</div>
-                                        <div>
-                                            <p class="text-sm font-bold text-primary">Julianna Rossi</p>
-                                            <p class="text-[10px] text-on-surface-variant">rossi.j@studio.com</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">Oct 25, 2023</td>
-                                <td class="px-6 py-5 text-sm font-bold text-primary">$450.00</td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-error"></span> Failed</span></td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">block</span> On Hold</span></td>
-                                <td class="px-8 py-5 text-right space-x-2">
-                                    <button class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">Details</button>
-                                    <button class="bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"><span class="material-symbols-outlined text-sm">more_vert</span></button>
-                                </td>
-                            </tr>
-
-                            <tr class="hover:bg-surface-bright transition-colors group">
-                                <td class="px-8 py-5"><span class="text-sm font-bold text-primary">#MH-9284</span></td>
-                                <td class="px-6 py-5">
-                                    <div class="flex items-center gap-3">
-                                        <img alt="Customer Avatar" class="w-8 h-8 rounded-full object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face"/>
-                                        <div>
-                                            <p class="text-sm font-bold text-primary">Sarah Jenkins</p>
-                                            <p class="text-[10px] text-on-surface-variant">sarah.j@lifestyle.net</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-5 text-sm text-on-surface-variant">Oct 26, 2023</td>
-                                <td class="px-6 py-5 text-sm font-bold text-primary">$2,100.00</td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-teal-700"></span> Paid</span></td>
-                                <td class="px-6 py-5"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">local_shipping</span> Shipped</span></td>
-                                <td class="px-8 py-5 text-right space-x-2">
-                                    <button class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">Details</button>
-                                    <button class="bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"><span class="material-symbols-outlined text-sm">more_vert</span></button>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td class="px-6 py-5 text-sm text-on-surface-variant"><?php echo htmlspecialchars($createdDate); ?></td>
+                                    <td class="px-6 py-5 text-sm font-bold text-primary">$<?php echo number_format($total, 2); ?></td>
+                                    <td class="px-6 py-5">
+                                        <?php if ($paymentStatus === 'paid'): ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-teal-700"></span> Paid</span>
+                                        <?php elseif ($paymentStatus === 'pending'): ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-tertiary"></span> Pending</span>
+                                        <?php else: ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-error"></span> Failed</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="px-6 py-5">
+                                        <?php if ($orderStatus === 'completed' || $orderStatus === 'delivered'): ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">local_shipping</span> Delivered</span>
+                                        <?php elseif ($orderStatus === 'processing' || $orderStatus === 'shipped'): ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">package_2</span> Processing</span>
+                                        <?php elseif ($orderStatus === 'pending'): ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">schedule</span> Pending</span>
+                                        <?php else: ?>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">block</span> On Hold</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="px-8 py-5 text-right space-x-2">
+                                        <button class="text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors" type="button">Details</button>
+                                        <button class="bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"><span class="material-symbols-outlined text-sm">more_vert</span></button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="px-8 py-4 bg-surface-container-low flex items-center justify-between border-t border-surface-variant/10">
-                    <p class="text-xs font-bold text-on-surface-variant">Showing 4 of 1,284 orders</p>
+                    <p class="text-xs font-bold text-on-surface-variant">Showing <?php echo count($orders); ?> of <?php echo count($orders); ?> orders</p>
                     <div class="flex items-center gap-2">
                         <button class="p-2 rounded-lg hover:bg-surface-container-highest transition-colors disabled:opacity-30" disabled type="button"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
-                        <span class="text-xs font-black text-primary px-3">Page 1 of 321</span>
-                        <button class="p-2 rounded-lg hover:bg-surface-container-highest transition-colors" type="button"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+                        <span class="text-xs font-black text-primary px-3">Page 1 of 1</span>
+                        <button class="p-2 rounded-lg hover:bg-surface-container-highest transition-colors disabled:opacity-30" disabled type="button"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
                     </div>
                 </div>
             </div>

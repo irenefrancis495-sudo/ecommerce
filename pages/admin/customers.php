@@ -107,6 +107,10 @@ $commentsCount = count($customerComments);
         <span class="material-symbols-outlined">group</span>
         <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Users</span>
       </a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/feedback">
+        <span class="material-symbols-outlined">chat</span>
+        <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span>
+      </a>
       <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports">
         <span class="material-symbols-outlined">analytics</span>
         <span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span>
@@ -182,8 +186,101 @@ $commentsCount = count($customerComments);
           <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $customerCount; ?></span></div>
         </div>
         <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Admins</p>
-          <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $adminCount; ?></span></div>
+          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Comments</p>
+          <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $commentsCount; ?></span></div>
+        </div>
+      </div>
+
+      <!-- Customer Activity Overview -->
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <!-- Recent Orders -->
+        <div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm shadow-slate-200/40">
+          <h3 class="text-lg font-black text-primary mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">shopping_cart</span>
+            Recent Customer Orders
+          </h3>
+          <div class="space-y-3">
+            <?php
+            $recentOrders = array_slice($orders, 0, 5); // Show last 5 orders
+            if (empty($recentOrders)): ?>
+              <div class="text-center py-8 text-on-surface-variant">
+                <span class="material-symbols-outlined text-3xl mb-2 block">shopping_cart</span>
+                <p class="text-sm">No orders yet</p>
+              </div>
+            <?php else: ?>
+              <?php foreach ($recentOrders as $order):
+                $user = $userLookup[$order['user_id']] ?? null;
+                $customerName = $user ? trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) : 'Unknown';
+                $orderNumber = $order['order_number'] ?? 'ORD-' . $order['id'];
+                $total = (float) ($order['total'] ?? 0);
+                $status = strtolower($order['status'] ?? '');
+              ?>
+              <div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-xs font-black">
+                    <?php echo strtoupper(substr($customerName, 0, 1)); ?>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-primary"><?php echo htmlspecialchars($customerName); ?></p>
+                    <p class="text-xs text-on-surface-variant"><?php echo htmlspecialchars($orderNumber); ?></p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-bold text-primary">$<?php echo number_format($total, 2); ?></p>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold
+                    <?php echo $status === 'completed' ? 'bg-teal-50 text-teal-700' : 'bg-tertiary-container text-on-tertiary-container'; ?>">
+                    <?php echo ucfirst($status ?: 'pending'); ?>
+                  </span>
+                </div>
+              </div>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
+        </div>
+
+        <!-- Recent Comments -->
+        <div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm shadow-slate-200/40">
+          <h3 class="text-lg font-black text-primary mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">chat</span>
+            Recent Customer Feedback
+          </h3>
+          <div class="space-y-3">
+            <?php
+            $recentComments = array_slice($customerComments, 0, 5); // Show last 5 comments
+            if (empty($recentComments)): ?>
+              <div class="text-center py-8 text-on-surface-variant">
+                <span class="material-symbols-outlined text-3xl mb-2 block">chat</span>
+                <p class="text-sm">No feedback yet</p>
+              </div>
+            <?php else: ?>
+              <?php foreach ($recentComments as $comment):
+                $name = $comment['name'] ?? 'Anonymous';
+                $message = $comment['message'] ?? '';
+                $createdAt = $comment['created_at'] ?? '';
+                $status = $comment['status'] ?? 'new';
+                $isNew = $status === 'new';
+              ?>
+              <div class="p-3 bg-surface-container-high rounded-xl <?php echo $isNew ? 'border-l-4 border-tertiary' : ''; ?>">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-xs font-black">
+                      <?php echo strtoupper(substr($name, 0, 1)); ?>
+                    </div>
+                    <span class="text-sm font-bold text-primary"><?php echo htmlspecialchars($name); ?></span>
+                    <?php if ($isNew): ?>
+                      <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-bold">
+                        <span class="w-1 h-1 rounded-full bg-tertiary"></span>
+                        NEW
+                      </span>
+                    <?php endif; ?>
+                  </div>
+                  <span class="text-xs text-on-surface-variant"><?php echo htmlspecialchars(date('M d, H:i', strtotime($createdAt))); ?></span>
+                </div>
+                <p class="text-sm text-on-surface-variant line-clamp-2"><?php echo htmlspecialchars(substr($message, 0, 80) . (strlen($message) > 80 ? '...' : '')); ?></p>
+              </div>
+              <?php endforeach; ?>
+            <?php endif; ?>
+          </div>
         </div>
       </div>
 
