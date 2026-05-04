@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once __DIR__ . '/_auth.php';
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
 ?>
