@@ -6,8 +6,10 @@ if (empty($_SESSION['admin_logged_in'])) {
     echo '<script>window.location.href="/admin/login";</script>';
     return;
 }
+require_once __DIR__ . '/_notifications.php';
 
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
+$notificationCount = adminNotificationCount();
 ?>
 
 <!-- SideNavBar Component -->
@@ -76,9 +78,12 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
         <div class="flex items-center gap-6">
             <div class="flex gap-4">
-                <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button">
+                <a class="relative text-slate-600 hover:text-amber-700 transition-colors" href="/admin/messages" title="Open notifications">
                     <span class="material-symbols-outlined">notifications</span>
-                </button>
+                    <?php if ($notificationCount > 0): ?>
+                    <span class="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold"><?php echo $notificationCount > 99 ? '99+' : $notificationCount; ?></span>
+                    <?php endif; ?>
+                </a>
                 <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button">
                     <span class="material-symbols-outlined">help_outline</span>
                 </button>
