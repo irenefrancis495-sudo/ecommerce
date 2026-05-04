@@ -73,6 +73,9 @@ function renderCart() {
     if (summarySubtotal) summarySubtotal.textContent = `$${subtotal.toFixed(2)}`;
     if (summaryTotal) summaryTotal.textContent = `$${total.toFixed(2)}`;
     attachCartControls();
+    if (typeof updateCheckoutButton === 'function') {
+        updateCheckoutButton();
+    }
 }
 
 function attachCartControls() {

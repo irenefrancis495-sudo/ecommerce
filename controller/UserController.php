@@ -10,7 +10,57 @@ class UserController {
         $this->db = new Database();
     }
 
+    private function getAdminUser(): array {
+        return [
+            'id' => 0,
+            'username' => 'admin',
+            'email' => 'admin@mpemba.local',
+            'password' => 'Admin@123',
+            'first_name' => 'Site',
+            'last_name' => 'Admin',
+            'role' => 'admin'
+        ];
+    }
+
+    public function loginAdmin($login, $password) {
+        $adminUser = $this->getAdminUser();
+        $loginNormalized = strtolower($login);
+
+        if ($loginNormalized === strtolower($adminUser['username']) || $loginNormalized === strtolower($adminUser['email'])) {
+            $isValidPassword = hash_equals($adminUser['password'], $password) || strcasecmp($adminUser['password'], $password) === 0;
+
+            if ($isValidPassword) {
+                $_SESSION['admin_logged_in'] = true;
+                $_SESSION['admin_user'] = [
+                    'id' => $adminUser['id'],
+                    'username' => $adminUser['username'],
+                    'email' => $adminUser['email'],
+                    'first_name' => $adminUser['first_name'],
+                    'last_name' => $adminUser['last_name'],
+                    'role' => $adminUser['role']
+                ];
+                $_SESSION['user'] = $_SESSION['admin_user'];
+
+                return [
+                    'success' => true,
+                    'message' => 'Admin login successful',
+                    'user' => $_SESSION['admin_user'],
+                    'redirect' => '/admin/index'
+                ];
+            }
+
+            return ['success' => false, 'message' => 'Invalid username or password'];
+        }
+
+        return null;
+    }
+
     public function login($username, $password) {
+        $adminLogin = $this->loginAdmin($username, $password);
+        if ($adminLogin !== null) {
+            return $adminLogin;
+        }
+
         $users = $this->db->getUsers();
 
         foreach ($users as $user) {

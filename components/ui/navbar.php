@@ -12,7 +12,7 @@
             <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/home">Home</a>
             <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/products">Products</a>
             <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/category">Categories</a>
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/register">Register</a>
+            <a id="register-link-desktop" class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/register">Register</a>
         </div>
 
         <div class="hidden lg:flex items-center gap-4" id="auth-section">
@@ -29,7 +29,7 @@
             <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/home">Home</a>
             <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/products">Products</a>
             <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/category">Categories</a>
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/register">Register</a>
+            <a id="register-link-mobile" class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/register">Register</a>
             <div class="flex flex-col gap-3 pt-2 border-t border-slate-200/70 dark:border-slate-800" id="mobile-auth-section">
                 <!-- This will be populated by JavaScript -->
             </div>
@@ -48,12 +48,11 @@
 
         // Check authentication status and update navbar
         async function updateAuthStatus() {
+            const authSection = document.getElementById('auth-section');
+            const mobileAuthSection = document.getElementById('mobile-auth-section');
             try {
                 const response = await fetch('/api/auth.php?action=check');
                 const result = await response.json();
-
-                const authSection = document.getElementById('auth-section');
-                const mobileAuthSection = document.getElementById('mobile-auth-section');
 
                 if (result.success && result.user) {
                     // User is logged in
@@ -77,6 +76,11 @@
                             Cart
                         </a>
                     `;
+
+                    const registerDesktop = document.getElementById('register-link-desktop');
+                    const registerMobile = document.getElementById('register-link-mobile');
+                    if (registerDesktop) registerDesktop.style.display = 'none';
+                    if (registerMobile) registerMobile.style.display = 'none';
                 } else {
                     // User is not logged in
                     authSection.innerHTML = `
@@ -94,11 +98,32 @@
                             Cart
                         </a>
                     `;
+                    const registerDesktop = document.getElementById('register-link-desktop');
+                    const registerMobile = document.getElementById('register-link-mobile');
+                    if (registerDesktop) registerDesktop.style.display = '';
+                    if (registerMobile) registerMobile.style.display = '';
                 }
             } catch (error) {
                 console.error('Auth check failed:', error);
                 // Default to logged out state
-                updateAuthStatus();
+                authSection.innerHTML = `
+                    <a href="/login" class="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/20 hover:bg-primary/90 transition">Login</a>
+                    <a href="/cart" class="relative inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-3 py-2 text-slate-700 shadow-sm hover:border-primary hover:text-primary transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 dark:hover:text-white">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        <span id="cart-count" class="absolute -top-1 -right-1 inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-on-secondary px-1.5"></span>
+                    </a>
+                `;
+                mobileAuthSection.innerHTML = `
+                    <a href="/login" class="block rounded-3xl bg-primary px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary/90 transition">Login</a>
+                    <a href="/cart" class="flex items-center justify-center gap-2 rounded-3xl border border-slate-200 px-4 py-3 text-sm font-medium text-slate-700 hover:border-primary hover:text-primary transition dark:border-slate-800 dark:text-slate-200">
+                        <span class="material-symbols-outlined">shopping_cart</span>
+                        Cart
+                    </a>
+                `;
+                const registerDesktop = document.getElementById('register-link-desktop');
+                const registerMobile = document.getElementById('register-link-mobile');
+                if (registerDesktop) registerDesktop.style.display = '';
+                if (registerMobile) registerMobile.style.display = '';
             }
         }
 

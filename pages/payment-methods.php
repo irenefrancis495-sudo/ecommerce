@@ -219,6 +219,9 @@
 <span id="summary-total">$0.00</span>
 </div>
 </div>
+<div id="payment-auth-warning" class="hidden mb-4 rounded-xl border border-error/20 bg-error-container/10 px-4 py-3 text-sm text-on-error-container">
+    Tafadhali ingia kwanza ili kuthibitisha malipo yako.
+</div>
 <button id="payment-confirm-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold font-headline mt-4 shadow-lg shadow-secondary/20 active:scale-95 transition-transform" disabled>
                     Confirm Payment
                 </button>

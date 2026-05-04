@@ -152,6 +152,48 @@
 <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="/js/app.js"></script>
 <script>
+    async function updateCheckoutButton() {
+        const button = document.getElementById('checkout-button');
+        if (!button) return;
+
+        const cart = getCart();
+        const hasItems = cart.length > 0;
+        const defaultText = 'Proceed to Checkout';
+
+        if (!hasItems) {
+            button.textContent = defaultText;
+            button.disabled = true;
+            button.onclick = null;
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/auth.php?action=check');
+            const result = await response.json();
+            const loggedIn = result.success && result.user;
+
+            if (loggedIn) {
+                button.textContent = defaultText;
+                button.disabled = false;
+                button.onclick = function () {
+                    window.location.href = '/payment-methods';
+                };
+            } else {
+                button.textContent = 'Login to Checkout';
+                button.disabled = false;
+                button.onclick = function () {
+                    window.location.href = '/login';
+                };
+            }
+        } catch (error) {
+            button.textContent = 'Login to Checkout';
+            button.disabled = false;
+            button.onclick = function () {
+                window.location.href = '/login';
+            };
+        }
+    }
+
     // Initialize cart display when page loads
     document.addEventListener('DOMContentLoaded', function() {
         if (typeof renderCart === 'function') {
@@ -159,6 +201,9 @@
         }
         if (typeof updateCartCount === 'function') {
             updateCartCount();
+        }
+        if (typeof updateCheckoutButton === 'function') {
+            updateCheckoutButton();
         }
     });
 </script>

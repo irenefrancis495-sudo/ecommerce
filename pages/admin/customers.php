@@ -172,6 +172,33 @@ $totalUsers = count($displayUsers);
         </div>
       </div>
 
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div class="xl:col-span-2 bg-surface-container-lowest p-6 rounded-3xl shadow-sm shadow-slate-200/40">
+          <h3 class="text-lg font-black text-primary mb-4">Add New User</h3>
+          <form id="add-user-form" class="grid gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input id="new-username" type="text" placeholder="Username" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm" required>
+              <input id="new-email" type="email" placeholder="Email" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm" required>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input id="new-firstname" type="text" placeholder="First Name" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm">
+              <input id="new-lastname" type="text" placeholder="Last Name" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input id="new-password" type="password" placeholder="Password" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm" required>
+              <select id="new-role" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm">
+                <option value="customer">Customer</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="flex items-center justify-between gap-4">
+              <button type="submit" class="rounded-2xl bg-primary text-white px-6 py-3 text-sm font-semibold hover:bg-primary/90 transition">Create User</button>
+              <span id="add-user-status" class="text-sm text-slate-500"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40">
         <div class="overflow-x-auto">
           <table class="w-full text-left border-collapse">
@@ -184,6 +211,7 @@ $totalUsers = count($displayUsers);
                 <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Joined</th>
                 <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Orders</th>
                 <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Spend</th>
+                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Action</th>
                 <th class="px-8 py-5 text-xs font-black text-primary uppercase tracking-widest text-right">Status</th>
               </tr>
             </thead>
@@ -211,6 +239,13 @@ $totalUsers = count($displayUsers);
                 <td class="px-6 py-5 text-sm text-on-surface-variant"><?php echo htmlspecialchars($u['joined']); ?></td>
                 <td class="px-6 py-5 text-sm font-bold text-primary"><?php echo (int) $u['orders']; ?></td>
                 <td class="px-6 py-5 text-sm font-bold text-primary">$<?php echo htmlspecialchars($u['spend']); ?></td>
+                <td class="px-6 py-5 text-sm text-right">
+                  <?php if ($u['role'] === 'admin'): ?>
+                    <button disabled class="rounded-full bg-surface-container-high text-slate-500 px-3 py-2 text-xs font-semibold">Protected</button>
+                  <?php else: ?>
+                    <button onclick="deleteUser(<?php echo (int) $u['id']; ?>, '<?php echo htmlspecialchars(addslashes($u['username'])); ?>')" class="rounded-full bg-error/10 text-error px-3 py-2 text-xs font-semibold hover:bg-error/20 transition">Delete</button>
+                  <?php endif; ?>
+                </td>
                 <td class="px-8 py-5 text-right">
                   <?php if ($u['status'] === 'active'): ?>
                     <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-teal-700"></span> Active</span>
@@ -227,3 +262,75 @@ $totalUsers = count($displayUsers);
     </div>
   </main>
 </div>
+<script>
+  async function addUser(event) {
+    event.preventDefault();
+
+    const status = document.getElementById('add-user-status');
+    status.textContent = '';
+    status.className = 'text-sm text-slate-500';
+
+    const payload = {
+      username: document.getElementById('new-username').value.trim(),
+      email: document.getElementById('new-email').value.trim(),
+      first_name: document.getElementById('new-firstname').value.trim(),
+      last_name: document.getElementById('new-lastname').value.trim(),
+      password: document.getElementById('new-password').value,
+      role: document.getElementById('new-role').value
+    };
+
+    if (!payload.username || !payload.email || !payload.password) {
+      status.textContent = 'Username, email and password are required.';
+      status.className = 'text-sm text-error';
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin_users.php?action=add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+
+      if (result.status === 'success') {
+        status.textContent = 'User created successfully.';
+        status.className = 'text-sm text-teal-700';
+        document.getElementById('add-user-form').reset();
+        setTimeout(() => location.reload(), 900);
+      } else {
+        status.textContent = result.message || 'Could not create user.';
+        status.className = 'text-sm text-error';
+      }
+    } catch (error) {
+      status.textContent = 'There was an error saving the user.';
+      status.className = 'text-sm text-error';
+    }
+  }
+
+  async function deleteUser(id, username) {
+    if (!confirm('Delete user "' + username + '"? This action cannot be undone.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/admin_users.php?action=delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      const result = await response.json();
+
+      if (result.status === 'success') {
+        alert('User deleted successfully.');
+        location.reload();
+      } else {
+        alert(result.message || 'Could not delete user.');
+      }
+    } catch (error) {
+      alert('There was an error deleting the user.');
+    }
+  }
+
+  document.getElementById('add-user-form').addEventListener('submit', addUser);
+</script>
