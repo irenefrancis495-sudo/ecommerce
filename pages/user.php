@@ -1,6 +1,11 @@
 <?php
-// Static user page - no database
+<<<<<<< HEAD
+use Mpemba\Utils\Utility;
+=======
+require __DIR__ . '/../config/bootstrap.php';
 session_start();
+use Mpemba\Entity\Order;
+>>>>>>> main
 
 $userLogged = isset($_SESSION['user_id']) || localStorage.getItem('user'); // Check localStorage instead
 $orders = [];
