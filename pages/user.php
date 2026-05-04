@@ -1,6 +1,7 @@
 <?php
-// Static user page - no database
+require __DIR__ . '/../config/bootstrap.php';
 session_start();
+use Mpemba\Entity\Order;
 
 $userLogged = isset($_SESSION['user_id']) || localStorage.getItem('user'); // Check localStorage instead
 $orders = [];
@@ -53,6 +54,6 @@ $orders = [];
             </section>
         <?php endif; ?>
     </main>
-    <?php include __DIR__ . '/../partials/footer.php'; ?>
+    <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 </body>
 </html>

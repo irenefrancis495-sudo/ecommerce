@@ -63,8 +63,6 @@
     </div>
 </main>
 
-<?php include __DIR__ . '/../components/ui/footer.php'; ?>
-
 <script>
 const products = <?php echo file_get_contents(__DIR__ . '/../data/products.json'); ?>;
 
