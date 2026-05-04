@@ -4,10 +4,11 @@
 <aside class="sidebar">
   <div class="brand">Mpemba Admin</div>
   <nav>
-    <a href="index.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-    <a href="orders.php"><i class="fas fa-shopping-cart"></i> Orders</a>
-    <a href="products.php"><i class="fas fa-box-open"></i> Products</a>
-    <a href="customers.php"><i class="fas fa-users"></i> Customers</a>
-    <a href="reports.php"><i class="fas fa-chart-line"></i> Reports</a>
+    <a href="/admin/index" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+    <a href="/admin/inventory"><i class="fas fa-box-open"></i> Inventory</a>
+    <a href="/admin/orders"><i class="fas fa-shopping-cart"></i> Orders</a>
+    <a href="/admin/customers"><i class="fas fa-users"></i> Customers</a>
+    <a href="/admin/reports"><i class="fas fa-chart-line"></i> Reports</a>
+    <a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
   </nav>
 </aside>

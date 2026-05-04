@@ -1,27 +1,34 @@
 <?php
-session_start();
 // Simple admin authentication (replace with DB in production)
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: login.php'); exit;
+    echo '<script>window.location.href="/admin/login";</script>';
+    return;
 }
 
-$email = $_POST['email'] ?? '';
-$password = $_POST['password'] ?? '';
+$login = trim((string) ($_POST['login'] ?? $_POST['email'] ?? ''));
+$password = trim((string) ($_POST['password'] ?? ''));
 
 // Hard-coded admin user (change for production)
 $adminUser = [
+    'username' => 'admin',
     'email' => 'admin@mpemba.local',
-    // password: Admin@123 (bcrypt)
-    'password_hash' => password_hash('Admin@123', PASSWORD_DEFAULT),
+    'password' => 'Admin@123',
     'name' => 'Site Admin'
 ];
 
-if (strtolower($email) === strtolower($adminUser['email']) && password_verify($password, $adminUser['password_hash'])) {
+$loginNormalized = strtolower($login);
+$isValidLogin = $loginNormalized === strtolower($adminUser['email']) || $loginNormalized === strtolower($adminUser['username']);
+
+$isValidPassword = hash_equals($adminUser['password'], $password) || strcasecmp($adminUser['password'], $password) === 0;
+
+if ($isValidLogin && $isValidPassword) {
     $_SESSION['admin_logged_in'] = true;
     $_SESSION['admin_user'] = ['email'=>$adminUser['email'],'name'=>$adminUser['name']];
-    header('Location: index.php'); exit;
+    echo '<script>window.location.href="/admin/index";</script>';
+    return;
 }
 
 // invalid
 $_SESSION['auth_error'] = 'Invalid credentials';
-header('Location: login.php'); exit;
+echo '<script>window.location.href="/admin/login";</script>';
+return;

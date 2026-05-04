@@ -59,6 +59,13 @@ class Router {
             'sanctuary-home' => 'Sanctuary Home - Mpemba Store',
             'lifestyle-essentials' => 'Lifestyle Essentials - Mpemba Store',
             'splash' => 'Welcome - Mpemba Store',
+            'admin/index' => 'Admin Dashboard - Mpemba',
+            'admin/inventory' => 'Inventory Console - Mpemba Heritage',
+            'admin/orders' => 'Orders Registry - Mpemba Admin',
+            'admin/customers' => 'Customers - Mpemba Admin',
+            'admin/reports' => 'Reports - Mpemba Admin',
+            'admin/settings' => 'Settings Hub - Mpemba Admin',
+            'admin/login' => 'Admin Login - Mpemba',
         ];
 
         return $pageNames[$path] ?? $default;

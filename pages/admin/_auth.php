@@ -1,5 +1,5 @@
 <?php
-session_start();
 if (empty($_SESSION['admin_logged_in'])) {
-    header('Location: login'); exit;
+    echo '<script>window.location.href="/admin/login";</script>';
+    return;
 }

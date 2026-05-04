@@ -1,3 +1,3 @@
 <?php
-header('Location: /admin');
-exit;
+echo '<script>window.location.href="/admin/index";</script>';
+return;
