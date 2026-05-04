@@ -17,7 +17,7 @@ class Router {
         }
 
         if ($path === '') {
-            $path = 'home';
+            $path = 'splash';
         }
 
         // Check if it's a direct page request
@@ -43,7 +43,8 @@ class Router {
 
         // For requests like /login, /cart, etc.
         $pageNames = [
-            '' => 'Mpemba Store - Home',
+            '' => 'Welcome - Mpemba Store',
+            'splash' => 'Welcome - Mpemba Store',
             'home' => 'Home - Mpemba Store',
             'products' => 'All Products - Mpemba Store',
             'login' => 'Login - Mpemba Store',

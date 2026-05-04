@@ -3,6 +3,12 @@
 require_once __DIR__ . '/utils/Router.php';
 session_start();
 
+$requestedPath = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+if ($requestedPath === '') {
+    header('Location: /splash');
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 
