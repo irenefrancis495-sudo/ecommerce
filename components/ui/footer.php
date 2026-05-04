@@ -85,24 +85,7 @@
                         <span class="material-symbols-outlined text-base">arrow_forward</span>
                     </button>
                 </form>
-                <div class="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6">
-                    <h3 class="text-lg font-bold text-white mb-3">Send feedback</h3>
-                    <p class="text-slate-300 text-sm mb-4">Share your questions, product ideas, or website feedback and our team will review it.</p>
-                    <form id="customer-feedback-form" class="grid gap-4">
-                        <div class="grid gap-4 sm:grid-cols-2">
-                            <input name="name" type="text" placeholder="Your name" required class="w-full rounded-2xl border border-white/10 bg-slate-950/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition" />
-                            <input name="email" type="email" placeholder="Your email" required class="w-full rounded-2xl border border-white/10 bg-slate-950/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition" />
-                        </div>
-                        <textarea name="message" placeholder="How can we help you?" required rows="4" class="w-full rounded-3xl border border-white/10 bg-slate-950/10 px-4 py-3 text-sm text-white placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 transition"></textarea>
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                            <span id="feedback-form-status" class="text-sm text-slate-300"></span>
-                            <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary/90 shadow-lg shadow-primary/20">
-                                <span>Send feedback</span>
-                                <span class="material-symbols-outlined text-base">send</span>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+
                 <div class="mt-6 flex items-center gap-4">
                     <a href="#" class="group inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 transition hover:bg-primary hover:border-primary hover:shadow-lg hover:shadow-primary/30" title="Twitter">
                         <span class="material-symbols-outlined">public</span>

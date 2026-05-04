@@ -94,6 +94,9 @@
             </div>
         </div>
     </section>
+
+    <!-- Feedback Section -->
+
 </main>
 
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
