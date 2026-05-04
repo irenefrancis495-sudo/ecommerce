@@ -68,6 +68,10 @@ class Router {
             'admin/settings' => 'Settings Hub - Mpemba Admin',
             'admin/add-product' => 'Add Product - Mpemba Admin',
             'admin/login' => 'Admin Login - Mpemba',
+            'about-us' => 'About Us - Mpemba Store',
+            'privacy-policy' => 'Privacy Policy - Mpemba Store',
+            'blog' => 'Blog - Mpemba Store',
+            'contact' => 'Contact Us - Mpemba Store',
         ];
 
         return $pageNames[$path] ?? $default;

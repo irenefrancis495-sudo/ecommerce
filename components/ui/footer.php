@@ -63,11 +63,11 @@
                     Company
                 </h3>
                 <div class="mt-6 space-y-3">
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">About us</a>
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Privacy Policy</a>
+                    <a href="/about-us" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">About us</a>
+                    <a href="/privacy-policy" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Privacy Policy</a>
                     <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Terms & Conditions</a>
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Blog</a>
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Contact</a>
+                    <a href="/blog" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Blog</a>
+                    <a href="/contact" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Contact</a>
                 </div>
             </div>
 
