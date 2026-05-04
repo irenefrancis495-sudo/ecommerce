@@ -153,7 +153,7 @@
         <div class="bg-gradient-to-r from-primary to-cyan-500 rounded-3xl p-12 text-white text-center">
             <h2 class="text-3xl font-black mb-4">Get Stories Delivered</h2>
             <p class="mb-8 text-white/90 max-w-xl mx-auto">Subscribe to our newsletter for weekly artisan stories, cultural insights, and exclusive shopping recommendations.</p>
-            <form class="flex gap-3 max-w-md mx-auto" onsubmit="event.preventDefault();">
+            <form class="flex gap-3 max-w-md mx-auto" data-subscribe data-source="blog">
                 <input type="email" placeholder="Enter your email" required class="flex-1 rounded-full px-6 py-3 text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-white/30" />
                 <button type="submit" class="bg-white text-primary px-8 py-3 rounded-full font-bold hover:bg-white/90 transition">Subscribe</button>
             </form>

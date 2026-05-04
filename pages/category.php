@@ -191,10 +191,10 @@ $categoryImages = [
                 <span class="font-label font-bold text-secondary tracking-widest text-sm mb-4 block uppercase">Join the Atelier</span>
                 <h2 class="font-display font-bold text-4xl text-primary mb-6">Stay Inspired</h2>
                 <p class="font-body text-on-surface-variant mb-10 text-lg">Receive a weekly curation of new artisans, exclusive collections, and design stories from our marketplace.</p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <input class="flex-grow px-6 py-4 bg-surface-container-lowest rounded-lg border-none focus:ring-2 focus:ring-primary shadow-sm transition-all" placeholder="Enter your email" type="email" />
-                    <button class="px-8 py-4 bg-secondary text-on-secondary font-bold rounded-lg hover:scale-105 transition-all shadow-md">Subscribe Now</button>
-                </div>
+                <form class="flex flex-col sm:flex-row gap-4" data-subscribe data-source="category">
+                    <input class="flex-grow px-6 py-4 bg-surface-container-lowest rounded-lg border-none focus:ring-2 focus:ring-primary shadow-sm transition-all" placeholder="Enter your email" type="email" required />
+                    <button type="submit" class="px-8 py-4 bg-secondary text-on-secondary font-bold rounded-lg hover:scale-105 transition-all shadow-md">Subscribe Now</button>
+                </form>
             </div>
         </section>
     </main>

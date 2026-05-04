@@ -72,6 +72,8 @@ class Router {
             'privacy-policy' => 'Privacy Policy - Mpemba Store',
             'blog' => 'Blog - Mpemba Store',
             'contact' => 'Contact Us - Mpemba Store',
+                    'admin/messages' => 'Messages - Mpemba Admin',
+                    'admin/subscribers' => 'Subscribers - Mpemba Admin',
         ];
 
         return $pageNames[$path] ?? $default;

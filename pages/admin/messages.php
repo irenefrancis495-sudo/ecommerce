@@ -36,182 +36,234 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
 $totalMessages = count($messages);
 $newMessages   = count(array_filter($messages, fn($m) => ($m['status'] ?? 'new') === 'new'));
+$readMessages  = $totalMessages - $newMessages;
+$subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','return'=>'Returns & Refunds','artisan'=>'Artisan Partnership','media'=>'Media & Press','other'=>'Other'];
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact Messages - Mpemba Admin</title>
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/assets/DataTables/datatables.min.css" />
-    <link rel="stylesheet" href="/css/admin.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</head>
-<body>
-<?php include __DIR__ . '/_sidebar.php'; ?>
-
-<div class="main-content">
-    <div class="topbar d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0"><i class="fas fa-envelope me-2"></i>Contact Messages</h4>
-        <span class="text-muted">Welcome, <?= htmlspecialchars($adminName) ?></span>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 450, 'GRAD' 0, 'opsz' 24; }
+</style>
+<div class="bg-background text-on-background min-h-screen">
+  <!-- Sidebar -->
+  <aside class="h-screen w-64 fixed left-0 top-0 bg-slate-50 flex flex-col p-4 z-50">
+    <div class="mb-10 px-2">
+      <h1 class="text-teal-900 font-black tracking-tighter text-2xl">Mpemba Heritage</h1>
+      <p class="font-['Epilogue'] tracking-tight font-bold text-sm text-slate-500">Digital Atelier Console</p>
     </div>
-
-    <!-- Stats row -->
-    <div class="row g-3 mb-4">
-        <div class="col-md-3">
-            <div class="card text-center p-3 border-0 shadow-sm">
-                <div class="fs-2 fw-bold text-primary"><?= $totalMessages ?></div>
-                <div class="text-muted small">Total Messages</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center p-3 border-0 shadow-sm">
-                <div class="fs-2 fw-bold text-danger"><?= $newMessages ?></div>
-                <div class="text-muted small">Unread</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-center p-3 border-0 shadow-sm">
-                <div class="fs-2 fw-bold text-success"><?= $totalMessages - $newMessages ?></div>
-                <div class="text-muted small">Read</div>
-            </div>
-        </div>
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/index"><span class="material-symbols-outlined">dashboard</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Dashboard</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/inventory"><span class="material-symbols-outlined">inventory_2</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Inventory</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/orders"><span class="material-symbols-outlined">shopping_cart</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Orders</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/customers"><span class="material-symbols-outlined">group</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Users</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/feedback"><span class="material-symbols-outlined">chat</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Feedback</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 bg-white text-teal-900 font-bold rounded-lg shadow-sm shadow-slate-200/50 scale-102 transition-transform duration-200" href="/admin/messages"><span class="material-symbols-outlined">mail</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Messages</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/subscribers"><span class="material-symbols-outlined">mark_email_read</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Subscribers</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/reports"><span class="material-symbols-outlined">analytics</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Analytics</span></a>
+      <a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-teal-800 transition-all duration-300 hover:bg-white rounded-lg" href="/admin/settings"><span class="material-symbols-outlined">settings</span><span class="font-['Epilogue'] tracking-tight font-bold text-lg">Settings</span></a>
+    </nav>
+    <div class="mt-auto space-y-2">
+      <a class="group bg-gradient-to-r from-primary via-primary-container to-primary text-on-primary py-3.5 px-4 rounded-xl font-black tracking-wide uppercase text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/25 border border-primary/20 hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/35 transition-all duration-300" href="/admin/reports">
+        <span class="material-symbols-outlined text-base group-hover:rotate-90 transition-transform duration-300">add</span>NEW REPORT<span class="text-[9px] px-1.5 py-0.5 rounded-full bg-white/20 border border-white/30">AI</span>
+      </a>
+      <a class="w-full bg-surface-container-high text-primary py-2.5 px-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors" href="/admin/logout"><span class="material-symbols-outlined text-sm">logout</span>Logout</a>
     </div>
+  </aside>
 
-    <!-- Messages Table -->
-    <div class="card border-0 shadow-sm">
-        <div class="card-body">
-            <?php if (empty($messages)): ?>
-                <div class="text-center text-muted py-5">
-                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
-                    No contact messages yet.
-                </div>
-            <?php else: ?>
-            <table id="messagesTable" class="table table-hover align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Subject</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach (array_reverse($messages) as $msg): ?>
-                    <tr class="<?= ($msg['status'] ?? 'new') === 'new' ? 'fw-semibold' : '' ?>">
-                        <td><?= (int)$msg['id'] ?></td>
-                        <td><?= htmlspecialchars($msg['name']) ?></td>
-                        <td><?= htmlspecialchars($msg['email']) ?></td>
-                        <td><?= htmlspecialchars(ucfirst($msg['subject'])) ?></td>
-                        <td><?= htmlspecialchars($msg['created_at'] ?? '-') ?></td>
-                        <td>
-                            <?php if (($msg['status'] ?? 'new') === 'new'): ?>
-                                <span class="badge bg-danger">New</span>
-                            <?php else: ?>
-                                <span class="badge bg-secondary">Read</span>
-                            <?php endif; ?>
-                        </td>
-                        <td>
-                            <!-- View button -->
-                            <button class="btn btn-sm btn-outline-primary me-1"
-                                data-bs-toggle="modal"
-                                data-bs-target="#msgModal"
-                                data-id="<?= (int)$msg['id'] ?>"
-                                data-name="<?= htmlspecialchars($msg['name'], ENT_QUOTES) ?>"
-                                data-email="<?= htmlspecialchars($msg['email'], ENT_QUOTES) ?>"
-                                data-subject="<?= htmlspecialchars(ucfirst($msg['subject']), ENT_QUOTES) ?>"
-                                data-message="<?= htmlspecialchars($msg['message'], ENT_QUOTES) ?>"
-                                data-date="<?= htmlspecialchars($msg['created_at'] ?? '-', ENT_QUOTES) ?>">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                            <!-- Mark read -->
-                            <?php if (($msg['status'] ?? 'new') === 'new'): ?>
-                            <form method="POST" class="d-inline">
-                                <input type="hidden" name="mark_read" value="<?= (int)$msg['id'] ?>" />
-                                <button type="submit" class="btn btn-sm btn-outline-success me-1" title="Mark as read">
-                                    <i class="fas fa-check"></i>
-                                </button>
-                            </form>
-                            <?php endif; ?>
-                            <!-- Delete -->
-                            <form method="POST" class="d-inline delete-form">
-                                <input type="hidden" name="delete_id" value="<?= (int)$msg['id'] ?>" />
-                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-            <?php endif; ?>
-        </div>
+  <!-- Top Bar -->
+  <header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
+    <div class="flex items-center gap-6 w-1/2">
+      <div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-teal-900/10 rounded-lg">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+        <input id="globalSearch" class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-0" placeholder="Search messages..." type="text"/>
+      </div>
     </div>
+    <div class="flex items-center gap-6">
+      <button class="relative text-slate-600 hover:text-amber-700 transition-colors" type="button">
+        <span class="material-symbols-outlined">notifications</span>
+        <?php if ($newMessages > 0): ?>
+        <span class="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold"><?= $newMessages ?></span>
+        <?php endif; ?>
+      </button>
+      <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button"><span class="material-symbols-outlined">help_outline</span></button>
+      <div class="flex items-center gap-3 pl-4 border-l border-slate-100">
+        <img alt="Administrator Profile" class="w-8 h-8 rounded-full object-cover" src="https://i.pravatar.cc/80?u=mpemba-admin"/>
+        <div class="text-right">
+          <p class="text-xs font-bold text-teal-900"><?= htmlspecialchars($adminName) ?></p>
+          <p class="text-[10px] text-slate-400">Operations Lead</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="ml-64 pt-24 p-8 min-h-screen">
+    <div class="max-w-7xl mx-auto space-y-8">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div>
+          <h2 class="text-3xl font-black text-primary tracking-tight">Contact Messages</h2>
+          <p class="text-on-surface-variant mt-1">Incoming messages from the Contact Us page.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex bg-surface-container rounded-full p-1">
+            <button onclick="filterTable('all')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-bold bg-primary text-on-primary shadow-sm" data-filter="all">All</button>
+            <button onclick="filterTable('new')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" data-filter="new">Unread</button>
+            <button onclick="filterTable('read')" class="filter-btn px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" data-filter="read">Read</button>
+          </div>
+          <a href="/contact" target="_blank" class="flex items-center gap-1.5 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-surface-container-highest transition-colors">
+            <span class="material-symbols-outlined text-base">open_in_new</span> View Form
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
+          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Total</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10"><span class="material-symbols-outlined text-primary text-lg">mail</span></span></div>
+          <p class="text-3xl font-black text-primary"><?= $totalMessages ?></p>
+          <p class="text-xs text-on-surface-variant mt-1">All messages</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
+          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Unread</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-red-50"><span class="material-symbols-outlined text-red-500 text-lg">mark_email_unread</span></span></div>
+          <p class="text-3xl font-black text-red-500"><?= $newMessages ?></p>
+          <p class="text-xs text-on-surface-variant mt-1">Need attention</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
+          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Read</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-green-50"><span class="material-symbols-outlined text-green-600 text-lg">mark_email_read</span></span></div>
+          <p class="text-3xl font-black text-green-600"><?= $readMessages ?></p>
+          <p class="text-xs text-on-surface-variant mt-1">Reviewed</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
+          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Response Rate</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-cyan-50"><span class="material-symbols-outlined text-cyan-600 text-lg">trending_up</span></span></div>
+          <p class="text-3xl font-black text-cyan-600"><?= $totalMessages > 0 ? round(($readMessages / $totalMessages) * 100) : 0 ?>%</p>
+          <p class="text-xs text-on-surface-variant mt-1">Read ratio</p>
+        </div>
+      </div>
+
+      <!-- Inbox -->
+      <div class="bg-white rounded-2xl shadow-sm shadow-slate-200/50 border border-slate-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 class="font-black text-on-surface text-lg">Inbox</h3>
+          <span class="text-xs text-on-surface-variant"><?= $totalMessages ?> total</span>
+        </div>
+        <?php if (empty($messages)): ?>
+        <div class="flex flex-col items-center justify-center py-20 text-on-surface-variant">
+          <span class="material-symbols-outlined text-6xl mb-4 opacity-30">inbox</span>
+          <p class="font-bold text-lg">No messages yet</p>
+          <p class="text-sm mt-1">Contact form submissions will appear here.</p>
+        </div>
+        <?php else: ?>
+        <div class="divide-y divide-slate-50" id="messagesList">
+          <?php foreach (array_reverse($messages) as $msg):
+            $isNew = ($msg['status'] ?? 'new') === 'new';
+            $subjectLabel = $subjectLabels[$msg['subject'] ?? ''] ?? ucfirst($msg['subject'] ?? 'General');
+            $badgeMap = ['general'=>'bg-blue-50 text-blue-700','order'=>'bg-amber-50 text-amber-700','return'=>'bg-orange-50 text-orange-700','artisan'=>'bg-emerald-50 text-emerald-700','media'=>'bg-purple-50 text-purple-700','other'=>'bg-slate-100 text-slate-600'];
+            $badgeClass = $badgeMap[$msg['subject'] ?? 'other'] ?? 'bg-slate-100 text-slate-600';
+            $nameParts = explode(' ', $msg['name']);
+            $initials = strtoupper(substr($nameParts[0], 0, 1) . (count($nameParts) > 1 ? substr(end($nameParts), 0, 1) : ''));
+            $msgJson = htmlspecialchars(json_encode(['id'=>(int)$msg['id'],'name'=>$msg['name'],'email'=>$msg['email'],'subject'=>$subjectLabel,'message'=>$msg['message'],'date'=>$msg['created_at']??'-','status'=>$msg['status']??'new']), ENT_QUOTES);
+          ?>
+          <div class="message-row flex items-start gap-4 px-6 py-4 hover:bg-slate-50/70 transition-colors cursor-pointer <?= $isNew ? 'bg-blue-50/30' : '' ?>"
+               data-status="<?= $msg['status'] ?? 'new' ?>"
+               onclick="openMessage(<?= $msgJson ?>)">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center text-white font-black text-sm"><?= htmlspecialchars($initials) ?></div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-bold <?= $isNew ? 'text-teal-900' : 'text-slate-700' ?>"><?= htmlspecialchars($msg['name']) ?></span>
+                <?php if ($isNew): ?><span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>NEW</span><?php endif; ?>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold <?= $badgeClass ?>"><?= $subjectLabel ?></span>
+              </div>
+              <p class="text-sm text-on-surface-variant truncate mt-0.5"><?= htmlspecialchars($msg['email']) ?></p>
+              <p class="text-sm text-slate-500 truncate mt-0.5 max-w-xl"><?= htmlspecialchars($msg['message']) ?></p>
+            </div>
+            <div class="flex-shrink-0 flex flex-col items-end gap-2">
+              <span class="text-xs text-on-surface-variant whitespace-nowrap"><?= date('M d, Y', strtotime($msg['created_at'] ?? 'now')) ?></span>
+              <div class="flex items-center gap-1.5" onclick="event.stopPropagation()">
+                <?php if ($isNew): ?>
+                <form method="POST"><input type="hidden" name="mark_read" value="<?= (int)$msg['id'] ?>" /><button type="submit" title="Mark as read" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors"><span class="material-symbols-outlined text-sm">check</span></button></form>
+                <?php endif; ?>
+                <a href="mailto:<?= htmlspecialchars($msg['email']) ?>?subject=Re: <?= rawurlencode($subjectLabel) ?>" title="Reply" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"><span class="material-symbols-outlined text-sm">reply</span></a>
+                <form method="POST" class="delete-form"><input type="hidden" name="delete_id" value="<?= (int)$msg['id'] ?>" /><button type="submit" title="Delete" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button></form>
+              </div>
+            </div>
+          </div>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+      </div>
+    </div>
+  </main>
 </div>
 
-<!-- View Message Modal -->
-<div class="modal fade" id="msgModal" tabindex="-1" aria-labelledby="msgModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="msgModalLabel">Message Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p><strong>From:</strong> <span id="mName"></span> &lt;<span id="mEmail"></span>&gt;</p>
-                <p><strong>Subject:</strong> <span id="mSubject"></span></p>
-                <p><strong>Date:</strong> <span id="mDate"></span></p>
-                <hr />
-                <p id="mMessage" class="text-slate-700 whitespace-pre-wrap"></p>
-            </div>
-            <div class="modal-footer">
-                <a id="mReply" href="#" class="btn btn-primary">
-                    <i class="fas fa-reply me-1"></i>Reply via Email
-                </a>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+<!-- Message Detail Drawer -->
+<div id="msgDrawer" class="fixed inset-y-0 right-0 w-full max-w-lg bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+    <h3 class="font-black text-on-surface text-lg">Message Details</h3>
+    <button onclick="closeDrawer()" class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors"><span class="material-symbols-outlined">close</span></button>
+  </div>
+  <div class="flex-1 overflow-y-auto p-6 space-y-6">
+    <div class="flex items-center gap-4">
+      <div id="dAvatar" class="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center text-white font-black text-xl"></div>
+      <div><p id="dName" class="font-black text-on-surface text-lg"></p><a id="dEmail" href="#" class="text-sm text-primary hover:underline"></a></div>
     </div>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs text-on-surface-variant mb-1">Subject</p><p id="dSubject" class="font-bold text-on-surface text-sm"></p></div>
+      <div class="bg-slate-50 rounded-xl p-4"><p class="text-xs text-on-surface-variant mb-1">Date</p><p id="dDate" class="font-bold text-on-surface text-sm"></p></div>
+    </div>
+    <div class="bg-slate-50 rounded-xl p-5">
+      <p class="text-xs text-on-surface-variant mb-3 font-semibold uppercase tracking-wide">Message</p>
+      <p id="dMessage" class="text-on-surface text-sm leading-relaxed whitespace-pre-wrap"></p>
+    </div>
+  </div>
+  <div class="px-6 py-4 border-t border-slate-100 flex gap-3">
+    <a id="dReply" href="#" class="flex-1 flex items-center justify-center gap-2 bg-primary text-on-primary py-2.5 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors"><span class="material-symbols-outlined text-base">reply</span>Reply via Email</a>
+    <button onclick="closeDrawer()" class="px-4 py-2.5 rounded-xl bg-surface-container-high text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors">Close</button>
+  </div>
 </div>
+<div id="drawerOverlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/30 z-40 hidden"></div>
 
-<script src="/assets/jquery/jquery.min.js"></script>
-<script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/assets/DataTables/datatables.min.js"></script>
 <script src="/assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script>
-$(document).ready(function () {
-    $('#messagesTable').DataTable({ order: [[0, 'desc']], pageLength: 25 });
-
-    // Populate modal
-    $('#msgModal').on('show.bs.modal', function (e) {
-        const btn = e.relatedTarget;
-        $('#mName').text(btn.dataset.name);
-        $('#mEmail').text(btn.dataset.email);
-        $('#mSubject').text(btn.dataset.subject);
-        $('#mMessage').text(btn.dataset.message);
-        $('#mDate').text(btn.dataset.date);
-        $('#mReply').attr('href', 'mailto:' + btn.dataset.email + '?subject=Re: ' + encodeURIComponent(btn.dataset.subject));
+function openMessage(data) {
+    const parts = data.name.trim().split(' ');
+    const initials = (parts[0].charAt(0) + (parts.length > 1 ? parts[parts.length-1].charAt(0) : '')).toUpperCase();
+    document.getElementById('dAvatar').textContent  = initials;
+    document.getElementById('dName').textContent    = data.name;
+    document.getElementById('dEmail').textContent   = data.email;
+    document.getElementById('dEmail').href          = 'mailto:' + data.email;
+    document.getElementById('dSubject').textContent = data.subject;
+    document.getElementById('dDate').textContent    = data.date;
+    document.getElementById('dMessage').textContent = data.message;
+    document.getElementById('dReply').href          = 'mailto:' + data.email + '?subject=Re: ' + encodeURIComponent(data.subject);
+    document.getElementById('msgDrawer').classList.remove('translate-x-full');
+    document.getElementById('drawerOverlay').classList.remove('hidden');
+}
+function closeDrawer() {
+    document.getElementById('msgDrawer').classList.add('translate-x-full');
+    document.getElementById('drawerOverlay').classList.add('hidden');
+}
+function filterTable(filter) {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        const active = btn.dataset.filter === filter;
+        btn.classList.toggle('bg-primary', active);
+        btn.classList.toggle('text-on-primary', active);
+        btn.classList.toggle('shadow-sm', active);
+        btn.classList.toggle('text-on-surface-variant', !active);
     });
-
-    // Confirm delete
-    $('.delete-form').on('submit', function (e) {
+    document.querySelectorAll('.message-row').forEach(row => {
+        row.style.display = (filter === 'all' || row.dataset.status === filter) ? '' : 'none';
+    });
+}
+document.getElementById('globalSearch').addEventListener('input', function () {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('.message-row').forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+});
+document.querySelectorAll('.delete-form').forEach(form => {
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
-        const form = this;
-        Swal.fire({
-            title: 'Delete this message?',
-            text: 'This action cannot be undone.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc3545',
-            confirmButtonText: 'Yes, delete it'
-        }).then(result => { if (result.isConfirmed) form.submit(); });
+        const f = this;
+        Swal.fire({ title: 'Delete this message?', text: 'This cannot be undone.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'Yes, delete' })
+            .then(r => { if (r.isConfirmed) f.submit(); });
     });
 });
 </script>
-</body>
-</html>
