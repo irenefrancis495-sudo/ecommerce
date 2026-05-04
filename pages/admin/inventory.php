@@ -307,3 +307,4 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         <h3 class="text-9xl font-editorial font-black text-primary select-none">MPEMBA</h3>
     </div>
 </div>
+<script src="/js/admin.js"></script>

@@ -101,6 +101,68 @@ function attachCartControls() {
     });
 }
 
+function showCartNotification(message) {
+    let toast = document.getElementById('cart-notice');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'cart-notice';
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        Object.assign(toast.style, {
+            position: 'fixed',
+            bottom: '24px',
+            right: '24px',
+            zIndex: '9999',
+            background: 'rgba(15, 23, 42, 0.95)',
+            color: '#ffffff',
+            padding: '14px 18px',
+            borderRadius: '18px',
+            boxShadow: '0 20px 50px rgba(15, 23, 42, 0.24)',
+            fontSize: '13px',
+            maxWidth: '320px',
+            opacity: '0',
+            transition: 'opacity 220ms ease, transform 220ms ease',
+            transform: 'translateY(12px)'
+        });
+        document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+    if (toast._timeoutId) {
+        clearTimeout(toast._timeoutId);
+    }
+    toast._timeoutId = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(12px)';
+    }, 2200);
+}
+
+function findProductDataFromButton(button) {
+    const id = parseInt(button.dataset.id) || parseInt(button.closest('[data-id]')?.dataset.id);
+    const name = button.dataset.name || button.closest('[data-name]')?.dataset.name || button.closest('article,div')?.querySelector('h3, h2, .product-name')?.textContent.trim();
+    const price = parseFloat(button.dataset.price) || parseFloat(button.closest('[data-price]')?.dataset.price) || parseFloat(button.closest('article,div')?.querySelector('[data-price]')?.dataset.price);
+    if (!id || !name || !price) {
+        return null;
+    }
+    return { id, name, price };
+}
+
+function setButtonAddedState(button) {
+    if (!button.dataset.originalHtml) {
+        button.dataset.originalHtml = button.innerHTML;
+    }
+    button.disabled = true;
+    button.classList.add('bg-teal-600', 'cursor-not-allowed');
+    button.classList.remove('hover:bg-primary/90');
+    button.innerHTML = `<span class="material-symbols-outlined text-lg">check</span> Added`;
+    setTimeout(() => {
+        button.disabled = false;
+        button.classList.remove('bg-teal-600', 'cursor-not-allowed');
+        button.innerHTML = button.dataset.originalHtml;
+    }, 1400);
+}
+
 function addToCart(product) {
     let cart = getCart();
     const index = cart.findIndex(item => item.id === product.id);
@@ -111,7 +173,7 @@ function addToCart(product) {
     }
     setCart(cart);
     updateCartCount();
-    alert(`${product.name} added to cart`);
+    showCartNotification(`${product.name} imeongezwa kwenye cart`);
     if (typeof renderCart === 'function') renderCart();
 }
 
@@ -135,13 +197,93 @@ function changeQty(productId, delta) {
     }
 }
 
+function normalizeSearchTerm(value) {
+    return String(value || '').trim().toLowerCase();
+}
+
+function filterCardsBySearch(input) {
+    const selector = input.dataset.searchCardSelector || '.grid > *';
+    const query = normalizeSearchTerm(input.value);
+    const cards = document.querySelectorAll(selector);
+
+    cards.forEach(card => {
+        const text = normalizeSearchTerm(card.textContent);
+        card.style.display = !query || text.includes(query) ? '' : 'none';
+    });
+}
+
+function attachGlobalSearchInputs() {
+    document.querySelectorAll('input[data-search-target]').forEach(input => {
+        input.addEventListener('input', () => {
+            const target = input.dataset.searchTarget;
+            if (target === 'cards') {
+                filterCardsBySearch(input);
+                return;
+            }
+
+            if (target === 'products' && typeof window.executeProductSearch === 'function') {
+                window.executeProductSearch(input.value);
+            }
+        });
+    });
+}
+
+async function submitCustomerFeedback(form) {
+    const status = document.getElementById('feedback-form-status');
+    if (!status) return;
+
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    if (!name || !email || !message) {
+        status.textContent = 'Please fill in your name, email, and message.';
+        status.className = 'text-sm text-error';
+        return;
+    }
+
+    status.textContent = 'Sending feedback...';
+    status.className = 'text-sm text-slate-300';
+
+    try {
+        const response = await fetch('/api/comments.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, message })
+        });
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            status.textContent = 'Thank you — your feedback has been received.';
+            status.className = 'text-sm text-teal-500';
+            form.reset();
+        } else {
+            status.textContent = result.message || 'Unable to submit feedback at this time.';
+            status.className = 'text-sm text-error';
+        }
+    } catch (error) {
+        status.textContent = 'Submission failed. Please try again.';
+        status.className = 'text-sm text-error';
+    }
+}
+
+function attachFeedbackForm() {
+    const feedbackForm = document.getElementById('customer-feedback-form');
+    if (!feedbackForm) return;
+
+    feedbackForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+        submitCustomerFeedback(this);
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.add-to-cart').forEach(btn => {
         btn.addEventListener('click', function() {
-            const id = parseInt(this.dataset.id);
-            const name = this.dataset.name;
-            const price = parseFloat(this.dataset.price);
-            addToCart({ id, name, price });
+            const product = findProductDataFromButton(this);
+            if (!product) return;
+            addToCart(product);
+            setButtonAddedState(this);
         });
     });
 
@@ -167,6 +309,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     updateCartCount();
     if (typeof renderCart === 'function') renderCart();
+    attachGlobalSearchInputs();
+    attachFeedbackForm();
 
     const loginForm = document.getElementById('login-form');
     if (loginForm) {

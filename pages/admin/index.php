@@ -303,3 +303,4 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
     </div>
 </main>
+<script src="/js/admin.js"></script>

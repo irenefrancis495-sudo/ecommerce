@@ -265,3 +265,4 @@ $maxTrend = max($monthlyTrend ?: [1]);
     </div>
   </main>
 </div>
+<script src="/js/admin.js"></script>

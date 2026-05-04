@@ -117,7 +117,7 @@
                 <div class="flex items-center gap-4 w-full md:w-auto">
                     <div class="relative flex-grow md:w-64">
                         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
-                        <input class="w-full pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Search devices..." type="text" />
+                        <input data-search-target="cards" data-search-card-selector=".grid .group" class="w-full pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Search devices..." type="search" />
                     </div>
                     <button class="p-2 bg-surface-container-lowest rounded-xl shadow-sm hover:bg-primary hover:text-white transition-all group">
                         <span class="material-symbols-outlined">tune</span>

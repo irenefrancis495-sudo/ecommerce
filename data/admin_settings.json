@@ -1,0 +1,11 @@
+{
+    "store_name": "Mpemba Marketplace",
+    "support_email": "support@mpemba.com",
+    "currency": "USD",
+    "timezone": "Africa/Nairobi",
+    "low_stock_threshold": 20,
+    "maintenance_mode": true,
+    "email_notifications": true,
+    "sms_notifications": true,
+    "weekly_digest": true
+}

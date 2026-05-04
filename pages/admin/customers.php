@@ -63,6 +63,21 @@ foreach ($usersData as $idx => $u) {
 }
 
 $totalUsers = count($displayUsers);
+
+$commentsFile = __DIR__ . '/../../data/customer_comments.json';
+$customerComments = [];
+if (file_exists($commentsFile)) {
+    $decodedComments = json_decode((string) file_get_contents($commentsFile), true);
+    if (is_array($decodedComments)) {
+        $customerComments = $decodedComments;
+    }
+}
+
+usort($customerComments, function ($a, $b) {
+    return strcmp($b['created_at'] ?? '', $a['created_at'] ?? '');
+});
+
+$commentsCount = count($customerComments);
 ?>
 
 <style>
@@ -201,7 +216,7 @@ $totalUsers = count($displayUsers);
 
       <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40">
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table id="usersTable" class="w-full text-left border-collapse">
             <thead>
               <tr class="bg-surface-container-low border-b border-surface-variant/20">
                 <th class="px-8 py-5 text-xs font-black text-primary uppercase tracking-widest">ID</th>
@@ -258,6 +273,41 @@ $totalUsers = count($displayUsers);
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div class="mt-10 bg-surface-container-lowest rounded-3xl p-6 shadow-sm shadow-slate-200/40">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-xl font-black text-primary">Customer Feedback</h3>
+            <p class="text-sm text-on-surface-variant">Recent messages from the website feedback form.</p>
+          </div>
+          <span class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 text-xs font-semibold text-primary">
+            <?php echo $commentsCount; ?> message<?php echo $commentsCount === 1 ? '' : 's'; ?>
+          </span>
+        </div>
+
+        <?php if ($commentsCount === 0): ?>
+          <div class="rounded-3xl border border-dashed border-slate-200 bg-white/80 p-10 text-center text-slate-500">
+            No customer feedback has been received yet.
+          </div>
+        <?php else: ?>
+          <div class="space-y-4">
+            <?php foreach (array_slice($customerComments, 0, 6) as $comment): ?>
+              <div class="rounded-3xl border border-slate-200 bg-white/80 p-5">
+                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                  <div>
+                    <p class="text-sm font-semibold text-primary"><?php echo htmlspecialchars($comment['name'] ?? 'Anonymous'); ?> <span class="text-slate-400 font-medium">(<?php echo htmlspecialchars($comment['email'] ?? 'no-reply'); ?>)</span></p>
+                    <p class="text-xs text-slate-500 mt-1"><?php echo htmlspecialchars($comment['created_at'] ?? 'Unknown'); ?></p>
+                  </div>
+                  <span class="inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold <?php echo ((isset($comment['status']) && $comment['status'] === 'new') ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'); ?>">
+                    <?php echo htmlspecialchars(ucfirst($comment['status'] ?? 'new')); ?>
+                  </span>
+                </div>
+                <p class="mt-4 text-sm text-slate-600 leading-relaxed"><?php echo nl2br(htmlspecialchars($comment['message'] ?? '')); ?></p>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
       </div>
     </div>
   </main>
@@ -334,3 +384,4 @@ $totalUsers = count($displayUsers);
 
   document.getElementById('add-user-form').addEventListener('submit', addUser);
 </script>
+<script src="/js/admin.js"></script>

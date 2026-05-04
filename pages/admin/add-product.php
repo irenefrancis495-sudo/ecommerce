@@ -49,6 +49,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'status' => trim((string) ($_POST['status'] ?? 'active')),
     ];
 
+    // Handle file upload
+    $uploadedImagePath = '';
+    if (isset($_FILES['product_image']) && $_FILES['product_image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = __DIR__ . '/../../uploads/products/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $fileName = $_FILES['product_image']['name'];
+        $fileTmpName = $_FILES['product_image']['tmp_name'];
+        $fileSize = $_FILES['product_image']['size'];
+        $fileType = $_FILES['product_image']['type'];
+
+        // Validate file type
+        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!in_array($fileType, $allowedTypes)) {
+            $errors[] = 'Please upload a valid image file (JPEG, PNG, GIF, or WebP).';
+        }
+
+        // Validate file size (max 5MB)
+        if ($fileSize > 5 * 1024 * 1024) {
+            $errors[] = 'Image file size must be less than 5MB.';
+        }
+
+        if (empty($errors)) {
+            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $newFileName = uniqid('product_', true) . '.' . $fileExtension;
+            $uploadPath = $uploadDir . $newFileName;
+
+            if (move_uploaded_file($fileTmpName, $uploadPath)) {
+                $uploadedImagePath = '/uploads/products/' . $newFileName;
+                $formData['image_url'] = $uploadedImagePath;
+            } else {
+                $errors[] = 'Failed to upload the image file.';
+            }
+        }
+    }
+
     $errors = [];
     if ($formData['name'] === '') {
         $errors[] = 'Product name is required.';
@@ -199,67 +237,183 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       <?php endif; ?>
 
-      <form method="post" action="/admin/add-product" class="grid gap-6 lg:grid-cols-2">
-        <section class="lg:col-span-2 bg-surface-container-lowest rounded-3xl p-8 shadow-sm border border-outline-variant/15">
-          <div class="grid gap-6 lg:grid-cols-2">
-            <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Product Name</span>
-              <input name="name" value="<?php echo htmlspecialchars($formData['name']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="text" required />
-            </label>
-            <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Category</span>
-              <select name="category" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
-                <?php foreach ($categories as $key => $label): ?>
-                  <option value="<?php echo htmlspecialchars($key); ?>" <?php echo $formData['category'] === $key ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
-                <?php endforeach; ?>
-              </select>
-            </label>
-          </div>
-
-          <div class="grid gap-6 lg:grid-cols-2">
-            <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Price (USD)</span>
-              <input name="price" value="<?php echo htmlspecialchars($formData['price']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="number" step="0.01" min="0" required />
-            </label>
-            <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Stock Quantity</span>
-              <input name="stock_quantity" value="<?php echo htmlspecialchars($formData['stock_quantity']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="number" min="0" required />
-            </label>
-          </div>
-
-          <label class="block">
-            <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Image URL</span>
-            <input name="image_url" value="<?php echo htmlspecialchars($formData['image_url']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="url" placeholder="https://example.com/image.jpg" />
-          </label>
-
-          <label class="block lg:col-span-2">
-            <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Description</span>
-            <textarea name="description" rows="5" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20"><?php echo htmlspecialchars($formData['description']); ?></textarea>
-          </label>
-
-          <div class="grid gap-6 lg:grid-cols-3">
-            <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Featured</span>
-              <select name="featured" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
-                <?php foreach ($featuredOptions as $value => $label): ?>
-                  <option value="<?php echo htmlspecialchars($value); ?>" <?php echo $formData['featured'] === $value ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
-                <?php endforeach; ?>
-              </select>
-            </label>
-            <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Status</span>
-              <select name="status" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
-                <?php foreach ($statuses as $value => $label): ?>
-                  <option value="<?php echo htmlspecialchars($value); ?>" <?php echo $formData['status'] === $value ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
-                <?php endforeach; ?>
-              </select>
-            </label>
-            <div class="flex items-end">
-              <button type="submit" class="w-full rounded-3xl bg-primary py-4 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition">Save Product</button>
+      <form method="post" action="/admin/add-product" enctype="multipart/form-data" class="grid gap-8 lg:grid-cols-[1.8fr_1fr]">
+        <div class="space-y-8">
+          <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm border border-outline-variant/15">
+            <div class="grid gap-6 lg:grid-cols-2">
+              <label class="block">
+                <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Product Name</span>
+                <input id="nameField" name="name" value="<?php echo htmlspecialchars($formData['name']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="text" required />
+              </label>
+              <label class="block">
+                <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Category</span>
+                <select id="categoryField" name="category" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
+                  <?php foreach ($categories as $key => $label): ?>
+                    <option value="<?php echo htmlspecialchars($key); ?>" <?php echo $formData['category'] === $key ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </label>
             </div>
+
+            <div class="grid gap-6 lg:grid-cols-2">
+              <label class="block">
+                <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Price (USD)</span>
+                <input id="priceField" name="price" value="<?php echo htmlspecialchars($formData['price']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="number" step="0.01" min="0" required />
+              </label>
+              <label class="block">
+                <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Stock Quantity</span>
+                <input id="stockField" name="stock_quantity" value="<?php echo htmlspecialchars($formData['stock_quantity']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="number" min="0" required />
+              </label>
+            </div>
+          </section>
+
+          <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm border border-outline-variant/15">
+            <label class="block">
+              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Product Image</span>
+              <div class="mt-2 relative">
+                <input id="imageField" name="product_image" type="file" accept="image/*" class="w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 file:mr-4 file:py-2 file:px-4 file:rounded-l-3xl file:border-0 file:bg-surface-container-high file:text-on-surface-variant file:text-sm file:font-medium hover:file:bg-surface-container-highest" />
+                <p class="mt-2 text-xs text-on-surface-variant">Upload a product image (JPEG, PNG, GIF, WebP - max 5MB)</p>
+              </div>
+            </label>
+
+            <label class="block">
+              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Or Image URL</span>
+              <input name="image_url" value="<?php echo htmlspecialchars($formData['image_url']); ?>" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="url" placeholder="https://example.com/image.jpg" />
+              <p class="mt-2 text-xs text-on-surface-variant">Alternatively, provide a direct image URL if you prefer not to upload.</p>
+            </label>
+
+            <label class="block">
+              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Description</span>
+              <textarea id="descriptionField" name="description" rows="6" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20"><?php echo htmlspecialchars($formData['description']); ?></textarea>
+            </label>
+          </section>
+
+          <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm border border-outline-variant/15">
+            <div class="grid gap-6 lg:grid-cols-3">
+              <label class="block">
+                <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Featured</span>
+                <select name="featured" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
+                  <?php foreach ($featuredOptions as $value => $label): ?>
+                    <option value="<?php echo htmlspecialchars($value); ?>" <?php echo $formData['featured'] === $value ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </label>
+              <label class="block">
+                <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Status</span>
+                <select id="statusField" name="status" class="mt-2 w-full rounded-3xl border border-outline-variant bg-white px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20">
+                  <?php foreach ($statuses as $value => $label): ?>
+                    <option value="<?php echo htmlspecialchars($value); ?>" <?php echo $formData['status'] === $value ? 'selected' : ''; ?>><?php echo htmlspecialchars($label); ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </label>
+              <div class="flex items-end">
+                <button type="submit" class="w-full rounded-3xl bg-primary py-4 text-sm font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition">Save Product</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="space-y-6">
+          <div class="sticky top-28 rounded-3xl border border-outline-variant/15 bg-white p-6 shadow-sm">
+            <div class="mb-6">
+              <span class="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-[11px] font-bold uppercase tracking-[0.3em]">Live Preview</span>
+              <h3 class="mt-4 text-xl font-black text-primary">Product card preview</h3>
+              <p class="mt-2 text-sm text-on-surface-variant">Your product details render here as you type.</p>
+            </div>
+            <div class="rounded-3xl overflow-hidden border border-surface-container-highest bg-surface-container-lowest">
+              <img id="previewImage" class="w-full h-52 object-cover" src="<?php echo htmlspecialchars($formData['image_url'] ?: 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop&crop=center'); ?>" alt="Product preview image">
+              <div class="p-5">
+                <div class="flex items-center justify-between gap-3 mb-4">
+                  <span id="previewCategory" class="inline-flex rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-on-secondary-container"></span>
+                  <span id="previewStatus" class="inline-flex rounded-full px-3 py-1 text-xs font-bold"></span>
+                </div>
+                <h4 id="previewName" class="text-2xl font-black text-primary leading-tight"><?php echo htmlspecialchars($formData['name'] ?: 'New product title'); ?></h4>
+                <p id="previewDescription" class="mt-4 text-sm text-on-surface-variant leading-relaxed"><?php echo htmlspecialchars($formData['description'] ?: 'A compact preview of the product description will appear here.'); ?></p>
+                <div class="mt-6 flex items-center justify-between gap-3 text-sm text-on-surface-variant">
+                  <span class="text-3xl font-black text-primary" id="previewPrice"><?php echo $formData['price'] !== '' ? '$' . number_format((float)$formData['price'],2) : '$0.00'; ?></span>
+                  <span>Stock: <span id="previewQuantity"><?php echo htmlspecialchars($formData['stock_quantity'] ?: '0'); ?></span></span>
+                </div>
+              </div>
+            </div>
+            <div class="mt-6 rounded-3xl bg-primary text-white p-4 text-sm font-semibold">Tip: use the preview to confirm the image, headline and price before publishing.</div>
           </div>
-        </section>
+        </aside>
       </form>
     </div>
   </main>
 </div>
+<script>
+  (function () {
+    const fields = {
+      name: document.getElementById('nameField'),
+      description: document.getElementById('descriptionField'),
+      price: document.getElementById('priceField'),
+      stock: document.getElementById('stockField'),
+      category: document.getElementById('categoryField'),
+      status: document.getElementById('statusField'),
+      image: document.getElementById('imageField'),
+      imageUrl: document.querySelector('input[name="image_url"]'),
+    };
+
+    const preview = {
+      name: document.getElementById('previewName'),
+      description: document.getElementById('previewDescription'),
+      price: document.getElementById('previewPrice'),
+      quantity: document.getElementById('previewQuantity'),
+      category: document.getElementById('previewCategory'),
+      status: document.getElementById('previewStatus'),
+      image: document.getElementById('previewImage'),
+    };
+
+    if (!fields.name || !preview.name) {
+      return;
+    }
+
+    function formatPrice(value) {
+      const amount = parseFloat(value);
+      return Number.isFinite(amount) ? `$${amount.toFixed(2)}` : '$0.00';
+    }
+
+    function updatePreview() {
+      preview.name.textContent = fields.name.value.trim() || 'New product title';
+      preview.description.textContent = fields.description.value.trim() || 'A compact preview of the product description will appear here.';
+      preview.price.textContent = formatPrice(fields.price.value);
+      preview.quantity.textContent = fields.stock.value.trim() || '0';
+      preview.category.textContent = fields.category.options[fields.category.selectedIndex]?.text || 'Category';
+      preview.status.textContent = fields.status.value === 'inactive' ? 'Inactive' : 'Active';
+      preview.status.className = fields.status.value === 'inactive'
+        ? 'inline-flex rounded-full bg-error-container px-3 py-1 text-xs font-bold text-on-error-container'
+        : 'inline-flex rounded-full bg-teal-50 px-3 py-1 text-xs font-bold text-teal-700';
+
+      // Handle image preview
+      const urlValue = fields.imageUrl.value.trim();
+      if (fields.image.files && fields.image.files[0]) {
+        // File selected - show preview
+        const file = fields.image.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.image.src = e.target.result;
+          preview.image.alt = 'Product image preview';
+        };
+        reader.readAsDataURL(file);
+      } else if (urlValue) {
+        // URL provided
+        preview.image.src = urlValue;
+        preview.image.alt = preview.name.textContent;
+      } else {
+        // Default placeholder
+        preview.image.src = 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop&crop=center';
+        preview.image.alt = 'Product preview image';
+      }
+    }
+
+    ['input', 'change'].forEach(evt => {
+      Object.values(fields).forEach(el => {
+        el?.addEventListener(evt, updatePreview);
+      });
+    });
+
+    updatePreview();
+  })();
+</script>
+<script src="/js/admin.js"></script>

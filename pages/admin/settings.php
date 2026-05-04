@@ -107,14 +107,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="flex items-center gap-6 w-1/2">
       <div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-teal-900/10 rounded-lg">
         <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-        <input class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-0" placeholder="Search setting controls..." type="text"/>
+        <input class="w-full bg-slate-50 border-none rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-0" placeholder="Search setting controls..." type="text" />
       </div>
     </div>
     <div class="flex items-center gap-6">
       <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button"><span class="material-symbols-outlined">notifications</span></button>
       <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button"><span class="material-symbols-outlined">help_outline</span></button>
       <div class="flex items-center gap-3 pl-4 border-l border-slate-100">
-        <img alt="Administrator Profile" class="w-8 h-8 rounded-full object-cover" src="https://i.pravatar.cc/80?u=mpemba-admin"/>
+        <img alt="Administrator Profile" class="w-8 h-8 rounded-full object-cover" src="https://i.pravatar.cc/80?u=mpemba-admin" />
         <div class="text-right">
           <p class="text-xs font-bold text-teal-900"><?php echo htmlspecialchars($adminName); ?></p>
           <p class="text-[10px] text-slate-400">Operations Lead</p>
@@ -130,15 +130,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="text-on-surface-variant mt-1">Configure admin system, notifications, and business preferences.</p>
       </div>
 
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="rounded-3xl bg-surface-container-lowest p-6 shadow-sm border border-slate-200/20">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <div>
+              <p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">System Status</p>
+              <p class="text-lg font-black text-primary mt-2"><?php echo !empty($settings['maintenance_mode']) ? 'Maintenance Mode' : 'Live'; ?></p>
+            </div>
+            <span class="material-symbols-outlined text-3xl text-primary">toggle_on</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">When enabled, the storefront shifts to maintenance mode and administrators can tune settings without customer access.</p>
+        </div>
+
+        <div class="rounded-3xl bg-surface-container-lowest p-6 shadow-sm border border-slate-200/20">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <div>
+              <p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Notifications</p>
+              <p class="text-lg font-black text-primary mt-2"><?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? 'Enabled' : 'Disabled'; ?></p>
+            </div>
+            <span class="material-symbols-outlined text-3xl text-secondary">notifications_active</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">Email and SMS alerts keep the operations team informed about orders, stock, and urgent issues.</p>
+        </div>
+
+        <div class="rounded-3xl bg-surface-container-lowest p-6 shadow-sm border border-slate-200/20">
+          <div class="flex items-center justify-between gap-4 mb-4">
+            <div>
+              <p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Digest</p>
+              <p class="text-lg font-black text-primary mt-2"><?php echo !empty($settings['weekly_digest']) ? 'Weekly Summary' : 'Disabled'; ?></p>
+            </div>
+            <span class="material-symbols-outlined text-3xl text-tertiary">calendar_month</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">Weekly summaries are sent automatically when enabled, keeping the team aligned with store performance.</p>
+        </div>
+      </div>
+
       <?php if ($flash !== ''): ?>
         <div class="rounded-xl px-4 py-3 text-sm font-semibold <?php echo $flashType === 'error' ? 'bg-error-container text-on-error-container border border-error/20' : 'bg-teal-50 text-teal-700 border border-teal-200'; ?>">
           <?php echo htmlspecialchars($flash); ?>
         </div>
       <?php endif; ?>
 
-      <form method="post" action="/admin/settings" class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <section class="xl:col-span-2 bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40 space-y-5">
-          <h3 class="text-lg font-black text-primary">General</h3>
+      <form method="post" action="/admin/settings" class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+        <section class="xl:col-span-3 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-200/10 space-y-5">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-black text-primary">General Settings</h3>
+              <p class="text-sm text-on-surface-variant mt-1">Store identity, support contacts, currency, and timezone preferences.</p>
+            </div>
+            <span class="material-symbols-outlined text-2xl text-primary">store</span>
+          </div>
 
           <label class="block">
             <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Store Name</span>
@@ -167,34 +208,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </label>
         </section>
 
-        <section class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40 space-y-4">
-          <h3 class="text-lg font-black text-primary">Controls</h3>
+        <section class="xl:col-span-2 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-200/10 space-y-4">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-black text-primary">Notification & System Controls</h3>
+              <p class="text-sm text-on-surface-variant mt-1">Manage alerts, maintenance mode, and the weekly summary schedule.</p>
+            </div>
+            <span class="material-symbols-outlined text-2xl text-secondary">notification_add</span>
+          </div>
 
-          <label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/30">
-            <span class="text-sm font-semibold text-primary">Maintenance Mode</span>
-            <input type="checkbox" name="maintenance_mode" class="rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['maintenance_mode']) ? 'checked' : ''; ?> />
+          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+            <div>
+              <p class="text-sm font-semibold text-primary">Maintenance Mode</p>
+              <p class="text-xs text-on-surface-variant mt-1">Pause customer access while you update inventory or apply system changes.</p>
+            </div>
+            <input type="checkbox" name="maintenance_mode" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['maintenance_mode']) ? 'checked' : ''; ?> />
           </label>
 
-          <label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/30">
-            <span class="text-sm font-semibold text-primary">Email Notifications</span>
-            <input type="checkbox" name="email_notifications" class="rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['email_notifications']) ? 'checked' : ''; ?> />
+          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+            <div>
+              <p class="text-sm font-semibold text-primary">Email Notifications</p>
+              <p class="text-xs text-on-surface-variant mt-1">Send immediate email alerts for orders, refunds, and stock warnings.</p>
+            </div>
+            <input type="checkbox" name="email_notifications" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['email_notifications']) ? 'checked' : ''; ?> />
           </label>
 
-          <label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/30">
-            <span class="text-sm font-semibold text-primary">SMS Notifications</span>
-            <input type="checkbox" name="sms_notifications" class="rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['sms_notifications']) ? 'checked' : ''; ?> />
+          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+            <div>
+              <p class="text-sm font-semibold text-primary">SMS Notifications</p>
+              <p class="text-xs text-on-surface-variant mt-1">Receive urgent stock and shipping alerts through SMS.</p>
+            </div>
+            <input type="checkbox" name="sms_notifications" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['sms_notifications']) ? 'checked' : ''; ?> />
           </label>
 
-          <label class="flex items-center justify-between p-3 rounded-xl bg-surface-container-low border border-outline-variant/30">
-            <span class="text-sm font-semibold text-primary">Weekly Digest</span>
-            <input type="checkbox" name="weekly_digest" class="rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['weekly_digest']) ? 'checked' : ''; ?> />
+          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+            <div>
+              <p class="text-sm font-semibold text-primary">Weekly Digest</p>
+              <p class="text-xs text-on-surface-variant mt-1">Send a weekly summary of orders, stock, and platform health.</p>
+            </div>
+            <input type="checkbox" name="weekly_digest" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['weekly_digest']) ? 'checked' : ''; ?> />
           </label>
 
-          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-black tracking-wide uppercase text-sm shadow-lg shadow-primary/25 hover:scale-[1.02] transition-transform">
-            Save Settings
-          </button>
+          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-black tracking-wide uppercase text-sm shadow-lg shadow-primary/25 hover:scale-[1.02] transition-transform">Save Settings</button>
         </section>
       </form>
     </div>
   </main>
 </div>
+<script src="/js/admin.js"></script>
