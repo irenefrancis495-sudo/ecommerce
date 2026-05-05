@@ -18,7 +18,7 @@ usort($comments, function ($a, $b) {
 });
 $totalComments   = count($comments);
 $newComments     = count(array_filter($comments, fn($c) => ($c['status'] ?? '') === 'new'));
-$repliedComments = count(array_filter($comments, fn($c) => ($c['status'] ?? '') === 'replied'));
+$repliedComments = count(array_filter($comments, fn($c) => in_array(($c['status'] ?? ''), ['replied', 'customer_replied'])));
 $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments) * 100, 1) : 0;
 ?>
 
@@ -63,6 +63,26 @@ $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments
         outline: none; transition: border-color .15s, box-shadow .15s; resize: vertical; min-height: 90px;
     }
     .reply-panel textarea:focus { border-color: #003345; box-shadow: 0 0 0 3px rgba(0,51,69,.08); }
+    .message-lane { display: flex; }
+    .message-lane.admin { justify-content: flex-end; }
+    .message-lane.customer { justify-content: flex-start; }
+    .message-bubble {
+        max-width: 82%;
+        border-radius: 1.4rem;
+        padding: .85rem 1rem;
+        box-shadow: 0 14px 24px -22px rgba(15,23,42,.4);
+    }
+    .message-bubble.admin {
+        background: linear-gradient(180deg, #0A84FF, #1877f2);
+        color: #fff;
+        border-bottom-right-radius: .45rem;
+    }
+    .message-bubble.customer {
+        background: rgba(255,255,255,.96);
+        color: #0f172a;
+        border: 1px solid #e2e8f0;
+        border-bottom-left-radius: .45rem;
+    }
     .rate-bar { height: 6px; border-radius: 99px; background: #e2e8f0; overflow: hidden; }
     .rate-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg,#0d9488,#06b6d4); }
     @media (max-width: 1024px) {
@@ -225,7 +245,7 @@ $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments
                                     $isReplied = $status === 'replied';
                                 ?>
                                 <tr class="fb-row <?php echo $isNew ? 'is-new' : ''; ?>"
-                                    data-status="<?php echo htmlspecialchars($status); ?>"
+                                    data-status="<?php echo htmlspecialchars($status === 'customer_replied' ? 'replied' : $status); ?>"
                                     data-name="<?php echo htmlspecialchars(strtolower($name)); ?>"
                                     data-message="<?php echo htmlspecialchars(strtolower($message)); ?>">
                                     <td class="px-6 py-4">
@@ -241,11 +261,54 @@ $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments
                                     </td>
                                     <td class="px-4 py-4 max-w-xs">
                                         <p class="text-sm text-slate-600 line-clamp-2"><?php echo htmlspecialchars(substr($message, 0, 110) . (strlen($message) > 110 ? '...' : '')); ?></p>
-                                        <?php if (!empty($comment['reply'])): ?>
+                                        <?php if (!empty($comment['image'])): ?>
+                                        <a href="<?php echo htmlspecialchars($comment['image']); ?>" target="_blank" rel="noopener" class="mt-2 inline-block">
+                                            <img src="<?php echo htmlspecialchars($comment['image']); ?>" alt="Attachment"
+                                                class="h-14 w-auto max-w-[90px] rounded-xl object-cover border border-slate-200 shadow-sm hover:opacity-80 transition">
+                                        </a>
+                                        <?php endif; ?>
+                                        <?php
+                                            $thread = $comment['thread'] ?? [];
+                                            $latestThreadImage = null;
+                                            $latestThreadLabel = '';
+                                            $latestCustomerImage = null;
+                                            foreach ($thread as $entry) {
+                                                if (!empty($entry['image'])) {
+                                                    $latestThreadImage = $entry['image'];
+                                                    $latestThreadLabel = ($entry['from'] === 'customer') ? 'Customer attachment' : 'Admin attachment';
+                                                    if ($entry['from'] === 'customer') {
+                                                        $latestCustomerImage = $entry['image'];
+                                                    }
+                                                }
+                                            }
+                                        ?>
+
+                                        <?php if (!empty($comment['reply']) || !empty($comment['reply_image'])): ?>
                                         <div class="mt-2 rounded-xl bg-teal-50 border border-teal-100 px-3 py-2">
                                             <p class="text-[10px] font-bold uppercase tracking-wider text-teal-600 mb-1">Admin reply</p>
-                                            <p class="text-xs text-slate-700 line-clamp-2"><?php echo htmlspecialchars($comment['reply']); ?></p>
+                                            <?php if (!empty($comment['reply'])): ?>
+                                                <p class="text-xs text-slate-700 line-clamp-2"><?php echo htmlspecialchars($comment['reply']); ?></p>
+                                            <?php endif; ?>
+                                            <?php if (!empty($comment['reply_image'])): ?>
+                                                <img src="<?php echo htmlspecialchars((string) $comment['reply_image']); ?>" alt="Admin attachment" class="mt-2 h-14 w-auto max-w-[90px] rounded-xl object-cover border border-teal-100 shadow-sm">
+                                            <?php endif; ?>
                                         </div>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($latestCustomerImage)): ?>
+                                            <div class="mt-2 rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
+                                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Customer attachment</p>
+                                                <a href="<?php echo htmlspecialchars((string) $latestCustomerImage); ?>" target="_blank" rel="noopener" class="inline-block">
+                                                    <img src="<?php echo htmlspecialchars((string) $latestCustomerImage); ?>" alt="Customer attachment" class="mt-1 h-14 w-auto max-w-[90px] rounded-xl object-cover border border-slate-200 shadow-sm hover:opacity-90 transition">
+                                                </a>
+                                            </div>
+                                        <?php elseif (empty($comment['reply_image']) && !empty($latestThreadImage)): ?>
+                                            <div class="mt-2 rounded-xl bg-slate-50 border border-slate-200 px-3 py-2">
+                                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1"><?php echo htmlspecialchars($latestThreadLabel); ?></p>
+                                                <a href="<?php echo htmlspecialchars((string) $latestThreadImage); ?>" target="_blank" rel="noopener" class="inline-block">
+                                                    <img src="<?php echo htmlspecialchars((string) $latestThreadImage); ?>" alt="<?php echo htmlspecialchars($latestThreadLabel); ?>" class="mt-1 h-14 w-auto max-w-[90px] rounded-xl object-cover border border-slate-200 shadow-sm hover:opacity-90 transition">
+                                                </a>
+                                            </div>
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-4 py-4 hidden md:table-cell">
@@ -260,6 +323,10 @@ $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments
                                         <?php elseif ($isReplied): ?>
                                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 text-[11px] font-bold">
                                                 <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">check_circle</span>Replied
+                                            </span>
+                                        <?php elseif ($status === 'customer_replied'): ?>
+                                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-50 text-orange-600 text-[11px] font-bold">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>Customer replied
                                             </span>
                                         <?php else: ?>
                                             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold">
@@ -293,15 +360,85 @@ $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments
                                                     <span class="material-symbols-outlined text-lg">close</span>
                                                 </button>
                                             </div>
-                                            <textarea id="reply-text-<?php echo (int)$comment['id']; ?>" placeholder="Write your reply here..."><?php echo htmlspecialchars($comment['reply'] ?? ''); ?></textarea>
-                                            <div class="flex items-center justify-between gap-3">
-                                                <p id="reply-status-<?php echo (int)$comment['id']; ?>" class="text-xs text-slate-400"></p>
-                                                <button onclick="submitReply(<?php echo (int)$comment['id']; ?>)"
-                                                        class="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2 text-sm font-bold text-white hover:bg-primary/90 shadow-md shadow-primary/20 transition"
-                                                        type="button">
-                                                    <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">send</span>
-                                                    Send Reply
-                                                </button>
+
+                                            <!-- Original message + image -->
+                                            <div class="rounded-xl bg-white border border-slate-200 px-3 py-2.5">
+                                                <p class="text-xs text-slate-600"><?php echo htmlspecialchars($message); ?></p>
+                                                <?php if (!empty($comment['image'])): ?>
+                                                    <a href="<?php echo htmlspecialchars($comment['image']); ?>" target="_blank" rel="noopener" class="mt-2 inline-block">
+                                                        <img src="<?php echo htmlspecialchars($comment['image']); ?>" alt="Attached photo"
+                                                            class="h-20 w-auto max-w-[140px] rounded-xl object-cover border border-slate-200 shadow-sm hover:opacity-80 transition">
+                                                    </a>
+                                                <?php endif; ?>
+                                            </div>
+
+                                            <?php $thread = $comment['thread'] ?? []; ?>
+                                            <?php if (!empty($thread)): ?>
+                                                <!-- Conversation thread -->
+                                                <div class="space-y-2 max-h-72 overflow-y-auto rounded-[1.8rem] border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,245,249,0.9))] p-4">
+                                                    <div class="mx-auto mb-2 h-1.5 w-16 rounded-full bg-slate-200"></div>
+                                                    <?php foreach ($thread as $entry): ?>
+                                                        <?php $entryIsAdmin = $entry['from'] === 'admin'; ?>
+                                                        <div class="message-lane <?php echo $entryIsAdmin ? 'admin' : 'customer'; ?>">
+                                                            <div class="message-bubble <?php echo $entryIsAdmin ? 'admin' : 'customer'; ?>">
+                                                                <div class="mb-1 flex items-center justify-between gap-2 text-[10px] font-bold <?php echo $entryIsAdmin ? 'text-white/80' : 'text-slate-400'; ?>">
+                                                                    <span><?php echo $entryIsAdmin ? 'Admin' . (!empty($entry['by']) ? ' · ' . htmlspecialchars($entry['by']) : '') : 'Customer'; ?></span>
+                                                                    <span><?php echo !empty($entry['at']) ? date('M d H:i', strtotime($entry['at'])) : ''; ?></span>
+                                                                </div>
+                                                                <?php if (!empty($entry['message'])): ?>
+                                                                    <p class="text-xs leading-relaxed <?php echo $entryIsAdmin ? 'text-white' : 'text-slate-700'; ?>"><?php echo nl2br(htmlspecialchars((string) ($entry['message'] ?? ''))); ?></p>
+                                                                <?php endif; ?>
+                                                                <?php if (!empty($entry['image'])): ?>
+                                                                    <a href="<?php echo htmlspecialchars((string) $entry['image']); ?>" target="_blank" rel="noopener" class="mt-2 inline-block">
+                                                                        <img src="<?php echo htmlspecialchars((string) $entry['image']); ?>" alt="Reply attachment"
+                                                                            class="h-28 w-auto max-w-[180px] rounded-2xl object-cover border <?php echo $entryIsAdmin ? 'border-white/20' : 'border-slate-200'; ?> shadow-sm hover:opacity-90 transition">
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                                <?php if (!empty($thread) && end($thread)['from'] === 'customer'): ?>
+                                                    <div class="rounded-xl border border-orange-300 bg-orange-50 px-3 py-2 flex items-center gap-2">
+                                                        <span class="material-symbols-outlined text-orange-500 text-base" style="font-variation-settings:'FILL' 1">chat_bubble</span>
+                                                        <p class="text-xs font-semibold text-orange-700">Customer replied — write a follow-up below</p>
+                                                    </div>
+                                                <?php endif; ?>
+                                            <?php endif; ?>
+
+                                            <div class="rounded-[1.8rem] border border-slate-200 bg-white/90 p-3 shadow-inner shadow-slate-200/50">
+                                                <div class="mb-2 flex items-center justify-center">
+                                                    <div class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-[11px] font-semibold text-white shadow-md">
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                                        Reply Composer
+                                                    </div>
+                                                </div>
+                                                <textarea id="reply-text-<?php echo (int)$comment['id']; ?>" placeholder="Write a reply or attach a photo..."><?php echo htmlspecialchars($comment['reply'] ?? ''); ?></textarea>
+                                                <div id="reply-preview-wrap-<?php echo (int)$comment['id']; ?>" class="hidden px-2 pb-2">
+                                                    <div class="relative inline-block">
+                                                        <img id="reply-preview-<?php echo (int)$comment['id']; ?>" src="" alt="Reply preview" class="h-28 w-auto max-w-full rounded-2xl object-cover border border-slate-200 shadow-sm">
+                                                        <button type="button" onclick="clearAdminReplyImage(<?php echo (int)$comment['id']; ?>)" class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-white shadow transition hover:bg-red-600">
+                                                            <span class="material-symbols-outlined" style="font-size:14px">close</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-2 border-t border-slate-100"></div>
+                                                <div class="flex flex-wrap items-center justify-between gap-3 px-2 pt-3">
+                                                    <div class="flex items-center gap-2">
+                                                        <label for="reply-image-<?php echo (int)$comment['id']; ?>" class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-slate-100 px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-200">
+                                                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1">add_photo_alternate</span>
+                                                            Photo
+                                                        </label>
+                                                        <input type="file" id="reply-image-<?php echo (int)$comment['id']; ?>" accept="image/jpeg,image/png,image/webp,image/gif" class="sr-only" onchange="handleAdminReplyImageChange(<?php echo (int)$comment['id']; ?>)">
+                                                        <p id="reply-status-<?php echo (int)$comment['id']; ?>" class="text-xs text-slate-400"></p>
+                                                    </div>
+                                                    <button onclick="submitReply(<?php echo (int)$comment['id']; ?>)"
+                                                            class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2 text-sm font-bold text-white hover:bg-slate-700 shadow-md shadow-slate-900/20 transition"
+                                                            type="button">
+                                                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">send</span>
+                                                        Send Reply
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -329,28 +466,67 @@ $responseRate    = $totalComments > 0 ? round(($repliedComments / $totalComments
         if (isHidden) row.classList.remove('hidden');
     }
 
+    function handleAdminReplyImageChange(id) {
+        var input = document.getElementById('reply-image-' + id);
+        var previewWrap = document.getElementById('reply-preview-wrap-' + id);
+        var preview = document.getElementById('reply-preview-' + id);
+        if (!input || !previewWrap || !preview) return;
+
+        var file = input.files && input.files[0];
+        if (!file) {
+            previewWrap.classList.add('hidden');
+            preview.src = '';
+            return;
+        }
+
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            preview.src = event.target && event.target.result ? event.target.result : '';
+            previewWrap.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function clearAdminReplyImage(id) {
+        var input = document.getElementById('reply-image-' + id);
+        var previewWrap = document.getElementById('reply-preview-wrap-' + id);
+        var preview = document.getElementById('reply-preview-' + id);
+        if (input) input.value = '';
+        if (preview) preview.src = '';
+        if (previewWrap) previewWrap.classList.add('hidden');
+    }
+
     async function submitReply(id) {
         var textarea = document.getElementById('reply-text-' + id);
         var statusEl = document.getElementById('reply-status-' + id);
+        var imageInput = document.getElementById('reply-image-' + id);
         if (!textarea || !statusEl) return;
         var reply = textarea.value.trim();
-        if (!reply) {
-            statusEl.textContent = 'Please enter a reply before sending.';
+        var imageFile = imageInput && imageInput.files ? imageInput.files[0] : null;
+        if (!reply && !imageFile) {
+            statusEl.textContent = 'Please enter a reply or attach a photo.';
             statusEl.className = 'text-xs text-red-500 font-semibold';
             return;
         }
         statusEl.textContent = 'Saving...';
         statusEl.className = 'text-xs text-slate-400';
         try {
+            var formData = new FormData();
+            formData.append('action', 'reply');
+            formData.append('id', String(id));
+            formData.append('reply', reply);
+            if (imageFile) formData.append('image', imageFile);
+
             var response = await fetch('/api/comments.php', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'reply', id: id, reply: reply })
+                body: formData
             });
             var result = await response.json();
             if (result.status === 'success') {
                 statusEl.textContent = 'Reply saved successfully.';
                 statusEl.className = 'text-xs text-teal-600 font-semibold';
+                textarea.value = '';
+                clearAdminReplyImage(id);
                 setTimeout(function() { window.location.reload(); }, 800);
             } else {
                 statusEl.textContent = result.message || 'Could not save reply.';

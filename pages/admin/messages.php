@@ -15,7 +15,7 @@ if (file_exists($file)) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_read'])) {
     $id = (int) $_POST['mark_read'];
     foreach ($messages as &$msg) {
-        if ($msg['id'] === $id) {
+        if ((int) ($msg['id'] ?? 0) === $id) {
             $msg['status'] = 'read';
         }
     }
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_read'])) {
 // Delete message
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $id = (int) $_POST['delete_id'];
-    $messages = array_values(array_filter($messages, fn($m) => $m['id'] !== $id));
+    $messages = array_values(array_filter($messages, fn($m) => (int) ($m['id'] ?? 0) !== $id));
     file_put_contents($file, json_encode($messages, JSON_PRETTY_PRINT));
     header('Location: /admin/messages');
     exit;
@@ -183,7 +183,7 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
             $badgeClass = $badgeMap[$msg['subject'] ?? 'other'] ?? 'bg-slate-100 text-slate-600';
             $nameParts = explode(' ', $msg['name']);
             $initials = strtoupper(substr($nameParts[0], 0, 1) . (count($nameParts) > 1 ? substr(end($nameParts), 0, 1) : ''));
-            $msgJson = htmlspecialchars(json_encode(['id'=>(int)$msg['id'],'name'=>$msg['name'],'email'=>$msg['email'],'subject'=>$subjectLabel,'message'=>$msg['message'],'date'=>$msg['created_at']??'-','status'=>$msg['status']??'new']), ENT_QUOTES);
+            $msgJson = htmlspecialchars(json_encode(['id'=>(int)$msg['id'],'name'=>$msg['name'],'email'=>$msg['email'],'subject'=>$subjectLabel,'message'=>$msg['message'],'date'=>$msg['created_at']??'-','status'=>$msg['status']??'new','reply'=>$msg['reply']??'','replied_at'=>$msg['replied_at']??'','replied_by'=>$msg['replied_by']??'','thread'=>$msg['thread']??[]]), ENT_QUOTES);
           ?>
           <div class="message-row flex items-start gap-4 px-6 py-4 hover:bg-slate-50/70 transition-colors cursor-pointer <?= $isNew ? 'bg-blue-50/30' : '' ?>"
                data-status="<?= $msg['status'] ?? 'new' ?>"
@@ -193,6 +193,7 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="font-bold <?= $isNew ? 'text-teal-900' : 'text-slate-700' ?>"><?= htmlspecialchars($msg['name']) ?></span>
                 <?php if ($isNew): ?><span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-red-100 text-red-600 text-[10px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>NEW</span><?php endif; ?>
+                <?php if (($msg['status'] ?? '') === 'customer_replied'): ?><span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-orange-100 text-orange-600 text-[10px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>REPLIED</span><?php endif; ?>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold <?= $badgeClass ?>"><?= $subjectLabel ?></span>
               </div>
               <p class="text-sm text-on-surface-variant truncate mt-0.5"><?= htmlspecialchars($msg['email']) ?></p>
@@ -248,6 +249,11 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
       <p id="dReplyPreview" class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap"></p>
       <p id="dReplyMeta" class="mt-3 text-xs text-slate-500"></p>
     </div>
+    <!-- Conversation thread -->
+    <div id="dThreadWrap" class="hidden space-y-3">
+      <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Conversation Thread</p>
+      <div id="dThread"></div>
+    </div>
     <div class="rounded-xl border border-slate-200 p-5 bg-white">
       <div class="flex items-center justify-between gap-4 mb-3">
         <div>
@@ -285,13 +291,52 @@ function openMessage(data) {
     document.getElementById('dSubject').textContent = data.subject;
     document.getElementById('dDate').textContent    = data.date;
     document.getElementById('dMessage').textContent = data.message;
-    document.getElementById('dReplyText').value     = data.reply || '';
+    document.getElementById('dReplyText').value     = '';
     document.getElementById('dReplyStatus').textContent = '';
     document.getElementById('dReply').href          = 'mailto:' + data.email + '?subject=Re: ' + encodeURIComponent(data.subject);
-    const replyWrap = document.getElementById('dReplyPreviewWrap');
+
+    // Thread view (preferred)
+    const threadWrap = document.getElementById('dThreadWrap');
+    const threadEl   = document.getElementById('dThread');
+    const thread = Array.isArray(data.thread) ? data.thread : [];
+
+    if (thread.length > 0) {
+      threadWrap.classList.remove('hidden');
+      threadEl.innerHTML = thread.map(function(entry) {
+        const isAdmin = entry.from === 'admin';
+        const time = entry.at ? new Date(entry.at).toLocaleString() : '';
+        return `<div class="rounded-xl border px-4 py-3 ${isAdmin ? 'border-emerald-200 bg-emerald-50' : 'border-orange-200 bg-orange-50'}">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white ${isAdmin ? 'bg-emerald-600' : 'bg-orange-500'}">
+              <span class="material-symbols-outlined text-xs" style="font-size:12px;font-variation-settings:'FILL' 1">${isAdmin ? 'support_agent' : 'person'}</span>
+              ${isAdmin ? (entry.by || 'Admin') : 'Customer'}
+            </span>
+            <span class="text-xs text-slate-400">${time}</span>
+          </div>
+          <p class="text-sm text-slate-700 whitespace-pre-wrap">${entry.message ? entry.message.replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''}</p>
+        </div>`;
+      }).join('');
+
+      // Highlight if customer replied
+      if (data.status === 'customer_replied') {
+        const lastEntry = thread[thread.length - 1];
+        if (lastEntry && lastEntry.from === 'customer') {
+          const badge = document.createElement('div');
+          badge.className = 'rounded-xl border border-orange-300 bg-orange-50 px-4 py-2 flex items-center gap-2';
+          badge.innerHTML = '<span class="material-symbols-outlined text-orange-500 text-base" style="font-variation-settings:\'FILL\' 1">chat_bubble</span><p class="text-sm font-semibold text-orange-700">Customer replied — please respond</p>';
+          threadEl.prepend(badge);
+        }
+      }
+    } else {
+      threadWrap.classList.add('hidden');
+      threadEl.innerHTML = '';
+    }
+
+    // Legacy single reply preview (show when no thread)
+    const replyWrap    = document.getElementById('dReplyPreviewWrap');
     const replyPreview = document.getElementById('dReplyPreview');
-    const replyMeta = document.getElementById('dReplyMeta');
-    if (data.reply) {
+    const replyMeta    = document.getElementById('dReplyMeta');
+    if (thread.length === 0 && data.reply) {
       replyWrap.classList.remove('hidden');
       replyPreview.textContent = data.reply;
       replyMeta.textContent = data.replied_at ? ('Saved ' + data.replied_at + (data.replied_by ? ' by ' + data.replied_by : '')) : '';
@@ -350,15 +395,32 @@ function filterTable(filter) {
         btn.classList.toggle('text-on-surface-variant', !active);
     });
     document.querySelectorAll('.message-row').forEach(row => {
-      const status = row.dataset.status || 'new';
-      const visible = filter === 'all' || status === filter || (filter === 'read' && status === 'replied');
-      row.style.display = visible ? '' : 'none';
+        const status = row.dataset.status || 'new';
+        let visible = false;
+        if (filter === 'all') {
+            visible = true;
+        } else if (filter === 'new') {
+            visible = status === 'new';
+        } else if (filter === 'read') {
+            visible = status === 'read' || status === 'replied' || status === 'customer_replied';
+        } else {
+            visible = status === filter;
+        }
+        row.style.display = visible ? '' : 'none';
     });
 }
 document.getElementById('globalSearch').addEventListener('input', function () {
-    const q = this.value.toLowerCase();
+    const q = this.value.toLowerCase().trim();
     document.querySelectorAll('.message-row').forEach(row => {
-        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        if (!q) {
+            // Restore visibility based on active filter
+            const activeBtn = document.querySelector('.filter-btn.bg-primary');
+            const activeFilter = activeBtn ? activeBtn.dataset.filter : 'all';
+            filterTable(activeFilter);
+            return;
+        }
+        const matches = row.textContent.toLowerCase().includes(q);
+        row.style.display = matches ? '' : 'none';
     });
 });
 document.querySelectorAll('.delete-form').forEach(form => {
