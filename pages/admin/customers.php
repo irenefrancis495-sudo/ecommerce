@@ -81,6 +81,25 @@ usort($customerComments, function ($a, $b) {
 });
 
 $commentsCount = count($customerComments);
+
+// Load orders for Recent Customer Orders section
+$ordersFile = __DIR__ . '/../../data/orders.json';
+$orders = [];
+if (file_exists($ordersFile)) {
+    $decodedOrders = json_decode((string) file_get_contents($ordersFile), true);
+    if (is_array($decodedOrders)) {
+        $orders = $decodedOrders;
+    }
+}
+usort($orders, function ($a, $b) {
+    return strcmp($b['created_at'] ?? '', $a['created_at'] ?? '');
+});
+// Build user lookup by id
+$userLookup = [];
+foreach ($usersData as $u) {
+    $uid = (int)($u['id'] ?? 0);
+    if ($uid > 0) $userLookup[$uid] = $u;
+}
 ?>
 
 <style>
@@ -88,47 +107,77 @@ $commentsCount = count($customerComments);
 
   body {
     background:
-      radial-gradient(circle at 10% 0%, rgba(20, 184, 166, 0.08) 0%, transparent 30%),
-      radial-gradient(circle at 100% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 35%),
-      #f5f7fb;
+      radial-gradient(circle at 10% 0%, rgba(20, 184, 166, 0.07) 0%, transparent 32%),
+      radial-gradient(circle at 90% 15%, rgba(245, 158, 11, 0.07) 0%, transparent 32%),
+      radial-gradient(circle at 50% 90%, rgba(99, 102, 241, 0.04) 0%, transparent 40%),
+      #f1f4f8;
   }
 
   .admin-shell { position: relative; }
-
   .admin-shell::before {
     content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background-image: linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
-    background-size: 42px 42px;
-    mask-image: radial-gradient(circle at center, black, transparent 78%);
+    position: fixed; inset: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(148,163,184,0.055) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(148,163,184,0.055) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse at 50% 40%, black 0%, transparent 72%);
     z-index: 0;
   }
 
-  .surface-glass {
-    background: rgba(255, 255, 255, 0.74);
-    backdrop-filter: blur(16px);
-  }
-
-  .admin-sidebar {
-    border-right: 1px solid rgba(255, 255, 255, 0.45);
-    box-shadow: 0 24px 40px -32px rgba(15, 23, 42, 0.5);
-  }
-
-  .admin-topbar {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 12px 28px -24px rgba(15, 23, 42, 0.35);
-  }
+  .admin-sidebar { border-right: 1px solid rgba(255,255,255,0.45); box-shadow: 0 24px 40px -32px rgba(15,23,42,0.5); }
+  .admin-topbar  { border-bottom: 1px solid rgba(255,255,255,0.7); box-shadow: 0 12px 28px -24px rgba(15,23,42,0.35); }
 
   .admin-main { width: calc(100% - 16rem); }
   .admin-content { position: relative; z-index: 1; }
 
+  /* KPI cards */
+  .kpi-card { transition: transform .18s ease, box-shadow .18s ease; }
+  .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 20px 36px -18px rgba(15,23,42,0.18); }
+
+  /* Avatar palette */
+  .av-teal   { background: #0d9488; color:#fff; }
+  .av-indigo { background: #4f46e5; color:#fff; }
+  .av-rose   { background: #e11d48; color:#fff; }
+  .av-amber  { background: #d97706; color:#fff; }
+  .av-violet { background: #7c3aed; color:#fff; }
+  .av-cyan   { background: #0891b2; color:#fff; }
+  .av-lime   { background: #65a30d; color:#fff; }
+  .av-fuchsia{ background: #c026d3; color:#fff; }
+
+  /* Table row hover */
+  .usr-row { transition: background .14s; }
+  .usr-row:hover { background: #f0f9ff; }
+
+  /* Form labels float */
+  .field-wrap { position: relative; }
+  .field-wrap label { position: absolute; left:3rem; top:50%; transform:translateY(-50%); font-size:.72rem; font-weight:700; color:#94a3b8; pointer-events:none; transition:.15s; letter-spacing:.04em; text-transform:uppercase; }
+  .field-wrap input:focus ~ label,
+  .field-wrap input:not(:placeholder-shown) ~ label,
+  .field-wrap select:focus ~ label { top:.55rem; font-size:.6rem; color:#003345; }
+  .field-wrap .fi { position:absolute; left:.85rem; top:50%; transform:translateY(-50%); color:#94a3b8; font-size:18px; pointer-events:none; }
+  .field-wrap input, .field-wrap select {
+    padding: 1.4rem 1rem .55rem 3rem;
+    border-radius: 1rem;
+    border: 1.5px solid #e2e8f0;
+    font-size: .875rem;
+    background: #f8fafc;
+    width: 100%;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .field-wrap input:focus, .field-wrap select:focus { border-color:#003345; box-shadow: 0 0 0 3px rgba(0,51,69,.08); background:#fff; }
+  .field-wrap select { appearance: none; }
+
+  /* Feedback pill */
+  .fb-pill-new     { background:#fef3c7; color:#92400e; }
+  .fb-pill-replied { background:#d1fae5; color:#065f46; }
+  .fb-pill-closed  { background:#f1f5f9; color:#475569; }
+
   @media (max-width: 1024px) {
-    .admin-sidebar { position: static; width: 100%; height: auto; margin-bottom: 1rem; }
-    .admin-topbar { position: static; left: auto; right: auto; width: 100%; margin: 0 1rem 1rem; border-radius: 1rem; }
-    .admin-main { width: 100%; margin-left: 0; }
-    .admin-content { padding-top: 1.25rem; }
+    .admin-sidebar { position:static; width:100%; height:auto; margin-bottom:1rem; }
+    .admin-topbar  { position:static; left:auto; right:auto; width:100%; margin:0 1rem 1rem; border-radius:1rem; }
+    .admin-main { width:100%; margin-left:0; }
+    .admin-content { padding-top:1.25rem; }
   }
 </style>
 
@@ -157,82 +206,135 @@ $commentsCount = count($customerComments);
 
   <main class="admin-main admin-content ml-64 pt-24 p-8 min-h-screen">
     <div class="max-w-7xl mx-auto space-y-8">
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+
+      <!-- Page Header -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
         <div>
-          <h2 class="text-3xl font-black text-primary tracking-tight">Users Management</h2>
-          <p class="text-on-surface-variant mt-1">Generated from website user accounts for admin operations.</p>
+          <div class="flex items-center gap-2 text-xs text-on-surface-variant mb-1 font-semibold">
+            <span class="material-symbols-outlined text-sm">home</span>
+            <span>Admin</span>
+            <span class="material-symbols-outlined text-sm">chevron_right</span>
+            <span class="text-primary">Users</span>
+          </div>
+          <h2 class="text-3xl font-black text-primary tracking-tight flex items-center gap-3">
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-2xl bg-primary text-white shadow-lg shadow-primary/30">
+              <span class="material-symbols-outlined text-xl" style="font-variation-settings:'FILL' 1">group</span>
+            </span>
+            Users Management
+          </h2>
+          <p class="text-on-surface-variant mt-1 text-sm">Manage all registered accounts and access levels.</p>
         </div>
-        <div class="flex gap-3">
-          <button class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-surface-container-highest transition-colors" type="button">
-            <span class="material-symbols-outlined text-lg">group</span>
-            All Users
+        <div class="flex gap-2 flex-wrap items-center">
+          <button data-role-filter="all" class="role-filter-tab flex items-center gap-1.5 bg-primary text-white px-4 py-2.5 rounded-xl text-sm font-bold transition-colors shadow-sm shadow-primary/20" type="button">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">group</span>
+            All <span class="bg-white/20 rounded-md px-1.5 py-0.5 text-xs"><?php echo $totalUsers; ?></span>
           </button>
-          <button id="exportUsersBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20" type="button">
-            <span class="material-symbols-outlined text-lg">download</span>
-            Export Users
+          <button data-role-filter="customer" class="role-filter-tab flex items-center gap-1.5 bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors" type="button">
+            <span class="material-symbols-outlined text-base">person</span>
+            Customers <span class="bg-slate-100 rounded-md px-1.5 py-0.5 text-xs text-slate-500"><?php echo $customerCount; ?></span>
+          </button>
+          <button data-role-filter="admin" class="role-filter-tab flex items-center gap-1.5 bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors" type="button">
+            <span class="material-symbols-outlined text-base">admin_panel_settings</span>
+            Admins <span class="bg-slate-100 rounded-md px-1.5 py-0.5 text-xs text-slate-500"><?php echo $adminCount; ?></span>
+          </button>
+          <button id="exportUsersBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-5 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20 hover:opacity-90 transition" type="button">
+            <span class="material-symbols-outlined text-base">download</span>
+            Export CSV
           </button>
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Users</p>
-          <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $totalUsers; ?></span></div>
+      <!-- KPI Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings:'FILL' 1">group</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-primary leading-none"><?php echo $totalUsers; ?></p>
+            <p class="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wide">Total Users</p>
+          </div>
         </div>
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Active Users</p>
-          <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $activeCount; ?></span><span class="text-xs font-bold text-teal-600">online-ready</span></div>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-teal-600 text-2xl" style="font-variation-settings:'FILL' 1">verified_user</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-teal-700 leading-none"><?php echo $activeCount; ?></p>
+            <p class="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wide">Active</p>
+          </div>
         </div>
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Customers</p>
-          <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $customerCount; ?></span></div>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-indigo-600 text-2xl" style="font-variation-settings:'FILL' 1">storefront</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-indigo-700 leading-none"><?php echo $customerCount; ?></p>
+            <p class="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wide">Customers</p>
+          </div>
         </div>
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Comments</p>
-          <div class="flex items-baseline gap-2"><span class="text-2xl font-black text-primary"><?php echo $commentsCount; ?></span></div>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-amber-600 text-2xl" style="font-variation-settings:'FILL' 1">rate_review</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-amber-700 leading-none"><?php echo $commentsCount; ?></p>
+            <p class="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wide">Feedback</p>
+          </div>
         </div>
       </div>
 
-      <!-- Customer Activity Overview -->
+      <!-- Activity Overview -->
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Recent Orders -->
-        <div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm shadow-slate-200/40">
-          <h3 class="text-lg font-black text-primary mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined">shopping_cart</span>
-            Recent Customer Orders
-          </h3>
-          <div class="space-y-3">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-base font-black text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-lg text-indigo-500" style="font-variation-settings:'FILL' 1">shopping_bag</span>
+              Recent Orders
+            </h3>
+            <a href="/admin/orders" class="text-xs font-bold text-primary hover:underline flex items-center gap-1">View all <span class="material-symbols-outlined text-sm">arrow_forward</span></a>
+          </div>
+          <div class="divide-y divide-slate-50">
             <?php
-            $recentOrders = array_slice($orders, 0, 5); // Show last 5 orders
+            $recentOrders = array_slice($orders, 0, 5);
             if (empty($recentOrders)): ?>
-              <div class="text-center py-8 text-on-surface-variant">
-                <span class="material-symbols-outlined text-3xl mb-2 block">shopping_cart</span>
-                <p class="text-sm">No orders yet</p>
+              <div class="text-center py-10 text-slate-400">
+                <span class="material-symbols-outlined text-4xl mb-2 block opacity-40">shopping_bag</span>
+                <p class="text-sm font-medium">No orders yet</p>
               </div>
             <?php else: ?>
               <?php foreach ($recentOrders as $order):
                 $user = $userLookup[$order['user_id']] ?? null;
-                $customerName = $user ? trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) : 'Unknown';
+                $customerName = $user ? trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) : ($order['user_email'] ?? 'Unknown');
+                $customerName = trim($customerName) ?: 'Unknown';
                 $orderNumber = $order['order_number'] ?? 'ORD-' . $order['id'];
                 $total = (float) ($order['total'] ?? 0);
-                $status = strtolower($order['status'] ?? '');
+                $status = strtolower($order['status'] ?? 'pending');
+                $statusColors = [
+                  'completed' => 'bg-teal-50 text-teal-700',
+                  'delivered' => 'bg-teal-50 text-teal-700',
+                  'pending'   => 'bg-amber-50 text-amber-700',
+                  'shipped'   => 'bg-indigo-50 text-indigo-700',
+                  'cancelled' => 'bg-red-50 text-red-700',
+                ];
+                $sc = $statusColors[$status] ?? 'bg-slate-100 text-slate-600';
               ?>
-              <div class="flex items-center justify-between p-3 bg-surface-container-high rounded-xl">
+              <div class="flex items-center justify-between px-6 py-3.5 hover:bg-slate-50 transition">
                 <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-xs font-black">
+                  <div class="w-8 h-8 rounded-full av-teal flex items-center justify-center text-[10px] font-black flex-shrink-0">
                     <?php echo strtoupper(substr($customerName, 0, 1)); ?>
                   </div>
                   <div>
-                    <p class="text-sm font-bold text-primary"><?php echo htmlspecialchars($customerName); ?></p>
-                    <p class="text-xs text-on-surface-variant"><?php echo htmlspecialchars($orderNumber); ?></p>
+                    <p class="text-sm font-bold text-primary leading-tight"><?php echo htmlspecialchars($customerName); ?></p>
+                    <p class="text-xs text-slate-400"><?php echo htmlspecialchars($orderNumber); ?></p>
                   </div>
                 </div>
-                <div class="text-right">
-                  <p class="text-sm font-bold text-primary">$<?php echo number_format($total, 2); ?></p>
-                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-bold
-                    <?php echo $status === 'completed' ? 'bg-teal-50 text-teal-700' : 'bg-tertiary-container text-on-tertiary-container'; ?>">
-                    <?php echo ucfirst($status ?: 'pending'); ?>
+                <div class="text-right flex items-center gap-3">
+                  <span class="inline-flex px-2 py-0.5 rounded-full text-[11px] font-bold <?php echo $sc; ?>">
+                    <?php echo ucfirst($status); ?>
                   </span>
+                  <p class="text-sm font-black text-primary">$<?php echo number_format($total, 2); ?></p>
                 </div>
               </div>
               <?php endforeach; ?>
@@ -240,45 +342,43 @@ $commentsCount = count($customerComments);
           </div>
         </div>
 
-        <!-- Recent Comments -->
-        <div class="bg-surface-container-lowest p-6 rounded-3xl shadow-sm shadow-slate-200/40">
-          <h3 class="text-lg font-black text-primary mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined">chat</span>
-            Recent Customer Feedback
-          </h3>
-          <div class="space-y-3">
+        <!-- Recent Feedback -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h3 class="text-base font-black text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-lg text-amber-500" style="font-variation-settings:'FILL' 1">rate_review</span>
+              Recent Feedback
+            </h3>
+            <span class="text-xs font-bold text-slate-400"><?php echo $commentsCount; ?> total</span>
+          </div>
+          <div class="divide-y divide-slate-50">
             <?php
-            $recentComments = array_slice($customerComments, 0, 5); // Show last 5 comments
+            $recentComments = array_slice($customerComments, 0, 5);
             if (empty($recentComments)): ?>
-              <div class="text-center py-8 text-on-surface-variant">
-                <span class="material-symbols-outlined text-3xl mb-2 block">chat</span>
-                <p class="text-sm">No feedback yet</p>
+              <div class="text-center py-10 text-slate-400">
+                <span class="material-symbols-outlined text-4xl mb-2 block opacity-40">chat_bubble</span>
+                <p class="text-sm font-medium">No feedback yet</p>
               </div>
             <?php else: ?>
               <?php foreach ($recentComments as $comment):
                 $name = $comment['name'] ?? 'Anonymous';
                 $message = $comment['message'] ?? '';
                 $createdAt = $comment['created_at'] ?? '';
-                $status = $comment['status'] ?? 'new';
-                $isNew = $status === 'new';
+                $fStatus = $comment['status'] ?? 'new';
+                $pillCls = $fStatus === 'replied' ? 'fb-pill-replied' : ($fStatus === 'closed' ? 'fb-pill-closed' : 'fb-pill-new');
               ?>
-              <div class="p-3 bg-surface-container-high rounded-xl <?php echo $isNew ? 'border-l-4 border-tertiary' : ''; ?>">
-                <div class="flex items-start justify-between mb-2">
+              <div class="px-6 py-3.5 hover:bg-slate-50 transition <?php echo $fStatus === 'new' ? 'border-l-4 border-amber-400' : ''; ?>">
+                <div class="flex items-start justify-between gap-2 mb-1">
                   <div class="flex items-center gap-2">
-                    <div class="w-6 h-6 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-xs font-black">
+                    <div class="w-6 h-6 rounded-full av-amber flex items-center justify-center text-[10px] font-black flex-shrink-0">
                       <?php echo strtoupper(substr($name, 0, 1)); ?>
                     </div>
                     <span class="text-sm font-bold text-primary"><?php echo htmlspecialchars($name); ?></span>
-                    <?php if ($isNew): ?>
-                      <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-xs font-bold">
-                        <span class="w-1 h-1 rounded-full bg-tertiary"></span>
-                        NEW
-                      </span>
-                    <?php endif; ?>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-bold <?php echo $pillCls; ?>"><?php echo ucfirst($fStatus); ?></span>
                   </div>
-                  <span class="text-xs text-on-surface-variant"><?php echo htmlspecialchars(date('M d, H:i', strtotime($createdAt))); ?></span>
+                  <span class="text-[10px] text-slate-400 flex-shrink-0"><?php echo $createdAt ? date('M d', strtotime($createdAt)) : ''; ?></span>
                 </div>
-                <p class="text-sm text-on-surface-variant line-clamp-2"><?php echo htmlspecialchars(substr($message, 0, 80) . (strlen($message) > 80 ? '...' : '')); ?></p>
+                <p class="text-xs text-slate-500 leading-snug pl-8 line-clamp-2"><?php echo htmlspecialchars(substr($message, 0, 90)) . (strlen($message) > 90 ? '…' : ''); ?></p>
               </div>
               <?php endforeach; ?>
             <?php endif; ?>
@@ -286,85 +386,160 @@ $commentsCount = count($customerComments);
         </div>
       </div>
 
-      <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div class="xl:col-span-2 bg-surface-container-lowest p-6 rounded-3xl shadow-sm shadow-slate-200/40">
-          <h3 class="text-lg font-black text-primary mb-4">Add New User</h3>
+      <!-- Add New User -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary text-xl" style="font-variation-settings:'FILL' 1">person_add</span>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-primary">Add New User</h3>
+            <p class="text-xs text-slate-400">Create a new customer or admin account</p>
+          </div>
+        </div>
+        <div class="p-6">
           <form id="add-user-form" class="grid gap-4">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input id="new-username" type="text" placeholder="Username" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm" required>
-              <input id="new-email" type="email" placeholder="Email" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm" required>
+              <div class="field-wrap">
+                <span class="material-symbols-outlined fi">alternate_email</span>
+                <input id="new-username" type="text" placeholder=" " required autocomplete="off">
+                <label for="new-username">Username</label>
+              </div>
+              <div class="field-wrap">
+                <span class="material-symbols-outlined fi">mail</span>
+                <input id="new-email" type="email" placeholder=" " required autocomplete="off">
+                <label for="new-email">Email address</label>
+              </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input id="new-firstname" type="text" placeholder="First Name" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm">
-              <input id="new-lastname" type="text" placeholder="Last Name" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm">
+              <div class="field-wrap">
+                <span class="material-symbols-outlined fi">badge</span>
+                <input id="new-firstname" type="text" placeholder=" " autocomplete="off">
+                <label for="new-firstname">First Name</label>
+              </div>
+              <div class="field-wrap">
+                <span class="material-symbols-outlined fi">badge</span>
+                <input id="new-lastname" type="text" placeholder=" " autocomplete="off">
+                <label for="new-lastname">Last Name</label>
+              </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input id="new-password" type="password" placeholder="Password" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm" required>
-              <select id="new-role" class="rounded-2xl border border-surface-container-high px-4 py-3 text-sm">
-                <option value="customer">Customer</option>
-                <option value="admin">Admin</option>
-              </select>
+              <div class="field-wrap">
+                <span class="material-symbols-outlined fi">lock</span>
+                <input id="new-password" type="password" placeholder=" " required autocomplete="new-password">
+                <label for="new-password">Password</label>
+              </div>
+              <div class="field-wrap">
+                <span class="material-symbols-outlined fi">shield_person</span>
+                <select id="new-role">
+                  <option value="customer">Customer</option>
+                  <option value="admin">Admin</option>
+                </select>
+                <label for="new-role">Role</label>
+              </div>
             </div>
-            <div class="flex items-center justify-between gap-4">
-              <button type="submit" class="rounded-2xl bg-primary text-white px-6 py-3 text-sm font-semibold hover:bg-primary/90 transition">Create User</button>
+            <div class="flex items-center gap-4 pt-1">
+              <button type="submit" class="flex items-center gap-2 rounded-xl bg-primary text-white px-6 py-2.5 text-sm font-bold hover:bg-primary/90 transition shadow-md shadow-primary/20">
+                <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">person_add</span>
+                Create User
+              </button>
               <span id="add-user-status" class="text-sm text-slate-500"></span>
             </div>
           </form>
         </div>
       </div>
 
-      <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40">
+      <!-- Users Table -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 class="text-base font-black text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">manage_accounts</span>
+            All Users
+          </h3>
+          <p id="usrVisibleCount" class="text-xs font-bold text-slate-400">Showing <?php echo $totalUsers; ?> user<?php echo $totalUsers !== 1 ? 's' : ''; ?></p>
+        </div>
         <div class="overflow-x-auto">
           <table id="usersTable" class="w-full text-left border-collapse">
             <thead>
-              <tr class="bg-surface-container-low border-b border-surface-variant/20">
-                <th class="px-8 py-5 text-xs font-black text-primary uppercase tracking-widest">ID</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">User</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Username</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Role</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Joined</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Orders</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Spend</th>
-                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest">Action</th>
-                <th class="px-8 py-5 text-xs font-black text-primary uppercase tracking-widest text-right">Status</th>
+              <tr class="bg-slate-50 border-b border-slate-100">
+                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest w-12">#</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">User</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest hidden md:table-cell">Username</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Role</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell">Joined</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest hidden lg:table-cell text-center">Orders</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest hidden xl:table-cell text-right">Spend</th>
+                <th class="px-4 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Status</th>
+                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-surface-container-low">
-              <?php foreach ($displayUsers as $u): ?>
-              <tr class="hover:bg-surface-bright transition-colors group">
-                <td class="px-8 py-5 text-sm font-bold text-primary">#<?php echo (int) $u['id']; ?></td>
-                <td class="px-6 py-5">
+            <tbody class="divide-y divide-slate-50">
+              <?php
+              $avPalette = ['av-teal','av-indigo','av-rose','av-amber','av-violet','av-cyan','av-lime','av-fuchsia'];
+              foreach ($displayUsers as $uidx => $u):
+                $avClass = $avPalette[$uidx % count($avPalette)];
+              ?>
+              <tr class="usr-row"
+                  data-id="<?php echo (int)$u['id']; ?>"
+                  data-name="<?php echo htmlspecialchars($u['name']); ?>"
+                  data-email="<?php echo htmlspecialchars($u['email']); ?>"
+                  data-username="<?php echo htmlspecialchars($u['username']); ?>"
+                  data-role="<?php echo htmlspecialchars($u['role']); ?>"
+                  data-status="<?php echo htmlspecialchars($u['status']); ?>">
+                <td class="px-6 py-4 text-xs font-bold text-slate-400"><?php echo (int)$u['id']; ?></td>
+                <td class="px-4 py-4">
                   <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-[10px] font-black"><?php echo htmlspecialchars($u['initials']); ?></div>
-                    <div>
-                      <p class="text-sm font-bold text-primary"><?php echo htmlspecialchars($u['name']); ?></p>
-                      <p class="text-[10px] text-on-surface-variant"><?php echo htmlspecialchars($u['email']); ?></p>
+                    <div class="w-9 h-9 rounded-xl <?php echo $avClass; ?> flex items-center justify-center text-[11px] font-black flex-shrink-0 shadow-sm">
+                      <?php echo htmlspecialchars($u['initials']); ?>
+                    </div>
+                    <div class="min-w-0">
+                      <p class="text-sm font-bold text-primary truncate"><?php echo htmlspecialchars($u['name']); ?></p>
+                      <p class="text-xs text-slate-400 truncate"><?php echo htmlspecialchars($u['email']); ?></p>
                     </div>
                   </div>
                 </td>
-                <td class="px-6 py-5 text-sm text-on-surface-variant">@<?php echo htmlspecialchars($u['username']); ?></td>
-                <td class="px-6 py-5">
+                <td class="px-4 py-4 hidden md:table-cell">
+                  <span class="text-xs font-mono font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded-lg">@<?php echo htmlspecialchars($u['username']); ?></span>
+                </td>
+                <td class="px-4 py-4">
                   <?php if ($u['role'] === 'admin'): ?>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold">Admin</span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[11px] font-bold">
+                      <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">shield</span>
+                      Admin
+                    </span>
                   <?php else: ?>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] font-bold">Customer</span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold">
+                      <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">person</span>
+                      Customer
+                    </span>
                   <?php endif; ?>
                 </td>
-                <td class="px-6 py-5 text-sm text-on-surface-variant"><?php echo htmlspecialchars($u['joined']); ?></td>
-                <td class="px-6 py-5 text-sm font-bold text-primary"><?php echo (int) $u['orders']; ?></td>
-                <td class="px-6 py-5 text-sm font-bold text-primary">$<?php echo htmlspecialchars($u['spend']); ?></td>
-                <td class="px-6 py-5 text-sm text-right">
-                  <?php if ($u['role'] === 'admin'): ?>
-                    <button disabled class="rounded-full bg-surface-container-high text-slate-500 px-3 py-2 text-xs font-semibold">Protected</button>
-                  <?php else: ?>
-                    <button onclick="deleteUser(<?php echo (int) $u['id']; ?>, '<?php echo htmlspecialchars(addslashes($u['username'])); ?>')" class="rounded-full bg-error/10 text-error px-3 py-2 text-xs font-semibold hover:bg-error/20 transition">Delete</button>
-                  <?php endif; ?>
+                <td class="px-4 py-4 hidden lg:table-cell text-xs text-slate-500 font-medium"><?php echo htmlspecialchars($u['joined']); ?></td>
+                <td class="px-4 py-4 hidden lg:table-cell text-center">
+                  <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary/8 text-primary text-xs font-black"><?php echo (int)$u['orders']; ?></span>
                 </td>
-                <td class="px-8 py-5 text-right">
+                <td class="px-4 py-4 hidden xl:table-cell text-right text-sm font-black text-primary">$<?php echo htmlspecialchars($u['spend']); ?></td>
+                <td class="px-4 py-4 text-center">
                   <?php if ($u['status'] === 'active'): ?>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-teal-700"></span> Active</span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-teal-50 text-teal-700 text-[11px] font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>Active
+                    </span>
                   <?php else: ?>
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-error"></span> Inactive</span>
+                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold">
+                      <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Inactive
+                    </span>
+                  <?php endif; ?>
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <?php if ($u['role'] === 'admin'): ?>
+                    <span class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-400 text-xs font-semibold cursor-default">
+                      <span class="material-symbols-outlined text-sm">lock</span> Protected
+                    </span>
+                  <?php else: ?>
+                    <button onclick="deleteUser(<?php echo (int)$u['id']; ?>, '<?php echo htmlspecialchars(addslashes($u['username'])); ?>')"
+                            class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 transition">
+                      <span class="material-symbols-outlined text-sm">delete</span> Delete
+                    </button>
                   <?php endif; ?>
                 </td>
               </tr>
@@ -372,42 +547,54 @@ $commentsCount = count($customerComments);
             </tbody>
           </table>
         </div>
+        <div class="px-6 py-3 bg-slate-50 border-t border-slate-100">
+          <p id="usrVisibleCountBottom" class="text-xs text-slate-400 font-semibold"><?php echo $totalUsers; ?> user<?php echo $totalUsers !== 1 ? 's' : ''; ?> registered</p>
+        </div>
       </div>
 
-      <div class="mt-10 bg-surface-container-lowest rounded-3xl p-6 shadow-sm shadow-slate-200/40">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <h3 class="text-xl font-black text-primary">Customer Feedback</h3>
-            <p class="text-sm text-on-surface-variant">Recent messages from the website feedback form.</p>
-          </div>
-          <span class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-2 text-xs font-semibold text-primary">
+      <!-- Customer Feedback Full List -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 class="text-base font-black text-primary flex items-center gap-2">
+            <span class="material-symbols-outlined text-lg text-amber-500" style="font-variation-settings:'FILL' 1">forum</span>
+            Customer Feedback
+          </h3>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-50 text-amber-700 px-3 py-1 text-xs font-bold">
+            <span class="material-symbols-outlined text-sm">chat</span>
             <?php echo $commentsCount; ?> message<?php echo $commentsCount === 1 ? '' : 's'; ?>
           </span>
         </div>
 
         <?php if ($commentsCount === 0): ?>
-          <div class="rounded-3xl border border-dashed border-slate-200 bg-white/80 p-10 text-center text-slate-500">
-            No customer feedback has been received yet.
+          <div class="py-16 text-center text-slate-400">
+            <span class="material-symbols-outlined text-5xl block opacity-30 mb-3">forum</span>
+            <p class="text-sm font-semibold">No customer feedback received yet.</p>
           </div>
         <?php else: ?>
-          <div class="space-y-4">
-            <?php foreach (array_slice($customerComments, 0, 6) as $comment): ?>
-              <div class="rounded-3xl border border-slate-200 bg-white/80 p-5">
-                <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                  <div>
-                    <p class="text-sm font-semibold text-primary"><?php echo htmlspecialchars($comment['name'] ?? 'Anonymous'); ?> <span class="text-slate-400 font-medium">(<?php echo htmlspecialchars($comment['email'] ?? 'no-reply'); ?>)</span></p>
-                    <p class="text-xs text-slate-500 mt-1"><?php echo htmlspecialchars($comment['created_at'] ?? 'Unknown'); ?></p>
-                  </div>
-                  <span class="inline-flex items-center gap-2 rounded-full px-3 py-2 text-[11px] font-bold <?php echo ((isset($comment['status']) && $comment['status'] === 'new') ? 'bg-amber-50 text-amber-700' : 'bg-slate-100 text-slate-600'); ?>">
-                    <?php echo htmlspecialchars(ucfirst($comment['status'] ?? 'new')); ?>
-                  </span>
-                </div>
-                <p class="mt-4 text-sm text-slate-600 leading-relaxed"><?php echo nl2br(htmlspecialchars($comment['message'] ?? '')); ?></p>
+          <div class="divide-y divide-slate-50">
+            <?php foreach (array_slice($customerComments, 0, 8) as $comment):
+              $fStatus = $comment['status'] ?? 'new';
+              $pillCls = $fStatus === 'replied' ? 'bg-teal-50 text-teal-700' : ($fStatus === 'closed' ? 'bg-slate-100 text-slate-500' : 'bg-amber-50 text-amber-700');
+            ?>
+            <div class="px-6 py-5 hover:bg-slate-50 transition flex flex-col sm:flex-row sm:items-start gap-4 <?php echo $fStatus === 'new' ? 'border-l-4 border-amber-400' : ''; ?>">
+              <div class="w-10 h-10 rounded-xl av-amber flex items-center justify-center text-sm font-black flex-shrink-0">
+                <?php echo strtoupper(substr($comment['name'] ?? 'A', 0, 1)); ?>
               </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2 mb-1">
+                  <span class="text-sm font-bold text-primary"><?php echo htmlspecialchars($comment['name'] ?? 'Anonymous'); ?></span>
+                  <span class="text-xs text-slate-400"><?php echo htmlspecialchars($comment['email'] ?? ''); ?></span>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold <?php echo $pillCls; ?>"><?php echo ucfirst($fStatus); ?></span>
+                  <span class="text-[11px] text-slate-300 ml-auto"><?php echo htmlspecialchars($comment['created_at'] ?? ''); ?></span>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed"><?php echo nl2br(htmlspecialchars($comment['message'] ?? '')); ?></p>
+              </div>
+            </div>
             <?php endforeach; ?>
           </div>
         <?php endif; ?>
       </div>
+
     </div>
   </main>
 </div>
@@ -458,9 +645,18 @@ $commentsCount = count($customerComments);
   }
 
   async function deleteUser(id, username) {
-    if (!confirm('Delete user "' + username + '"? This action cannot be undone.')) {
-      return;
-    }
+    const confirm = await Swal.fire({
+      title: 'Delete User?',
+      html: 'Are you sure you want to delete <strong>' + username + '</strong>?<br><span class="text-sm text-slate-500">This action cannot be undone.</span>',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
+      reverseButtons: true
+    });
+    if (!confirm.isConfirmed) return;
 
     try {
       const response = await fetch('/api/admin_users.php?action=delete', {
@@ -471,47 +667,76 @@ $commentsCount = count($customerComments);
       const result = await response.json();
 
       if (result.status === 'success') {
-        alert('User deleted successfully.');
+        await Swal.fire({ title: 'Deleted!', text: 'User has been deleted.', icon: 'success', timer: 1500, showConfirmButton: false });
         location.reload();
       } else {
-        alert(result.message || 'Could not delete user.');
+        Swal.fire({ title: 'Error', text: result.message || 'Could not delete user.', icon: 'error' });
       }
     } catch (error) {
-      alert('There was an error deleting the user.');
+      Swal.fire({ title: 'Error', text: 'There was an error deleting the user.', icon: 'error' });
     }
   }
 
   document.getElementById('add-user-form').addEventListener('submit', addUser);
 
+  // ── Role filter ──────────────────────────────────────────────────────────
+  var activeRoleFilter = 'all';
+
+  function filterUsers() {
+    var q = (document.getElementById('custSearch')?.value || '').toLowerCase().trim();
+    var count = 0;
+    document.querySelectorAll('.usr-row').forEach(function(row) {
+      var role     = row.dataset.role     || '';
+      var name     = row.dataset.name     || '';
+      var email    = row.dataset.email    || '';
+      var username = row.dataset.username || '';
+      var matchRole   = activeRoleFilter === 'all' || role === activeRoleFilter;
+      var matchSearch = !q || name.toLowerCase().includes(q) || email.toLowerCase().includes(q) || username.toLowerCase().includes(q);
+      var visible = matchRole && matchSearch;
+      row.style.display = visible ? '' : 'none';
+      if (visible) count++;
+    });
+    var top = document.getElementById('usrVisibleCount');
+    var bot = document.getElementById('usrVisibleCountBottom');
+    var txt = 'Showing ' + count + ' user' + (count !== 1 ? 's' : '');
+    if (top) top.textContent = txt;
+    if (bot) bot.textContent = count + ' user' + (count !== 1 ? 's' : '') + ' registered';
+  }
+
+  document.querySelectorAll('.role-filter-tab').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      activeRoleFilter = this.dataset.roleFilter || 'all';
+      document.querySelectorAll('.role-filter-tab').forEach(function(b) {
+        b.classList.remove('bg-primary', 'text-white', 'shadow-sm', 'shadow-primary/20');
+        b.classList.add('bg-white', 'border', 'border-slate-200', 'text-slate-600', 'hover:bg-slate-50');
+      });
+      this.classList.add('bg-primary', 'text-white', 'shadow-sm', 'shadow-primary/20');
+      this.classList.remove('bg-white', 'border', 'border-slate-200', 'text-slate-600', 'hover:bg-slate-50');
+      filterUsers();
+    });
+  });
+
   // ── Search ────────────────────────────────────────────────────────────────
   var custSearch = document.getElementById('custSearch');
-  if (custSearch) {
-    custSearch.addEventListener('input', function() {
-      var q = this.value.toLowerCase().trim();
-      document.querySelectorAll('#usersTable tbody tr').forEach(function(row) {
-        var txt = row.textContent.toLowerCase();
-        row.style.display = (!q || txt.includes(q)) ? '' : 'none';
-      });
-    });
-  }
+  if (custSearch) { custSearch.addEventListener('input', filterUsers); }
 
   // ── Export Users CSV ─────────────────────────────────────────────────────
   document.getElementById('exportUsersBtn')?.addEventListener('click', function() {
-    var rows = document.querySelectorAll('#usersTable tbody tr:not([style*="display: none"])');
-    var csv  = ['ID,Name,Email,Role,Status'];
+    var rows = document.querySelectorAll('.usr-row:not([style*="display: none"])');
+    var csv  = ['ID,Name,Email,Username,Role,Status'];
     rows.forEach(function(row) {
-      var cells = row.querySelectorAll('td');
-      if (cells.length < 3) return;
-      var name   = (cells[1]?.textContent.trim() || '').replace(/"/g,'""');
-      var email  = (cells[2]?.textContent.trim() || '').replace(/"/g,'""');
-      var role   = (cells[3]?.textContent.trim() || '').replace(/"/g,'""');
-      var status = (cells[4]?.textContent.trim() || '').replace(/"/g,'""');
-      var id     = row.dataset.id || '';
-      csv.push(id + ',"' + name + '","' + email + '","' + role + '","' + status + '"');
+      var id       = row.dataset.id       || '';
+      var name     = (row.dataset.name     || '').replace(/"/g, '""');
+      var email    = (row.dataset.email    || '').replace(/"/g, '""');
+      var username = (row.dataset.username || '').replace(/"/g, '""');
+      var role     = (row.dataset.role     || '').replace(/"/g, '""');
+      var status   = (row.dataset.status   || '').replace(/"/g, '""');
+      csv.push(id + ',"' + name + '","' + email + '","' + username + '","' + role + '","' + status + '"');
     });
     var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([csv.join('\n')], {type:'text/csv'}));
-    a.download = 'users.csv'; a.click();
+    a.href = URL.createObjectURL(new Blob([csv.join('\n')], { type: 'text/csv' }));
+    a.download = 'users_export.csv';
+    a.click();
   });
 </script>
 <script src="/js/admin.js"></script>

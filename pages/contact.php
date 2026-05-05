@@ -12,10 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $submitResult = ['success' => false, 'msg' => 'Please enter a valid email address.'];
     } else {
-        $file     = __DIR__ . '/../data/contact_messages.json';
-        $messages = json_decode(file_get_contents($file), true) ?: [];
+        $file = __DIR__ . '/../data/contact_messages.json';
+        $messages = [];
+        if (file_exists($file)) {
+            $messages = json_decode(file_get_contents($file), true) ?: [];
+        }
+        $nextId = 1;
+        foreach ($messages as $existingMessage) {
+            $nextId = max($nextId, (int) ($existingMessage['id'] ?? 0) + 1);
+        }
         $messages[] = [
-            'id'         => count($messages) + 1,
+            'id'         => $nextId,
             'name'       => $name,
             'email'      => $email,
             'subject'    => $subject,

@@ -77,8 +77,8 @@ if (!$product) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-900">
-    <?php include __DIR__ . '/../partials/header.php'; ?>
-    <main class="max-w-5xl mx-auto px-6 py-10">
+    <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+    <main class="max-w-5xl mx-auto px-6 py-10 pt-28">
         <div class="grid gap-10 lg:grid-cols-[1.2fr,_0.8fr]">
             <section class="rounded-3xl bg-white p-8 shadow-sm">
                 <img src="<?= htmlspecialchars($product['image']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full rounded-3xl mb-6">

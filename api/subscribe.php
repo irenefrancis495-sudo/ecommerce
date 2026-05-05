@@ -17,8 +17,11 @@ if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-$file        = __DIR__ . '/../data/subscribers.json';
-$subscribers = json_decode(file_get_contents($file), true) ?: [];
+$file = __DIR__ . '/../data/subscribers.json';
+$subscribers = [];
+if (file_exists($file)) {
+    $subscribers = json_decode(file_get_contents($file), true) ?: [];
+}
 
 // Check for duplicate
 foreach ($subscribers as $s) {
@@ -28,8 +31,13 @@ foreach ($subscribers as $s) {
     }
 }
 
+$nextId = 1;
+foreach ($subscribers as $subscriber) {
+    $nextId = max($nextId, (int) ($subscriber['id'] ?? 0) + 1);
+}
+
 $subscribers[] = [
-    'id'         => count($subscribers) + 1,
+    'id'         => $nextId,
     'email'      => $email,
     'subscribed_at' => date('Y-m-d H:i:s'),
     'source'     => htmlspecialchars($input['source'] ?? $_POST['source'] ?? 'website', ENT_QUOTES, 'UTF-8'),

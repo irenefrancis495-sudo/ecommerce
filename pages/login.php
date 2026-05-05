@@ -83,6 +83,10 @@
                     localStorage.setItem('user', JSON.stringify(result.user));
                 }
 
+                // Read ?next= param from URL for post-login redirect
+                const params = new URLSearchParams(window.location.search);
+                const nextUrl = params.get('next') || '/home';
+
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         title: 'Success!',
@@ -96,7 +100,7 @@
                 }
 
                 setTimeout(() => {
-                    window.location.href = result.redirect || '/home';
+                    window.location.href = result.redirect || nextUrl;
                 }, 1000);
             } else {
                 if (typeof Swal !== 'undefined') {

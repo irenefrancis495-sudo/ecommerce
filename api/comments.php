@@ -87,9 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $newId = 1;
     foreach ($comments as $comment) {
-        if (isset($comment['id']) && (int) $comment['id'] >= $newId) {
-            $newId = (int) $comment['id'] + 1;
-        }
+        $newId = max($newId, (int) ($comment['id'] ?? 0) + 1);
     }
 
     $newComment = [

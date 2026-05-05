@@ -150,46 +150,62 @@ $permissionLabels = array_merge($adminPermissionLabels, $customerPermissionLabel
   </header>
 
   <main class="admin-main admin-content ml-64 pt-24 p-8 min-h-screen">
-    <div class="max-w-6xl mx-auto space-y-6">
+    <div class="max-w-6xl mx-auto space-y-8">
+      <div>
+        <h2 class="text-3xl font-black text-primary tracking-tight flex items-center gap-2">
+          <span class="material-symbols-outlined text-2xl" style="font-variation-settings:'FILL' 1">admin_panel_settings</span>
+          Permissions & Roles
+        </h2>
+        <p class="text-slate-500 mt-1">Manage role-based access control (RBAC) and assign user permissions</p>
+      </div>
+
       <?php if ($flash !== ''): ?>
-      <div class="px-4 py-3 rounded-xl bg-emerald-50 text-emerald-700 text-sm font-semibold"><?php echo htmlspecialchars($flash); ?></div>
+      <div class="px-4 py-3 rounded-lg text-sm font-semibold flex items-center gap-3 bg-emerald-50 text-emerald-700 border border-emerald-200">
+        <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1">check_circle</span>
+        <?php echo htmlspecialchars($flash); ?>
+      </div>
       <?php endif; ?>
 
       <section class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="px-5 py-4 border-b border-slate-100">
-          <h3 class="font-black text-on-surface text-lg">Role Permissions</h3>
-          <p class="text-xs text-slate-500 mt-1">Control what each role can access. Changes take effect immediately after saving.</p>
+        <div class="px-6 py-5 border-b border-slate-100">
+          <h3 class="font-black text-primary text-lg flex items-center gap-2">
+            <span class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+              <span class="material-symbols-outlined text-blue-600" style="font-variation-settings:'FILL' 1">security</span>
+            </span>
+            Role Permissions
+          </h3>
+          <p class="text-xs text-slate-500 mt-2">Control what each role can access. Changes take effect immediately after saving.</p>
         </div>
-        <form method="POST" class="p-5 space-y-6">
+        <form method="POST" class="p-6 space-y-8">
           <input type="hidden" name="action" value="save_role_permissions" />
 
           <!-- Admin Panel Permissions -->
           <div>
-            <div class="flex items-center gap-2 mb-3">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">dashboard</span>
                 Admin Panel Access
-              </span>
-              <p class="text-xs text-slate-400">Controls which roles can view/manage sections inside the admin panel.</p>
+              </div>
+              <p class="text-xs text-slate-500">Controls which roles can view/manage sections inside the admin dashboard</p>
             </div>
-            <div class="overflow-x-auto rounded-xl border border-slate-100">
+            <div class="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
               <table class="w-full text-sm">
-                <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+                <thead class="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    <th class="p-3 text-left">Permission</th>
-                    <th class="p-3 text-center w-24">Admin</th>
-                    <th class="p-3 text-center w-24">Customer</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Permission</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-24">Admin</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-24">Customer</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                   <?php foreach ($adminPermissionLabels as $permissionKey => $label): ?>
                   <tr class="hover:bg-slate-50/60 transition-colors">
-                    <td class="p-3 font-medium text-slate-700"><?php echo htmlspecialchars($label); ?></td>
-                    <td class="p-3 text-center">
-                      <input type="checkbox" class="w-4 h-4 accent-primary rounded" name="perm_admin_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['admin'][$permissionKey]) ? 'checked' : ''; ?> />
+                    <td class="px-5 py-3 font-medium text-slate-700"><?php echo htmlspecialchars($label); ?></td>
+                    <td class="px-5 py-3 text-center">
+                      <input type="checkbox" class="w-4 h-4 accent-primary rounded cursor-pointer" name="perm_admin_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['admin'][$permissionKey]) ? 'checked' : ''; ?> />
                     </td>
-                    <td class="p-3 text-center">
-                      <input type="checkbox" class="w-4 h-4 accent-amber-600 rounded" name="perm_customer_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['customer'][$permissionKey]) ? 'checked' : ''; ?> />
+                    <td class="px-5 py-3 text-center">
+                      <input type="checkbox" class="w-4 h-4 accent-amber-600 rounded cursor-pointer" name="perm_customer_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['customer'][$permissionKey]) ? 'checked' : ''; ?> />
                     </td>
                   </tr>
                   <?php endforeach; ?>
@@ -200,31 +216,31 @@ $permissionLabels = array_merge($adminPermissionLabels, $customerPermissionLabel
 
           <!-- Customer Storefront Permissions -->
           <div>
-            <div class="flex items-center gap-2 mb-3">
-              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold uppercase tracking-wider">
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
-                Customer Storefront Access
-              </span>
-              <p class="text-xs text-slate-400">Controls what customers (and admins acting as customers) can do on the shop.</p>
+            <div class="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 text-amber-700 text-xs font-bold uppercase tracking-wider">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">shopping_bag</span>
+                Storefront Access
+              </div>
+              <p class="text-xs text-slate-500">Controls what customers (and admins acting as customers) can do on the shop</p>
             </div>
-            <div class="overflow-x-auto rounded-xl border border-slate-100">
+            <div class="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
               <table class="w-full text-sm">
-                <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+                <thead class="bg-slate-50 border-b border-slate-100">
                   <tr>
-                    <th class="p-3 text-left">Permission</th>
-                    <th class="p-3 text-center w-24">Admin</th>
-                    <th class="p-3 text-center w-24">Customer</th>
+                    <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Permission</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-24">Admin</th>
+                    <th class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-24">Customer</th>
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100">
                   <?php foreach ($customerPermissionLabels as $permissionKey => $label): ?>
                   <tr class="hover:bg-slate-50/60 transition-colors">
-                    <td class="p-3 font-medium text-slate-700"><?php echo htmlspecialchars($label); ?></td>
-                    <td class="p-3 text-center">
-                      <input type="checkbox" class="w-4 h-4 accent-primary rounded" name="perm_admin_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['admin'][$permissionKey]) ? 'checked' : ''; ?> />
+                    <td class="px-5 py-3 font-medium text-slate-700"><?php echo htmlspecialchars($label); ?></td>
+                    <td class="px-5 py-3 text-center">
+                      <input type="checkbox" class="w-4 h-4 accent-primary rounded cursor-pointer" name="perm_admin_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['admin'][$permissionKey]) ? 'checked' : ''; ?> />
                     </td>
-                    <td class="p-3 text-center">
-                      <input type="checkbox" class="w-4 h-4 accent-amber-600 rounded" name="perm_customer_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['customer'][$permissionKey]) ? 'checked' : ''; ?> />
+                    <td class="px-5 py-3 text-center">
+                      <input type="checkbox" class="w-4 h-4 accent-amber-600 rounded cursor-pointer" name="perm_customer_<?php echo str_replace('.', '_', $permissionKey); ?>" <?php echo !empty($permissions['customer'][$permissionKey]) ? 'checked' : ''; ?> />
                     </td>
                   </tr>
                   <?php endforeach; ?>
@@ -233,37 +249,45 @@ $permissionLabels = array_merge($adminPermissionLabels, $customerPermissionLabel
             </div>
           </div>
 
-          <div class="pt-2 flex justify-end">
-            <button class="px-6 py-2.5 bg-primary text-white rounded-xl font-bold text-sm hover:opacity-95 transition-opacity" type="submit">Save All Permissions</button>
+          <div class="pt-4 flex justify-end">
+            <button class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-bold text-sm shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 transition-all duration-200 flex items-center gap-2" type="submit">
+              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">save</span>
+              Save All Permissions
+            </button>
           </div>
         </form>
       </section>
 
       <section class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="px-5 py-4 border-b border-slate-100">
-          <h3 class="font-black text-on-surface text-lg">User Roles</h3>
-          <p class="text-xs text-slate-500 mt-1">Assign each user as customer or admin.</p>
+        <div class="px-6 py-5 border-b border-slate-100">
+          <h3 class="font-black text-primary text-lg flex items-center gap-2">
+            <span class="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+              <span class="material-symbols-outlined text-purple-600" style="font-variation-settings:'FILL' 1">people</span>
+            </span>
+            User Roles
+          </h3>
+          <p class="text-xs text-slate-500 mt-2">Assign each user as customer or admin. Admins get full access to the dashboard.</p>
         </div>
-        <form method="POST" class="p-5">
+        <form method="POST" class="p-6">
           <input type="hidden" name="action" value="update_user_roles" />
-          <div class="overflow-x-auto">
+          <div class="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
             <table class="w-full text-sm">
-              <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+              <thead class="bg-slate-50 border-b border-slate-100">
                 <tr>
-                  <th class="p-3 text-left">Username</th>
-                  <th class="p-3 text-left">Email</th>
-                  <th class="p-3 text-left">Role</th>
+                  <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Username</th>
+                  <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Email</th>
+                  <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest w-40">Role</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-slate-100">
                 <?php foreach ($users as $user): ?>
-                <tr>
-                  <td class="p-3 font-semibold text-slate-700"><?php echo htmlspecialchars((string) ($user['username'] ?? '-')); ?></td>
-                  <td class="p-3 text-slate-600"><?php echo htmlspecialchars((string) ($user['email'] ?? '-')); ?></td>
-                  <td class="p-3">
-                    <select class="rounded-lg border-slate-200" name="user_role[<?php echo (int) ($user['id'] ?? 0); ?>]">
-                      <option value="customer" <?php echo (($user['role'] ?? 'customer') === 'customer') ? 'selected' : ''; ?>>Customer</option>
-                      <option value="admin" <?php echo (($user['role'] ?? 'customer') === 'admin') ? 'selected' : ''; ?>>Admin</option>
+                <tr class="hover:bg-slate-50/60 transition-colors">
+                  <td class="px-5 py-3 font-bold text-slate-700"><?php echo htmlspecialchars((string) ($user['username'] ?? '-')); ?></td>
+                  <td class="px-5 py-3 text-slate-600 text-xs"><?php echo htmlspecialchars((string) ($user['email'] ?? '-')); ?></td>
+                  <td class="px-5 py-3">
+                    <select class="rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" name="user_role[<?php echo (int) ($user['id'] ?? 0); ?>]">
+                      <option value="customer" <?php echo (($user['role'] ?? 'customer') === 'customer') ? 'selected' : ''; ?>>👤 Customer</option>
+                      <option value="admin" <?php echo (($user['role'] ?? 'customer') === 'admin') ? 'selected' : ''; ?>>⚙️ Admin</option>
                     </select>
                   </td>
                 </tr>
@@ -271,8 +295,11 @@ $permissionLabels = array_merge($adminPermissionLabels, $customerPermissionLabel
               </tbody>
             </table>
           </div>
-          <div class="pt-4 flex justify-end">
-            <button class="px-5 py-2.5 bg-primary text-white rounded-xl font-bold text-sm" type="submit">Save User Roles</button>
+          <div class="pt-5 flex justify-end">
+            <button class="px-6 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg font-bold text-sm shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30 transition-all duration-200 flex items-center gap-2" type="submit">
+              <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">save</span>
+              Save User Roles
+            </button>
           </div>
         </form>
       </section>

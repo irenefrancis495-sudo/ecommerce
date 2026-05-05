@@ -1,9 +1,6 @@
 <?php
-session_start();
-if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
-    $return = urlencode($_SERVER['REQUEST_URI'] ?? '/cart');
-    header('Location: /login?next=' . $return);
-    exit;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 ?>
 <!DOCTYPE html>
@@ -190,14 +187,14 @@ if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
                 button.textContent = 'Login to Checkout';
                 button.disabled = false;
                 button.onclick = function () {
-                    window.location.href = '/login';
+                    window.location.href = '/login?next=%2Fpayment-methods';
                 };
             }
         } catch (error) {
             button.textContent = 'Login to Checkout';
             button.disabled = false;
             button.onclick = function () {
-                window.location.href = '/login';
+                window.location.href = '/login?next=%2Fpayment-methods';
             };
         }
     }

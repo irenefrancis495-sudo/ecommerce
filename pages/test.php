@@ -10,8 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-900">
-    <?php include __DIR__ . '/../partials/header.php'; ?>
-    <main class="max-w-5xl mx-auto px-6 py-10">
+    <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+    <main class="max-w-5xl mx-auto px-6 py-10 pt-28">
         <section class="bg-white rounded-3xl p-8 shadow-sm">
             <h1 class="text-3xl font-bold text-slate-900 mb-4">Test Page</h1>
             <p class="text-slate-600">This page is available for system checks and simple functional tests.</p>

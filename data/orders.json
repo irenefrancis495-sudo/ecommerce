@@ -10,5 +10,20 @@
         "payment_status": "paid",
         "payment_method": "card",
         "id": 1
+    },
+    {
+        "id": 2,
+        "order_number": "ORD-20260505-002",
+        "user_id": 5,
+        "user_name": "sae",
+        "user_email": "dignatheobard960@gmail.com",
+        "status": "delivered",
+        "payment_status": "paid",
+        "payment_method": "Vodacom M-Pesa",
+        "subtotal": 89.98,
+        "tax": 6.3,
+        "shipping_cost": 24,
+        "total": 120.28,
+        "created_at": "2026-05-05 10:48:42"
     }
 ]
