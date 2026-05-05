@@ -151,7 +151,18 @@
             }
         }
 
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.querySelectorAll('#cart-count').forEach(el => {
+                el.textContent = count > 0 ? count : '';
+            });
+        }
+
         // Initialize auth status on page load
-        document.addEventListener('DOMContentLoaded', updateAuthStatus);
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthStatus();
+            updateCartCount();
+        });
     </script>
 </nav>

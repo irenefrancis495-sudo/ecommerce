@@ -279,7 +279,7 @@ function addToCart(product) {
     }
     setCart(cart);
     updateCartCount();
-    showCartNotification(`${normalizedProduct.name} imeongezwa kwenye cart`);
+    showCartNotification(`${normalizedProduct.name} added to cart`);
     if (typeof renderCart === 'function') renderCart();
 }
 

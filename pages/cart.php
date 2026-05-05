@@ -1,4 +1,11 @@
-<?php require_once __DIR__ . '/_customer_permissions.php'; customerRequirePermission('shop.cart'); ?>
+<?php
+session_start();
+if (!isset($_SESSION['user']) || empty($_SESSION['user']['id'])) {
+    $return = urlencode($_SERVER['REQUEST_URI'] ?? '/cart');
+    header('Location: /login?next=' . $return);
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"/>

@@ -145,6 +145,9 @@
 </div>
 <span class="text-lg font-headline font-bold text-primary">$124.00</span>
 </div>
+<button class="add-to-cart mt-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-container transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="101" data-name="Obsidian Rimmed Vessel" data-price="124.00" data-image="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
 <button class="mt-6 w-full py-4 bg-primary text-white font-bold tracking-widest uppercase text-xs hover:bg-primary-container transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                         View Piece
                         <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
@@ -162,6 +165,9 @@
 </div>
 <span class="text-lg font-headline font-bold text-primary">$490.00</span>
 </div>
+<button class="add-to-cart mt-4 w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center hover:bg-secondary/80 transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="102" data-name="Nordic Oak Luminary" data-price="490.00" data-image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=center">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
 <button class="mt-6 w-full py-4 bg-secondary text-on-secondary font-bold tracking-widest uppercase text-xs hover:scale-102 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                         Add to Collection
                         <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
@@ -179,6 +185,9 @@
 </div>
 <span class="text-lg font-headline font-bold text-primary">$1,200.00</span>
 </div>
+<button class="add-to-cart mt-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-container transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="103" data-name="Void Lounge Chair" data-price="1200.00" data-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=600&fit=crop&crop=center">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
 <button class="mt-6 w-full py-4 bg-primary text-white font-bold tracking-widest uppercase text-xs hover:bg-primary-container transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                         Inquire
                     </button>
@@ -195,6 +204,9 @@
 </div>
 <span class="text-lg font-headline font-bold text-primary">$85.00</span>
 </div>
+<button class="add-to-cart mt-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-container transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="104" data-name="Triptych Bud Vases" data-price="85.00" data-image="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
 </div>
 <!-- Product 5 -->
 <div class="flex flex-col group">
@@ -208,6 +220,9 @@
 </div>
 <span class="text-lg font-headline font-bold text-primary">$110.00</span>
 </div>
+<button class="add-to-cart mt-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-container transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="105" data-name="Raw Edge Linen Throw" data-price="110.00" data-image="https://images.unsplash.com/photo-1585399363000-c9ffd4e4b308?w=600&h=600&fit=crop&crop=center">
+<span class="material-symbols-outlined text-sm">shopping_cart</span>
+</button>
 </div>
 </div>
 </section>
