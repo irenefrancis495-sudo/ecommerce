@@ -1,9 +1,10 @@
 <?php
 require __DIR__ . '/../config/bootstrap.php';
-session_start();
+require_once __DIR__ . '/_customer_permissions.php';
+customerRequirePermission('shop.profile');
 use Mpemba\Entity\Order;
 
-$userLogged = isset($_SESSION['user_id']) || localStorage.getItem('user'); // Check localStorage instead
+$userLogged = customerIsLoggedIn();
 $orders = [];
 ?>
 <!DOCTYPE html>

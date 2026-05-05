@@ -10,7 +10,82 @@ class UserController {
         $this->db = new Database();
     }
 
+    private function getAdminUser(): array {
+        return [
+            'id' => 0,
+            'username' => 'admin',
+            'email' => 'admin@mpemba.local',
+            'password' => 'Admin@123',
+            'first_name' => 'Site',
+            'last_name' => 'Admin',
+            'role' => 'admin'
+        ];
+    }
+
+    private function buildAdminSession(array $user): array {
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_user'] = [
+            'id' => $user['id'] ?? 0,
+            'username' => $user['username'] ?? 'admin',
+            'email' => $user['email'] ?? 'admin@mpemba.local',
+            'first_name' => $user['first_name'] ?? 'Site',
+            'last_name' => $user['last_name'] ?? 'Admin',
+            'role' => $user['role'] ?? 'admin',
+            'name' => trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) ?: ($user['username'] ?? 'Admin')
+        ];
+        $_SESSION['user'] = $_SESSION['admin_user'];
+
+        return [
+            'success' => true,
+            'message' => 'Admin login successful',
+            'user' => $_SESSION['admin_user'],
+            'redirect' => '/admin/index'
+        ];
+    }
+
+    public function loginAdmin($login, $password) {
+        $adminUser = $this->getAdminUser();
+        $loginNormalized = strtolower($login);
+
+        if ($loginNormalized === strtolower($adminUser['username']) || $loginNormalized === strtolower($adminUser['email'])) {
+            $isValidPassword = hash_equals($adminUser['password'], $password) || strcasecmp($adminUser['password'], $password) === 0;
+
+            if ($isValidPassword) {
+                return $this->buildAdminSession($adminUser);
+            }
+
+            return ['success' => false, 'message' => 'Invalid username or password'];
+        }
+
+        $users = $this->db->getUsers();
+        foreach ($users as $user) {
+            $role = strtolower((string) ($user['role'] ?? 'customer'));
+            if ($role !== 'admin') {
+                continue;
+            }
+
+            $userLogin = strtolower((string) ($user['username'] ?? ''));
+            $userEmail = strtolower((string) ($user['email'] ?? ''));
+            if ($loginNormalized !== $userLogin && $loginNormalized !== $userEmail) {
+                continue;
+            }
+
+            if (!empty($user['password']) && password_verify($password, (string) $user['password'])) {
+                return $this->buildAdminSession($user);
+            }
+
+            return ['success' => false, 'message' => 'Invalid username or password'];
+        }
+
+        return null;
+    }
+
     public function login($username, $password) {
+        $adminLogin = $this->loginAdmin($username, $password);
+        if ($adminLogin !== null) {
+            return $adminLogin;
+        }
+
         $users = $this->db->getUsers();
 
         foreach ($users as $user) {

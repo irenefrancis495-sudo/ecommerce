@@ -79,15 +79,16 @@
             const result = await response.json();
 
             if (result.success) {
-                // Store user data in localStorage for client-side use
-                localStorage.setItem('user', JSON.stringify(result.user));
+                if (result.user) {
+                    localStorage.setItem('user', JSON.stringify(result.user));
+                }
 
                 if (typeof Swal !== 'undefined') {
                     Swal.fire({
                         title: 'Success!',
                         text: 'You have successfully logged into your account.',
                         icon: 'success',
-                        timer: 2000,
+                        timer: 1500,
                         showConfirmButton: false
                     });
                 } else {
@@ -95,7 +96,7 @@
                 }
 
                 setTimeout(() => {
-                    window.location.href = '/home';
+                    window.location.href = result.redirect || '/home';
                 }, 1000);
             } else {
                 if (typeof Swal !== 'undefined') {

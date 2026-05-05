@@ -15,7 +15,7 @@ session_destroy();
 		</div>
 
 		<h1 class="text-2xl font-black text-primary">Signed Out Successfully</h1>
-		<p class="text-sm text-on-surface-variant mt-2">Umetoka kwenye admin dashboard. Unarudishwa login page...</p>
+		<p class="text-sm text-on-surface-variant mt-2">You have been signed out of the admin dashboard. Redirecting to login page...</p>
 
 		<div class="mt-6 h-2 w-full rounded-full bg-surface-container-high overflow-hidden">
 			<div class="h-full w-full bg-gradient-to-r from-primary via-primary-container to-secondary animate-pulse"></div>

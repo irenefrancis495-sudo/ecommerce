@@ -24,14 +24,20 @@
     </header>
 
     <!-- Filters and Controls -->
-    <div class="flex flex-col sm:flex-row gap-4 mb-12 items-start sm:items-center justify-between">
-        <div class="flex flex-wrap gap-3">
-            <button class="px-4 py-2 rounded-full bg-primary text-on-primary font-medium hover:bg-primary/90 transition-colors" onclick="filterProducts('all')">All Products</button>
-            <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('atelier-electronics')">Electronics</button>
-            <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('heritage-fashion')">Fashion</button>
-            <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('natural-beauty')">Beauty</button>
-            <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('lifestyle-essentials')">Lifestyle</button>
-            <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('sanctuary-home')">Home</button>
+    <div class="flex flex-col lg:flex-row gap-4 mb-12 items-start lg:items-center justify-between">
+        <div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+            <div class="relative w-full max-w-md focus-within:ring-2 focus-within:ring-primary rounded-lg">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input id="productSearchInput" data-search-target="products" class="w-full bg-surface text-on-surface border border-outline rounded-lg py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Search products by name, category, or description..." type="search" />
+            </div>
+            <div class="flex flex-wrap gap-3">
+                <button class="px-4 py-2 rounded-full bg-primary text-on-primary font-medium hover:bg-primary/90 transition-colors" onclick="filterProducts('all')">All Products</button>
+                <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('atelier-electronics')">Electronics</button>
+                <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('heritage-fashion')">Fashion</button>
+                <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('natural-beauty')">Beauty</button>
+                <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('lifestyle-essentials')">Lifestyle</button>
+                <button class="px-4 py-2 rounded-full bg-surface text-on-surface border border-outline hover:bg-surface-variant transition-colors" onclick="filterProducts('sanctuary-home')">Home</button>
+            </div>
         </div>
         <div class="flex items-center gap-4">
             <select class="px-4 py-2 rounded-lg bg-surface border border-outline text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" id="sortSelect">
@@ -69,11 +75,13 @@ const products = <?php echo file_get_contents(__DIR__ . '/../data/products.json'
 let currentFilter = 'all';
 let currentSort = 'featured';
 let currentPage = 1;
+let currentSearchQuery = '';
 const itemsPerPage = 12;
 
 function renderProducts() {
     const filteredProducts = filterProductsByCategory(products, currentFilter);
-    const sortedProducts = sortProducts(filteredProducts, currentSort);
+    const searchedProducts = filterProductsBySearch(filteredProducts, currentSearchQuery);
+    const sortedProducts = sortProducts(searchedProducts, currentSort);
     const paginatedProducts = paginateProducts(sortedProducts, currentPage, itemsPerPage);
 
     const productsGrid = document.getElementById('productsGrid');
@@ -136,7 +144,7 @@ function createProductCard(product) {
             </div>
             <div class="flex items-center justify-between">
                 <span class="text-2xl font-bold text-primary">$${product.price}</span>
-                <button class="add-to-cart px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors" data-id="${product.id}" data-name="${product.name.replace(/"/g, '&quot;')}" data-price="${product.price}">
+                <button class="add-to-cart px-4 py-2 bg-primary text-on-primary rounded-lg font-medium hover:bg-primary/90 transition-colors" data-id="${product.id}" data-name="${product.name.replace(/"/g, '&quot;')}" data-price="${product.price}" data-image="${(product.image_url || '').replace(/"/g, '&quot;')}">
                     Add to Cart
                 </button>
             </div>
@@ -149,6 +157,15 @@ function createProductCard(product) {
 function filterProductsByCategory(products, category) {
     if (category === 'all') return products;
     return products.filter(product => product.category === category);
+}
+
+function filterProductsBySearch(products, query) {
+    if (!query) return products;
+    const normalizedQuery = query.trim().toLowerCase();
+    return products.filter(product => {
+        const combined = `${product.name} ${product.description} ${product.category}`.toLowerCase();
+        return combined.includes(normalizedQuery);
+    });
 }
 
 function sortProducts(products, sortBy) {
@@ -216,6 +233,25 @@ document.getElementById('sortSelect').addEventListener('change', (e) => {
     currentPage = 1;
     renderProducts();
 });
+
+const productSearchInput = document.getElementById('productSearchInput');
+if (productSearchInput) {
+    productSearchInput.addEventListener('input', (e) => {
+        currentSearchQuery = e.target.value;
+        currentPage = 1;
+        renderProducts();
+    });
+}
+
+window.executeProductSearch = (query) => {
+    currentSearchQuery = query || '';
+    const searchInput = document.getElementById('productSearchInput');
+    if (searchInput) {
+        searchInput.value = currentSearchQuery;
+    }
+    currentPage = 1;
+    renderProducts();
+};
 
 // Initialize products on page load
 document.addEventListener('DOMContentLoaded', () => {

@@ -41,18 +41,18 @@ unset($_SESSION['auth_error']);
       <div class="relative z-10">
         <p class="text-xs uppercase tracking-[0.3em] text-primary-fixed mb-5 font-bold">Digital Atelier Console</p>
         <h1 class="text-4xl leading-tight font-black font-headline">Mpemba Heritage<br/>Admin Portal</h1>
-        <p class="mt-4 text-sm text-primary-fixed">Dhibiti inventory, orders, na analytics za marketplace kutoka paneli moja ya kisasa.</p>
+        <p class="mt-4 text-sm text-primary-fixed">Manage inventory, orders, and marketplace analytics from one modern panel.</p>
       </div>
       <div class="relative z-10 rounded-2xl bg-white/10 p-4 backdrop-blur-sm border border-white/20">
         <p class="text-xs uppercase tracking-wider text-primary-fixed font-bold mb-1">Secure Access</p>
-        <p class="text-sm">Wafanyakazi wa admin pekee ndio wanaruhusiwa kuingia.</p>
+        <p class="text-sm">Only admin staff are authorized to access.</p>
       </div>
     </div>
 
     <div class="p-8 md:p-12">
       <div class="mb-8">
         <h2 class="text-3xl font-black font-headline text-primary">Sign In</h2>
-        <p class="text-sm text-on-surface-variant mt-2">Ingia kwenye admin dashboard ya Mpemba Marketplace.</p>
+        <p class="text-sm text-on-surface-variant mt-2">Sign in to the Mpemba Marketplace admin dashboard.</p>
       </div>
 
       <?php if ($authError): ?>

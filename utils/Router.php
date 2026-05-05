@@ -17,7 +17,7 @@ class Router {
         }
 
         if ($path === '') {
-            $path = 'home';
+            $path = 'splash';
         }
 
         // Check if it's a direct page request
@@ -43,7 +43,8 @@ class Router {
 
         // For requests like /login, /cart, etc.
         $pageNames = [
-            '' => 'Mpemba Store - Home',
+            '' => 'Welcome - Mpemba Store',
+            'splash' => 'Welcome - Mpemba Store',
             'home' => 'Home - Mpemba Store',
             'products' => 'All Products - Mpemba Store',
             'login' => 'Login - Mpemba Store',
@@ -65,7 +66,16 @@ class Router {
             'admin/customers' => 'Customers - Mpemba Admin',
             'admin/reports' => 'Reports - Mpemba Admin',
             'admin/settings' => 'Settings Hub - Mpemba Admin',
+            'admin/add-product' => 'Add Product - Mpemba Admin',
             'admin/login' => 'Admin Login - Mpemba',
+            'about-us' => 'About Us - Mpemba Store',
+            'privacy-policy' => 'Privacy Policy - Mpemba Store',
+            'blog' => 'Blog - Mpemba Store',
+            'contact' => 'Contact Us - Mpemba Store',
+                    'admin/messages' => 'Messages - Mpemba Admin',
+                    'admin/subscribers' => 'Subscribers - Mpemba Admin',
+                    'admin/categories' => 'Categories - Mpemba Admin',
+                    'admin/permissions' => 'Permissions - Mpemba Admin',
         ];
 
         return $pageNames[$path] ?? $default;

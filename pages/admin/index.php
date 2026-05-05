@@ -1,61 +1,110 @@
 <?php
-if (empty($_SESSION['admin_logged_in'])) {
-    echo '<script>window.location.href="/admin/login";</script>';
-    return;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
+require_once __DIR__ . '/_auth.php';
+require_once __DIR__ . '/_notifications.php';
 
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
+$notificationCount = adminNotificationCount();
+$activePage = 'dashboard';
 ?>
 
+<style>
+    body {
+        background:
+            radial-gradient(circle at 10% 0%, rgba(20, 184, 166, 0.08) 0%, transparent 30%),
+            radial-gradient(circle at 100% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 35%),
+            #f5f7fb;
+    }
+
+    .admin-shell {
+        position: relative;
+    }
+
+    .admin-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+        background-size: 42px 42px;
+        mask-image: radial-gradient(circle at center, black, transparent 75%);
+        z-index: 0;
+    }
+
+    .surface-glass {
+        background: rgba(255, 255, 255, 0.72);
+        backdrop-filter: blur(16px);
+    }
+
+    .kpi-card {
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        box-shadow: 0 20px 35px -20px rgba(15, 23, 42, 0.3);
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 28px 45px -25px rgba(15, 23, 42, 0.38);
+    }
+
+    .event-dot::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        width: 2px;
+        height: 38px;
+        transform: translateX(-50%);
+        background: linear-gradient(to bottom, rgba(148, 163, 184, 0.42), transparent);
+    }
+
+    .event-item:last-child .event-dot::after {
+        display: none;
+    }
+
+    .soft-scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .soft-scroll::-webkit-scrollbar-thumb {
+        background: rgba(15, 23, 42, 0.18);
+        border-radius: 999px;
+    }
+
+    @media (max-width: 1024px) {
+        .admin-sidebar {
+            position: static;
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        .admin-main {
+            margin-left: 0;
+        }
+
+        .admin-topbar {
+            position: static;
+            width: 100%;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .admin-content {
+            padding-top: 1.25rem;
+        }
+    }
+</style>
+
 <!-- SideNavBar Component -->
-<aside class="h-screen w-64 fixed left-0 top-0 bg-slate-50 flex flex-col p-4 z-50">
-    <div class="mb-10 px-2">
-        <h1 class="text-teal-900 font-black tracking-tighter text-2xl">Mpemba Heritage</h1>
-        <p class="font-['Epilogue'] tracking-tight font-bold text-sm text-slate-500">Digital Atelier Console</p>
-    </div>
-    <nav class="flex-1 space-y-1">
-        <a class="bg-white text-teal-900 font-bold rounded-lg shadow-sm shadow-slate-200/50 flex items-center gap-3 px-4 py-3 scale-102 transition-transform duration-200" href="/admin/index">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="font-['Epilogue'] tracking-tight">Dashboard</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-lg" href="/admin/inventory">
-            <span class="material-symbols-outlined">inventory_2</span>
-            <span class="font-['Epilogue'] tracking-tight">Inventory</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-lg" href="/admin/orders">
-            <span class="material-symbols-outlined">shopping_cart</span>
-            <span class="font-['Epilogue'] tracking-tight">Orders</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-lg" href="/admin/customers">
-            <span class="material-symbols-outlined">group</span>
-            <span class="font-['Epilogue'] tracking-tight">Users</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-lg" href="/admin/reports">
-            <span class="material-symbols-outlined">analytics</span>
-            <span class="font-['Epilogue'] tracking-tight">Analytics</span>
-        </a>
-        <a class="text-slate-500 hover:text-teal-800 hover:bg-white transition-all duration-300 flex items-center gap-3 px-4 py-3 rounded-lg" href="/admin/settings">
-            <span class="material-symbols-outlined">settings</span>
-            <span class="font-['Epilogue'] tracking-tight">Settings</span>
-        </a>
-    </nav>
-    <div class="mt-auto p-4 bg-slate-100 rounded-xl space-y-2">
-        <a class="group w-full bg-gradient-to-r from-primary via-primary-container to-primary text-on-primary py-3.5 rounded-xl font-black tracking-wide uppercase text-sm flex items-center justify-center gap-2 shadow-lg shadow-primary/25 border border-primary/20 hover:scale-[1.03] hover:shadow-xl hover:shadow-primary/35 transition-all duration-300" href="/admin/reports">
-            <span class="material-symbols-outlined text-base group-hover:rotate-90 transition-transform duration-300">add</span>
-            NEW REPORT
-            <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-white/20 border border-white/30">AI</span>
-        </a>
-        <a class="w-full bg-surface-container-high text-primary py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:bg-surface-container-highest transition-colors" href="/admin/logout">
-            <span class="material-symbols-outlined text-sm">logout</span>
-            Logout
-        </a>
-    </div>
-</aside>
+<div class="admin-shell relative z-10 lg:flex lg:items-start lg:gap-0">
+<?php require_once __DIR__ . '/_sidebar.php'; ?>
 
 <!-- Main Content Area -->
-<main class="ml-64 min-h-screen">
+<main class="admin-main ml-64 min-h-screen w-full">
     <!-- TopNavBar Component -->
-    <header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
+    <header class="admin-topbar fixed top-0 left-64 right-0 h-16 bg-white/85 backdrop-blur-xl border-b border-white/70 flex items-center justify-between px-8 z-40 shadow-sm shadow-slate-200/20">
         <div class="flex items-center flex-1">
             <div class="relative w-full max-w-md">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
@@ -64,9 +113,12 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
         <div class="flex items-center gap-6">
             <div class="flex gap-4">
-                <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button">
+                <a class="relative text-slate-600 hover:text-amber-700 transition-colors" href="/admin/messages" title="Open notifications">
                     <span class="material-symbols-outlined">notifications</span>
-                </button>
+                    <?php if ($notificationCount > 0): ?>
+                    <span class="absolute -top-1 -right-1 h-4 min-w-4 px-1 rounded-full bg-red-500 text-white text-[9px] flex items-center justify-center font-bold"><?php echo $notificationCount > 99 ? '99+' : $notificationCount; ?></span>
+                    <?php endif; ?>
+                </a>
                 <button class="text-slate-600 hover:text-amber-700 transition-colors" type="button">
                     <span class="material-symbols-outlined">help_outline</span>
                 </button>
@@ -81,16 +133,33 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
     </header>
 
-    <div class="pt-24 px-8 pb-12">
+    <div class="admin-content pt-24 px-8 pb-12">
         <!-- Hero Title -->
+        <section class="mb-8 rounded-3xl surface-glass border border-white/65 shadow-xl shadow-slate-300/25 p-7 lg:p-9 relative overflow-hidden">
+            <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-gradient-to-br from-amber-200/40 to-teal-200/30 blur-2xl pointer-events-none"></div>
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div>
+                    <p class="text-[11px] tracking-[0.24em] uppercase text-slate-500 font-bold mb-2">Admin Command Center</p>
+                    <h2 class="text-3xl lg:text-4xl font-black text-primary tracking-tight mb-2">Marketplace Performance</h2>
+                    <p class="text-on-surface-variant max-w-2xl">Real-time oversight of the Mpemba digital atelier ecosystem. Monitor sales trajectories, vendor health, and customer engagement through a curated editorial lens.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 min-w-[250px]">
+                    <a href="/admin/orders" class="rounded-2xl bg-primary text-white px-4 py-3 text-sm font-bold text-center hover:opacity-95 transition-opacity">Review Orders</a>
+                    <a href="/admin/inventory" class="rounded-2xl bg-white/85 border border-slate-200 px-4 py-3 text-sm font-bold text-primary text-center hover:bg-white transition-colors">Manage Stock</a>
+                    <a href="/admin/messages" class="rounded-2xl bg-white/85 border border-slate-200 px-4 py-3 text-sm font-bold text-primary text-center hover:bg-white transition-colors">Open Messages</a>
+                    <a href="/admin/reports" class="rounded-2xl bg-white/85 border border-slate-200 px-4 py-3 text-sm font-bold text-primary text-center hover:bg-white transition-colors">View Reports</a>
+                </div>
+            </div>
+        </section>
+
         <div class="mb-10">
-            <h2 class="text-4xl font-black text-primary tracking-tighter mb-2">Marketplace Performance</h2>
-            <p class="text-on-surface-variant max-w-2xl">Real-time oversight of the Mpemba digital atelier ecosystem. Monitor sales trajectories, vendor health, and customer engagement through a curated editorial lens.</p>
+            <h3 class="text-xl font-black text-slate-800 tracking-tight mb-1">Today at a Glance</h3>
+            <p class="text-slate-500 text-sm">Quick KPI snapshot from sales, operations, and user activity.</p>
         </div>
 
         <!-- Bento Grid Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-300">
+            <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-primary-fixed text-on-primary-fixed rounded-lg">
                         <span class="material-symbols-outlined">payments</span>
@@ -110,7 +179,7 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                 </div>
             </div>
 
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-300">
+            <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-secondary-fixed text-on-secondary-fixed rounded-lg">
                         <span class="material-symbols-outlined">shopping_basket</span>
@@ -130,7 +199,7 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                 </div>
             </div>
 
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-300">
+            <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-surface-container-high text-primary rounded-lg">
                         <span class="material-symbols-outlined">storefront</span>
@@ -150,7 +219,7 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                 </div>
             </div>
 
-            <div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm hover:scale-[1.02] transition-transform duration-300">
+            <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg">
                         <span class="material-symbols-outlined">trending_up</span>
@@ -172,7 +241,7 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl shadow-sm">
+            <div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-2xl border border-slate-200/60 shadow-sm">
                 <div class="flex justify-between items-center mb-10">
                     <div>
                         <h4 class="text-xl font-bold text-primary">Sales Performance Over Time</h4>
@@ -201,15 +270,14 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                 </div>
             </div>
 
-            <div class="bg-surface-container-low p-8 rounded-xl">
+            <div class="bg-surface-container-low p-8 rounded-2xl border border-slate-200/55">
                 <h4 class="text-xl font-bold text-primary mb-6">Recent Platform Events</h4>
                 <div class="space-y-6">
-                    <div class="flex gap-4">
-                        <div class="relative">
+                    <div class="event-item flex gap-4">
+                        <div class="event-dot relative">
                             <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-900">
                                 <span class="material-symbols-outlined text-sm">shopping_bag</span>
                             </div>
-                            <div class="absolute top-10 left-1/2 -translate-x-1/2 w-0.5 h-full bg-slate-200"></div>
                         </div>
                         <div class="pb-2">
                             <p class="text-sm font-bold text-primary">New Premium Order #4928</p>
@@ -218,12 +286,11 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                         </div>
                     </div>
 
-                    <div class="flex gap-4">
-                        <div class="relative">
+                    <div class="event-item flex gap-4">
+                        <div class="event-dot relative">
                             <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-900">
                                 <span class="material-symbols-outlined text-sm">person_add</span>
                             </div>
-                            <div class="absolute top-10 left-1/2 -translate-x-1/2 w-0.5 h-full bg-slate-200"></div>
                         </div>
                         <div class="pb-2">
                             <p class="text-sm font-bold text-primary">Vendor Application Received</p>
@@ -232,8 +299,8 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                         </div>
                     </div>
 
-                    <div class="flex gap-4">
-                        <div class="relative">
+                    <div class="event-item flex gap-4">
+                        <div class="event-dot relative">
                             <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700">
                                 <span class="material-symbols-outlined text-sm">edit</span>
                             </div>
@@ -249,7 +316,7 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-            <div class="bg-primary text-white p-8 rounded-xl relative overflow-hidden">
+            <div class="bg-primary text-white p-8 rounded-2xl relative overflow-hidden shadow-lg shadow-primary/30">
                 <div class="relative z-10">
                     <h4 class="text-xl font-bold mb-8">Dominant Market Categories</h4>
                     <div class="space-y-6">
@@ -285,7 +352,7 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
                 <div class="absolute -right-16 -bottom-16 w-64 h-64 rounded-full border-[32px] border-white/5 pointer-events-none"></div>
             </div>
 
-            <div class="group relative rounded-xl overflow-hidden shadow-sm h-full min-h-[360px]">
+            <div class="group relative rounded-2xl overflow-hidden shadow-sm h-full min-h-[360px] border border-slate-200/40">
                 <img alt="Artisan Showcase" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1200&h=900&fit=crop&crop=center"/>
                 <div class="absolute inset-0 bg-gradient-to-t from-primary via-transparent to-transparent opacity-80"></div>
                 <div class="absolute bottom-0 left-0 p-8">
@@ -300,3 +367,5 @@ $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
         </div>
     </div>
 </main>
+ </div>
+<script src="/js/admin.js"></script>

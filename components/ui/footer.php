@@ -63,11 +63,11 @@
                     Company
                 </h3>
                 <div class="mt-6 space-y-3">
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">About us</a>
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Privacy Policy</a>
+                    <a href="/about-us" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">About us</a>
+                    <a href="/privacy-policy" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Privacy Policy</a>
                     <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Terms & Conditions</a>
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Blog</a>
-                    <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Contact</a>
+                    <a href="/blog" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Blog</a>
+                    <a href="/contact" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Contact</a>
                 </div>
             </div>
 
@@ -78,13 +78,14 @@
                     Connect
                 </h3>
                 <p class="mt-6 text-slate-300 text-sm leading-relaxed">Get updates on new arrivals, exclusive deals, and style tips.</p>
-                <form class="mt-4 flex flex-col gap-3" onsubmit="event.preventDefault(); this.reset();">
-                    <input type="email" placeholder="Enter your email" required class="w-full rounded-2xl border border-white/20 bg-white/5 px-4 py-3 text-white text-sm placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 backdrop-blur transition" />
+                <form class="mt-4 flex flex-col gap-3" id="footerSubscribeForm" data-source="footer">
+                    <input type="email" name="email" placeholder="Enter your email" required class="w-full rounded-2xl border border-white/20 bg-white/5 px-4 py-3 text-white text-sm placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 backdrop-blur transition" />
                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-primary to-cyan-500 px-5 py-3 text-sm font-semibold text-white transition hover:from-primary/90 hover:to-cyan-400 shadow-lg shadow-primary/20">
                         <span>Subscribe</span>
                         <span class="material-symbols-outlined text-base">arrow_forward</span>
                     </button>
                 </form>
+
                 <div class="mt-6 flex items-center gap-4">
                     <a href="#" class="group inline-flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-white border border-white/20 transition hover:bg-primary hover:border-primary hover:shadow-lg hover:shadow-primary/30" title="Twitter">
                         <span class="material-symbols-outlined">public</span>
@@ -113,3 +114,59 @@
         </div>
     </div>
 </footer>
+
+<script src="/assets/sweetalert2/sweetalert2.all.min.js"></script>
+<script>
+(function () {
+    function handleSubscribeForm(form) {
+        if (!form) return;
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const emailInput = form.querySelector('input[type="email"]');
+            const btn        = form.querySelector('button[type="submit"]');
+            const email      = emailInput.value.trim();
+            const source     = form.dataset.source || 'website';
+            const origText   = btn.innerHTML;
+
+            btn.disabled = true;
+            btn.innerHTML = '<span>Sending...</span>';
+
+            try {
+                const res  = await fetch('/api/subscribe.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, source }),
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    emailInput.value = '';
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ icon: 'success', title: 'Subscribed!', text: data.message, confirmButtonColor: '#0d9488', timer: 3000, showConfirmButton: false });
+                    } else {
+                        alert(data.message);
+                    }
+                } else {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ icon: 'info', title: 'Heads up', text: data.message, confirmButtonColor: '#0d9488' });
+                    } else {
+                        alert(data.message);
+                    }
+                }
+            } catch (err) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong. Please try again.', confirmButtonColor: '#0d9488' });
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = origText;
+            }
+        });
+    }
+
+    // Footer form
+    handleSubscribeForm(document.getElementById('footerSubscribeForm'));
+    // Any other forms with data-subscribe on the page
+    document.querySelectorAll('form[data-subscribe]').forEach(handleSubscribeForm);
+})();
+</script>

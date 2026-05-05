@@ -336,5 +336,6 @@
         </section>
     </main>
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+    <script src="/js/app.js"></script>
 </body>
 </html>

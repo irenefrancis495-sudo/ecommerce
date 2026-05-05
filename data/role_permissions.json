@@ -1,0 +1,40 @@
+{
+    "admin": {
+        "dashboard.view": true,
+        "inventory.manage": true,
+        "categories.manage": true,
+        "orders.manage": true,
+        "users.manage": true,
+        "feedback.manage": true,
+        "messages.manage": true,
+        "subscribers.manage": true,
+        "reports.view": true,
+        "settings.manage": true,
+        "permissions.manage": true,
+        "shop.browse": true,
+        "shop.cart": true,
+        "shop.checkout": true,
+        "shop.orders": true,
+        "shop.profile": true,
+        "shop.reviews": true
+    },
+    "customer": {
+        "dashboard.view": false,
+        "inventory.manage": false,
+        "categories.manage": false,
+        "orders.manage": false,
+        "users.manage": false,
+        "feedback.manage": false,
+        "messages.manage": false,
+        "subscribers.manage": false,
+        "reports.view": false,
+        "settings.manage": false,
+        "permissions.manage": false,
+        "shop.browse": true,
+        "shop.cart": true,
+        "shop.checkout": true,
+        "shop.orders": true,
+        "shop.profile": true,
+        "shop.reviews": true
+    }
+}

@@ -89,7 +89,7 @@ if (!$product) {
                     <span class="text-3xl font-bold">$<?= number_format($product['price'], 2) ?></span>
                 </div>
                 <p class="text-slate-600 mb-8"><?= htmlspecialchars($product['description']) ?></p>
-                <button id="add-to-cart" class="add-to-cart rounded-full bg-blue-600 px-8 py-3 text-white font-semibold hover:bg-blue-700" data-id="<?= $product['id'] ?>" data-name="<?= htmlspecialchars($product['name']) ?>" data-price="<?= $product['price'] ?>" type="button">Add to Cart</button>
+                <button id="add-to-cart" class="add-to-cart rounded-full bg-blue-600 px-8 py-3 text-white font-semibold hover:bg-blue-700" data-id="<?= $product['id'] ?>" data-name="<?= htmlspecialchars($product['name']) ?>" data-price="<?= $product['price'] ?>" data-image="<?= htmlspecialchars($product['image']) ?>" type="button">Add to Cart</button>
             </section>
             <aside class="space-y-6">
                 <div class="rounded-3xl bg-white p-6 shadow-sm">
@@ -113,15 +113,5 @@ if (!$product) {
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
     <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
     <script src="/js/app.js"></script>
-    <script>
-        document.getElementById('add-to-cart').addEventListener('click', function () {
-            const product = {
-                id: <?= json_encode($product['id']) ?>,
-                name: <?= json_encode($product['name']) ?>,
-                price: <?= json_encode($product['price']) ?>
-            };
-            addToCart(product);
-        });
-    </script>
 </body>
 </html>
