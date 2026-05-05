@@ -67,7 +67,14 @@
                     <a href="/privacy-policy" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Privacy Policy</a>
                     <a href="#" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Terms & Conditions</a>
                     <a href="/blog" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Blog</a>
-                    <a href="/contact" class="block text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">Contact</a>
+                    <a href="/contact" class="flex items-center gap-2 text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">mail</span>
+                        Contact / Message
+                    </a>
+                    <a href="/user#feedback-center" class="flex items-center gap-2 text-slate-300 hover:text-white hover:translate-x-1 transition font-medium">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">rate_review</span>
+                        Send Feedback
+                    </a>
                 </div>
             </div>
 

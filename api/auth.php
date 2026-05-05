@@ -16,6 +16,43 @@ $action = $_GET['action'] ?? '';
 
 $userController = new UserController();
 
+function loadCustomerReplyCounts(array $user): array
+{
+    $email = strtolower(trim((string) ($user['email'] ?? '')));
+    if ($email === '') {
+        return ['feedback_reply_count' => 0, 'message_reply_count' => 0];
+    }
+
+    $feedbackCount = 0;
+    $messageCount = 0;
+
+    $feedbackFile = __DIR__ . '/../data/customer_comments.json';
+    if (file_exists($feedbackFile)) {
+        $items = json_decode((string) file_get_contents($feedbackFile), true) ?: [];
+        foreach ($items as $item) {
+            $itemEmail = strtolower(trim((string) ($item['email'] ?? '')));
+            $status = strtolower(trim((string) ($item['status'] ?? '')));
+            if ($itemEmail === $email && !empty($item['reply']) && $status === 'replied') {
+                $feedbackCount++;
+            }
+        }
+    }
+
+    $messagesFile = __DIR__ . '/../data/contact_messages.json';
+    if (file_exists($messagesFile)) {
+        $items = json_decode((string) file_get_contents($messagesFile), true) ?: [];
+        foreach ($items as $item) {
+            $itemEmail = strtolower(trim((string) ($item['email'] ?? '')));
+            $status = strtolower(trim((string) ($item['status'] ?? '')));
+            if ($itemEmail === $email && !empty($item['reply']) && $status === 'replied') {
+                $messageCount++;
+            }
+        }
+    }
+
+    return ['feedback_reply_count' => $feedbackCount, 'message_reply_count' => $messageCount];
+}
+
 try {
     switch ($action) {
         case 'login':
@@ -87,7 +124,14 @@ try {
         case 'check':
             $user = $userController->getCurrentUser();
             if ($user) {
-                echo json_encode(['success' => true, 'user' => $user]);
+                $replyCounts = loadCustomerReplyCounts($user);
+                echo json_encode([
+                    'success' => true,
+                    'user' => $user,
+                    'reply_count' => $replyCounts['feedback_reply_count'] + $replyCounts['message_reply_count'],
+                    'feedback_reply_count' => $replyCounts['feedback_reply_count'],
+                    'message_reply_count' => $replyCounts['message_reply_count'],
+                ]);
             } else {
                 echo json_encode(['success' => false, 'message' => 'Not logged in']);
             }

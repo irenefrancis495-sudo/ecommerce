@@ -14,5 +14,25 @@
         "unit_price": 34.99,
         "subtotal": 34.99,
         "id": 2
+    },
+    {
+        "id": 3,
+        "order_id": 2,
+        "product_id": 2,
+        "name": "USB-C Hub",
+        "image": "https://images.unsplash.com/photo-1625842268584-8f3296236761?w=400&h=400&fit=crop&crop=center",
+        "quantity": 1,
+        "unit_price": 49.99,
+        "subtotal": 49.99
+    },
+    {
+        "id": 4,
+        "order_id": 2,
+        "product_id": 3,
+        "name": "Portable Charger",
+        "image": "https://images.unsplash.com/photo-1609594040481-ea9d29c0b18a?w=400&h=400&fit=crop&crop=center",
+        "quantity": 1,
+        "unit_price": 39.99,
+        "subtotal": 39.99
     }
 ]

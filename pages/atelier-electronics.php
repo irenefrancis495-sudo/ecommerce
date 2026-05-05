@@ -155,7 +155,10 @@
                         </div>
                         <div class="flex items-center justify-between border-t border-surface-container-low pt-6">
                             <span class="text-3xl font-black text-primary font-display">$449.00</span>
-                            <button class="bg-secondary px-8 py-3 rounded-xl text-white font-bold hover:scale-105 transition-transform shadow-lg shadow-secondary/20">Pre-Order</button>
+                            <button type="button" class="add-to-cart bg-secondary px-8 py-3 rounded-xl text-white font-bold hover:scale-105 transition-transform shadow-lg shadow-secondary/20 inline-flex items-center justify-center gap-2" data-id="301" data-name="Aura V2 Adaptive Headphones" data-price="449.00" data-image="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1400&q=80">
+                                <span class="material-symbols-outlined">add</span>
+                                <span>Add to cart</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -174,8 +177,9 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$299.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
-                            <span class="material-symbols-outlined">shopping_cart</span>
+                        <button type="button" class="add-to-cart p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors inline-flex items-center justify-center gap-2" data-id="5" data-name="Core Hub Ultra" data-price="299" data-image="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80">
+                            <span class="material-symbols-outlined">add</span>
+                            <span class="text-sm font-semibold">Add to cart</span>
                         </button>
                     </div>
                 </div>
@@ -194,8 +198,9 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$189.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
-                            <span class="material-symbols-outlined">shopping_cart</span>
+                        <button type="button" class="add-to-cart p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors inline-flex items-center justify-center gap-2" data-id="6" data-name="Pulse Pro Band" data-price="189" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
+                            <span class="material-symbols-outlined">add</span>
+                            <span class="text-sm font-semibold">Add to cart</span>
                         </button>
                     </div>
                 </div>
@@ -231,8 +236,9 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <span class="text-2xl font-black text-primary font-display">$650.00</span>
-                        <button class="p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors">
-                            <span class="material-symbols-outlined">shopping_cart</span>
+                        <button type="button" class="add-to-cart p-3 bg-primary text-white rounded-xl hover:bg-primary-container transition-colors inline-flex items-center justify-center gap-2" data-id="7" data-name="Sonic Array 5" data-price="650.00" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
+                            <span class="material-symbols-outlined">add</span>
+                            <span class="text-sm font-semibold">Add to cart</span>
                         </button>
                     </div>
                 </div>

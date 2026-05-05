@@ -12,6 +12,15 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Start session
+// Start session with a shared cookie path so auth sessions work across the storefront and API endpoints.
+$cookieParams = session_get_cookie_params();
+session_set_cookie_params([
+    'lifetime' => $cookieParams['lifetime'],
+    'path' => '/',
+    'domain' => $cookieParams['domain'],
+    'secure' => $cookieParams['secure'],
+    'httponly' => $cookieParams['httponly'],
+    'samesite' => $cookieParams['samesite'] ?? 'Lax',
+]);
 session_start();
 ?>

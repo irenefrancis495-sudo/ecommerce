@@ -169,7 +169,7 @@
                     <span class="text-xl font-bold text-slate-950">$49</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="11" data-name="Organic Face Serum" data-price="49" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>
@@ -202,7 +202,7 @@
                     <span class="text-xl font-bold text-slate-950">$19</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="12" data-name="Natural Shampoo" data-price="19" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>
@@ -235,7 +235,7 @@
                     <span class="text-xl font-bold text-slate-950">$39</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="13" data-name="Moisturizing Cream" data-price="39" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>
@@ -268,7 +268,7 @@
                     <span class="text-xl font-bold text-slate-950">$24</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="14" data-name="Essential Oil Blend" data-price="24" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>
@@ -301,7 +301,7 @@
                     <span class="text-xl font-bold text-slate-950">$16</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="15" data-name="Herbal Face Mask" data-price="16" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>
@@ -334,7 +334,7 @@
                     <span class="text-xl font-bold text-slate-950">$22</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="17" data-name="Botanical Hair Oil" data-price="22" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>
@@ -367,7 +367,7 @@
                     <span class="text-xl font-bold text-slate-950">$8</span>
                     <button class="add-to-cart inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm hover:shadow-md active:scale-95" 
                         data-id="16" data-name="Natural Lip Balm" data-price="8" title="Add to cart">
-                        <span class="material-symbols-outlined text-lg">shopping_cart</span>
+                        <span class="material-symbols-outlined text-lg">add</span>
                     </button>
                 </div>
             </div>

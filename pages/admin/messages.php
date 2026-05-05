@@ -197,6 +197,12 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
               </div>
               <p class="text-sm text-on-surface-variant truncate mt-0.5"><?= htmlspecialchars($msg['email']) ?></p>
               <p class="text-sm text-slate-500 truncate mt-0.5 max-w-xl"><?= htmlspecialchars($msg['message']) ?></p>
+              <?php if (!empty($msg['reply'])): ?>
+              <div class="mt-3 rounded-2xl bg-emerald-50 border border-emerald-200 p-3 max-w-xl">
+                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-700 mb-1">Admin reply</p>
+                <p class="text-sm text-slate-700 truncate"><?= htmlspecialchars($msg['reply']) ?></p>
+              </div>
+              <?php endif; ?>
             </div>
             <div class="flex-shrink-0 flex flex-col items-end gap-2">
               <span class="text-xs text-on-surface-variant whitespace-nowrap"><?= date('M d, Y', strtotime($msg['created_at'] ?? 'now')) ?></span>
@@ -204,7 +210,7 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
                 <?php if ($isNew): ?>
                 <form method="POST"><input type="hidden" name="mark_read" value="<?= (int)$msg['id'] ?>" /><button type="submit" title="Mark as read" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors"><span class="material-symbols-outlined text-sm">check</span></button></form>
                 <?php endif; ?>
-                <a href="mailto:<?= htmlspecialchars($msg['email']) ?>?subject=Re: <?= rawurlencode($subjectLabel) ?>" title="Reply" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"><span class="material-symbols-outlined text-sm">reply</span></a>
+                <button type="button" onclick="event.stopPropagation(); openMessage(<?= $msgJson ?>);" title="Reply in system" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"><span class="material-symbols-outlined text-sm">reply</span></button>
                 <form method="POST" class="delete-form"><input type="hidden" name="delete_id" value="<?= (int)$msg['id'] ?>" /><button type="submit" title="Delete" class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 transition-colors"><span class="material-symbols-outlined text-sm">delete</span></button></form>
               </div>
             </div>
@@ -224,6 +230,7 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
     <button onclick="closeDrawer()" class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 transition-colors"><span class="material-symbols-outlined">close</span></button>
   </div>
   <div class="flex-1 overflow-y-auto p-6 space-y-6">
+    <input id="dId" type="hidden" value="" />
     <div class="flex items-center gap-4">
       <div id="dAvatar" class="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-cyan-500 flex items-center justify-center text-white font-black text-xl"></div>
       <div><p id="dName" class="font-black text-on-surface text-lg"></p><a id="dEmail" href="#" class="text-sm text-primary hover:underline"></a></div>
@@ -236,9 +243,30 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
       <p class="text-xs text-on-surface-variant mb-3 font-semibold uppercase tracking-wide">Message</p>
       <p id="dMessage" class="text-on-surface text-sm leading-relaxed whitespace-pre-wrap"></p>
     </div>
+    <div id="dReplyPreviewWrap" class="hidden rounded-xl border border-emerald-200 bg-emerald-50 p-5">
+      <p class="text-xs text-emerald-700 mb-3 font-semibold uppercase tracking-wide">Saved reply</p>
+      <p id="dReplyPreview" class="text-slate-700 text-sm leading-relaxed whitespace-pre-wrap"></p>
+      <p id="dReplyMeta" class="mt-3 text-xs text-slate-500"></p>
+    </div>
+    <div class="rounded-xl border border-slate-200 p-5 bg-white">
+      <div class="flex items-center justify-between gap-4 mb-3">
+        <div>
+          <p class="text-sm font-bold text-slate-900">Reply to customer</p>
+          <p class="text-xs text-slate-500">The customer can view your reply in their account message center.</p>
+        </div>
+        <span class="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+          <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
+        </span>
+      </div>
+      <textarea id="dReplyText" rows="4" class="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900" placeholder="Write your reply here..."></textarea>
+      <div class="mt-4 flex items-center justify-between gap-3">
+        <p id="dReplyStatus" class="text-sm text-slate-500"></p>
+        <button type="button" onclick="submitMessageReply()" class="inline-flex items-center gap-2 bg-primary text-on-primary py-2.5 px-4 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors"><span class="material-symbols-outlined text-base">send</span>Send Reply</button>
+      </div>
+    </div>
   </div>
   <div class="px-6 py-4 border-t border-slate-100 flex gap-3">
-    <a id="dReply" href="#" class="flex-1 flex items-center justify-center gap-2 bg-primary text-on-primary py-2.5 rounded-xl font-bold text-sm hover:bg-primary/90 transition-colors"><span class="material-symbols-outlined text-base">reply</span>Reply via Email</a>
+    <a id="dReply" href="#" class="flex-1 flex items-center justify-center gap-2 bg-slate-100 text-slate-700 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors"><span class="material-symbols-outlined text-base">mail</span>Email Customer</a>
     <button onclick="closeDrawer()" class="px-4 py-2.5 rounded-xl bg-surface-container-high text-on-surface font-bold text-sm hover:bg-surface-container-highest transition-colors">Close</button>
   </div>
 </div>
@@ -249,6 +277,7 @@ $subjectLabels = ['general'=>'General Inquiry','order'=>'Order & Shipping','retu
 function openMessage(data) {
     const parts = data.name.trim().split(' ');
     const initials = (parts[0].charAt(0) + (parts.length > 1 ? parts[parts.length-1].charAt(0) : '')).toUpperCase();
+  document.getElementById('dId').value           = data.id || '';
     document.getElementById('dAvatar').textContent  = initials;
     document.getElementById('dName').textContent    = data.name;
     document.getElementById('dEmail').textContent   = data.email;
@@ -256,13 +285,61 @@ function openMessage(data) {
     document.getElementById('dSubject').textContent = data.subject;
     document.getElementById('dDate').textContent    = data.date;
     document.getElementById('dMessage').textContent = data.message;
+    document.getElementById('dReplyText').value     = data.reply || '';
+    document.getElementById('dReplyStatus').textContent = '';
     document.getElementById('dReply').href          = 'mailto:' + data.email + '?subject=Re: ' + encodeURIComponent(data.subject);
+    const replyWrap = document.getElementById('dReplyPreviewWrap');
+    const replyPreview = document.getElementById('dReplyPreview');
+    const replyMeta = document.getElementById('dReplyMeta');
+    if (data.reply) {
+      replyWrap.classList.remove('hidden');
+      replyPreview.textContent = data.reply;
+      replyMeta.textContent = data.replied_at ? ('Saved ' + data.replied_at + (data.replied_by ? ' by ' + data.replied_by : '')) : '';
+    } else {
+      replyWrap.classList.add('hidden');
+      replyPreview.textContent = '';
+      replyMeta.textContent = '';
+    }
     document.getElementById('msgDrawer').classList.remove('translate-x-full');
     document.getElementById('drawerOverlay').classList.remove('hidden');
 }
 function closeDrawer() {
     document.getElementById('msgDrawer').classList.add('translate-x-full');
     document.getElementById('drawerOverlay').classList.add('hidden');
+}
+async function submitMessageReply() {
+  const id = parseInt(document.getElementById('dId').value, 10);
+  const reply = document.getElementById('dReplyText').value.trim();
+  const statusEl = document.getElementById('dReplyStatus');
+
+  if (!id || !reply) {
+    statusEl.textContent = 'Please write a reply before sending.';
+    statusEl.className = 'text-sm text-red-600';
+    return;
+  }
+
+  statusEl.textContent = 'Saving reply...';
+  statusEl.className = 'text-sm text-slate-500';
+
+  try {
+    const response = await fetch('/api/messages.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'reply', id: id, reply: reply })
+    });
+    const result = await response.json();
+    if (result.status === 'success') {
+      statusEl.textContent = result.message || 'Reply saved.';
+      statusEl.className = 'text-sm text-emerald-600';
+      setTimeout(function () { window.location.reload(); }, 700);
+    } else {
+      statusEl.textContent = result.message || 'Could not save reply.';
+      statusEl.className = 'text-sm text-red-600';
+    }
+  } catch (error) {
+    statusEl.textContent = 'Network error. Please try again.';
+    statusEl.className = 'text-sm text-red-600';
+  }
 }
 function filterTable(filter) {
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -273,7 +350,9 @@ function filterTable(filter) {
         btn.classList.toggle('text-on-surface-variant', !active);
     });
     document.querySelectorAll('.message-row').forEach(row => {
-        row.style.display = (filter === 'all' || row.dataset.status === filter) ? '' : 'none';
+      const status = row.dataset.status || 'new';
+      const visible = filter === 'all' || status === filter || (filter === 'read' && status === 'replied');
+      row.style.display = visible ? '' : 'none';
     });
 }
 document.getElementById('globalSearch').addEventListener('input', function () {

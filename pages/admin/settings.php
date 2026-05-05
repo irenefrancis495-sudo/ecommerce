@@ -153,126 +153,151 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p class="text-on-surface-variant mt-1">Configure admin system, notifications, and business preferences.</p>
       </div>
 
+      <style>
+        .status-card { transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+        .status-card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px -8px rgba(15,23,42,.12); border-color: rgba(15,23,42,.06); }
+        .toggle-switch { appearance: none; width: 48px; height: 28px; background: #e2e8f0; border-radius: 9999px; cursor: pointer; position: relative; transition: background .2s; }
+        .toggle-switch:checked { background: #0f766e; }
+        .toggle-switch::after { content: ''; position: absolute; width: 24px; height: 24px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: left .2s; }
+        .toggle-switch:checked::after { left: 22px; }
+      </style>
       <div class="grid gap-4 md:grid-cols-3">
-        <div class="rounded-3xl bg-surface-container-lowest p-6 shadow-sm border border-slate-200/20">
-          <div class="flex items-center justify-between gap-4 mb-4">
+        <div class="status-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+          <div class="flex items-start justify-between gap-4 mb-3">
             <div>
-              <p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">System Status</p>
-              <p class="text-lg font-black text-primary mt-2"><?php echo !empty($settings['maintenance_mode']) ? 'Maintenance Mode' : 'Live'; ?></p>
+              <p class="text-xs uppercase tracking-widest font-bold text-slate-400">System Status</p>
+              <p class="text-2xl font-black text-primary mt-2 leading-none"><?php echo !empty($settings['maintenance_mode']) ? 'Maintenance' : 'Live'; ?></p>
             </div>
-            <span class="material-symbols-outlined text-3xl text-primary">toggle_on</span>
+            <div class="w-12 h-12 rounded-2xl <?php echo !empty($settings['maintenance_mode']) ? 'bg-orange-50' : 'bg-emerald-50'; ?> flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-2xl <?php echo !empty($settings['maintenance_mode']) ? 'text-orange-600' : 'text-emerald-600'; ?>" style="font-variation-settings:'FILL' 1"><?php echo !empty($settings['maintenance_mode']) ? 'warning' : 'check_circle'; ?></span>
+            </div>
           </div>
-          <p class="text-sm text-on-surface-variant">When enabled, the storefront shifts to maintenance mode and administrators can tune settings without customer access.</p>
+          <p class="text-xs text-slate-500">Storefront <?php echo !empty($settings['maintenance_mode']) ? 'paused for maintenance' : 'accepting orders'; ?></p>
         </div>
 
-        <div class="rounded-3xl bg-surface-container-lowest p-6 shadow-sm border border-slate-200/20">
-          <div class="flex items-center justify-between gap-4 mb-4">
+        <div class="status-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+          <div class="flex items-start justify-between gap-4 mb-3">
             <div>
-              <p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Notifications</p>
-              <p class="text-lg font-black text-primary mt-2"><?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? 'Enabled' : 'Disabled'; ?></p>
+              <p class="text-xs uppercase tracking-widest font-bold text-slate-400">Notifications</p>
+              <p class="text-2xl font-black text-primary mt-2 leading-none"><?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? 'Enabled' : 'Off'; ?></p>
             </div>
-            <span class="material-symbols-outlined text-3xl text-secondary">notifications_active</span>
+            <div class="w-12 h-12 rounded-2xl <?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? 'bg-blue-50' : 'bg-slate-100'; ?> flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-2xl <?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? 'text-blue-600' : 'text-slate-400'; ?>" style="font-variation-settings:'FILL' 1">notifications<?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? '_active' : '_off'; ?></span>
+            </div>
           </div>
-          <p class="text-sm text-on-surface-variant">Email and SMS alerts keep the operations team informed about orders, stock, and urgent issues.</p>
+          <p class="text-xs text-slate-500"><?php echo !empty($settings['email_notifications']) ? 'Email ' : ''; ?><?php echo !empty($settings['sms_notifications']) ? 'SMS' : ''; ?><?php echo !empty($settings['email_notifications']) || !empty($settings['sms_notifications']) ? ' active' : 'All alerts disabled'; ?></p>
         </div>
 
-        <div class="rounded-3xl bg-surface-container-lowest p-6 shadow-sm border border-slate-200/20">
-          <div class="flex items-center justify-between gap-4 mb-4">
+        <div class="status-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm">
+          <div class="flex items-start justify-between gap-4 mb-3">
             <div>
-              <p class="text-xs uppercase tracking-widest font-bold text-on-surface-variant">Digest</p>
-              <p class="text-lg font-black text-primary mt-2"><?php echo !empty($settings['weekly_digest']) ? 'Weekly Summary' : 'Disabled'; ?></p>
+              <p class="text-xs uppercase tracking-widest font-bold text-slate-400">Weekly Digest</p>
+              <p class="text-2xl font-black text-primary mt-2 leading-none"><?php echo !empty($settings['weekly_digest']) ? 'Enabled' : 'Off'; ?></p>
             </div>
-            <span class="material-symbols-outlined text-3xl text-tertiary">calendar_month</span>
+            <div class="w-12 h-12 rounded-2xl <?php echo !empty($settings['weekly_digest']) ? 'bg-purple-50' : 'bg-slate-100'; ?> flex items-center justify-center flex-shrink-0">
+              <span class="material-symbols-outlined text-2xl <?php echo !empty($settings['weekly_digest']) ? 'text-purple-600' : 'text-slate-400'; ?>" style="font-variation-settings:'FILL' 1">calendar_month</span>
+            </div>
           </div>
-          <p class="text-sm text-on-surface-variant">Weekly summaries are sent automatically when enabled, keeping the team aligned with store performance.</p>
+          <p class="text-xs text-slate-500"><?php echo !empty($settings['weekly_digest']) ? 'Sunday summaries' : 'No weekly reports'; ?></p>
         </div>
       </div>
 
       <?php if ($flash !== ''): ?>
-        <div class="rounded-xl px-4 py-3 text-sm font-semibold <?php echo $flashType === 'error' ? 'bg-error-container text-on-error-container border border-error/20' : 'bg-teal-50 text-teal-700 border border-teal-200'; ?>">
+        <div class="rounded-lg px-4 py-3 text-sm font-semibold flex items-center gap-3 <?php echo $flashType === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'; ?>">
+          <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1"><?php echo $flashType === 'error' ? 'error' : 'check_circle'; ?></span>
           <?php echo htmlspecialchars($flash); ?>
         </div>
       <?php endif; ?>
 
       <form method="post" action="/admin/settings" class="grid grid-cols-1 xl:grid-cols-5 gap-6">
-        <section class="xl:col-span-3 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-200/10 space-y-5">
-          <div class="flex items-center justify-between gap-4">
+        <section class="xl:col-span-3 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-5">
+          <div class="flex items-center justify-between gap-4 pb-4 border-b border-slate-100">
             <div>
-              <h3 class="text-lg font-black text-primary">General Settings</h3>
-              <p class="text-sm text-on-surface-variant mt-1">Store identity, support contacts, currency, and timezone preferences.</p>
+              <h3 class="text-lg font-black text-primary flex items-center gap-2">
+                <span class="material-symbols-outlined text-blue-600" style="font-variation-settings:'FILL' 1">store</span>
+                General Settings
+              </h3>
+              <p class="text-xs text-slate-500 mt-1">Store identity, support, currency, and timezone</p>
             </div>
-            <span class="material-symbols-outlined text-2xl text-primary">store</span>
           </div>
 
           <label class="block">
-            <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Store Name</span>
-            <input name="store_name" value="<?php echo htmlspecialchars((string) $settings['store_name']); ?>" class="mt-2 w-full rounded-xl border border-outline-variant bg-surface-container-low px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="text" required />
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Store Name</span>
+            <input name="store_name" value="<?php echo htmlspecialchars((string) $settings['store_name']); ?>" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" type="text" required />
           </label>
 
           <label class="block">
-            <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Support Email</span>
-            <input name="support_email" value="<?php echo htmlspecialchars((string) $settings['support_email']); ?>" class="mt-2 w-full rounded-xl border border-outline-variant bg-surface-container-low px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="email" required />
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Support Email</span>
+            <input name="support_email" value="<?php echo htmlspecialchars((string) $settings['support_email']); ?>" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" type="email" required />
           </label>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Currency</span>
-              <input name="currency" value="<?php echo htmlspecialchars((string) $settings['currency']); ?>" class="mt-2 w-full rounded-xl border border-outline-variant bg-surface-container-low px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="text" required />
+              <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Currency</span>
+              <input name="currency" value="<?php echo htmlspecialchars((string) $settings['currency']); ?>" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" type="text" required />
             </label>
             <label class="block">
-              <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Timezone</span>
-              <input name="timezone" value="<?php echo htmlspecialchars((string) $settings['timezone']); ?>" class="mt-2 w-full rounded-xl border border-outline-variant bg-surface-container-low px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="text" required />
+              <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Timezone</span>
+              <input name="timezone" value="<?php echo htmlspecialchars((string) $settings['timezone']); ?>" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" type="text" required />
             </label>
           </div>
 
           <label class="block">
-            <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Low Stock Threshold</span>
-            <input name="low_stock_threshold" value="<?php echo (int) $settings['low_stock_threshold']; ?>" class="mt-2 w-full rounded-xl border border-outline-variant bg-surface-container-low px-4 py-3 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20" type="number" min="1" max="500" required />
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-400">Low Stock Threshold</span>
+            <input name="low_stock_threshold" value="<?php echo (int) $settings['low_stock_threshold']; ?>" class="mt-2 w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none" type="number" min="1" max="500" required />
           </label>
         </section>
 
-        <section class="xl:col-span-2 bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-slate-200/10 space-y-4">
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <h3 class="text-lg font-black text-primary">Notification & System Controls</h3>
-              <p class="text-sm text-on-surface-variant mt-1">Manage alerts, maintenance mode, and the weekly summary schedule.</p>
-            </div>
-            <span class="material-symbols-outlined text-2xl text-secondary">notification_add</span>
+        <section class="xl:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-slate-100 space-y-4">
+          <div class="flex items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <h3 class="text-lg font-black text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-purple-600" style="font-variation-settings:'FILL' 1">notifications</span>
+              Controls
+            </h3>
           </div>
 
-          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors cursor-pointer">
             <div>
-              <p class="text-sm font-semibold text-primary">Maintenance Mode</p>
-              <p class="text-xs text-on-surface-variant mt-1">Pause customer access while you update inventory or apply system changes.</p>
+              <p class="text-sm font-bold text-slate-700">Maintenance Mode</p>
+              <p class="text-xs text-slate-500 mt-1">Pause customer access for updates</p>
             </div>
-            <input type="checkbox" name="maintenance_mode" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['maintenance_mode']) ? 'checked' : ''; ?> />
+            <style>
+              .toggle-switch { appearance: none; width: 48px; height: 28px; background: #e2e8f0; border-radius: 9999px; cursor: pointer; position: relative; transition: background .2s; }
+              .toggle-switch:checked { background: #0f766e; }
+              .toggle-switch::after { content: ''; position: absolute; width: 24px; height: 24px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: left .2s; }
+              .toggle-switch:checked::after { left: 22px; }
+            </style>
+            <input type="checkbox" name="maintenance_mode" class="toggle-switch flex-shrink-0" <?php echo !empty($settings['maintenance_mode']) ? 'checked' : ''; ?> />
           </label>
 
-          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors cursor-pointer">
             <div>
-              <p class="text-sm font-semibold text-primary">Email Notifications</p>
-              <p class="text-xs text-on-surface-variant mt-1">Send immediate email alerts for orders, refunds, and stock warnings.</p>
+              <p class="text-sm font-bold text-slate-700">Email Notifications</p>
+              <p class="text-xs text-slate-500 mt-1">Orders, refunds, stock alerts</p>
             </div>
-            <input type="checkbox" name="email_notifications" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['email_notifications']) ? 'checked' : ''; ?> />
+            <input type="checkbox" name="email_notifications" class="toggle-switch flex-shrink-0" <?php echo !empty($settings['email_notifications']) ? 'checked' : ''; ?> />
           </label>
 
-          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors cursor-pointer">
             <div>
-              <p class="text-sm font-semibold text-primary">SMS Notifications</p>
-              <p class="text-xs text-on-surface-variant mt-1">Receive urgent stock and shipping alerts through SMS.</p>
+              <p class="text-sm font-bold text-slate-700">SMS Notifications</p>
+              <p class="text-xs text-slate-500 mt-1">Urgent shipping & stock alerts</p>
             </div>
-            <input type="checkbox" name="sms_notifications" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['sms_notifications']) ? 'checked' : ''; ?> />
+            <input type="checkbox" name="sms_notifications" class="toggle-switch flex-shrink-0" <?php echo !empty($settings['sms_notifications']) ? 'checked' : ''; ?> />
           </label>
 
-          <label class="flex items-start justify-between gap-4 p-4 rounded-3xl bg-surface-container-high border border-outline-variant/30">
+          <label class="flex items-start justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-200 transition-colors cursor-pointer">
             <div>
-              <p class="text-sm font-semibold text-primary">Weekly Digest</p>
-              <p class="text-xs text-on-surface-variant mt-1">Send a weekly summary of orders, stock, and platform health.</p>
+              <p class="text-sm font-bold text-slate-700">Weekly Digest</p>
+              <p class="text-xs text-slate-500 mt-1">Summary of orders & stock</p>
             </div>
-            <input type="checkbox" name="weekly_digest" class="mt-1 rounded border-outline-variant text-primary focus:ring-primary/20" <?php echo !empty($settings['weekly_digest']) ? 'checked' : ''; ?> />
+            <input type="checkbox" name="weekly_digest" class="toggle-switch flex-shrink-0" <?php echo !empty($settings['weekly_digest']) ? 'checked' : ''; ?> />
           </label>
 
-          <button type="submit" class="w-full mt-2 bg-gradient-to-r from-primary to-primary-container text-on-primary py-3 rounded-xl font-black tracking-wide uppercase text-sm shadow-lg shadow-primary/25 hover:scale-[1.02] transition-transform">Save Settings</button>
+          <button type="submit" class="w-full mt-4 bg-gradient-to-r from-primary to-teal-600 text-white py-2.5 rounded-lg font-bold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 transition-all duration-200 uppercase tracking-wide flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">save</span>
+            Save Settings
+          </button>
         </section>
       </form>
     </div>

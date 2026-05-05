@@ -1,4 +1,8 @@
-<?php require_once __DIR__ . '/_customer_permissions.php'; customerRequirePermission('shop.cart'); ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"/>
@@ -183,14 +187,14 @@
                 button.textContent = 'Login to Checkout';
                 button.disabled = false;
                 button.onclick = function () {
-                    window.location.href = '/login';
+                    window.location.href = '/login?next=%2Fpayment-methods';
                 };
             }
         } catch (error) {
             button.textContent = 'Login to Checkout';
             button.disabled = false;
             button.onclick = function () {
-                window.location.href = '/login';
+                window.location.href = '/login?next=%2Fpayment-methods';
             };
         }
     }

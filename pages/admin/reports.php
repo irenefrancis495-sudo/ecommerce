@@ -165,81 +165,102 @@ $maxTrend = max($monthlyTrend ?: [1]);
     <div class="max-w-7xl mx-auto space-y-8">
       <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
-          <h2 class="text-3xl font-black text-primary tracking-tight">Analytics Center</h2>
-          <p class="text-on-surface-variant mt-1">Generated insights from orders, users, and products in your website.</p>
+          <h2 class="text-3xl font-black text-primary tracking-tight flex items-center gap-2">
+            <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">insights</span>
+            Analytics Center
+          </h2>
+          <p class="text-slate-500 mt-2">Key business metrics and performance trends at a glance</p>
         </div>
         <div class="flex gap-3">
-          <button id="periodBtn" class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-surface-container-highest transition-colors" type="button">
-            <span class="material-symbols-outlined text-lg">calendar_month</span>
+          <button id="periodBtn" class="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm font-semibold text-primary hover:bg-slate-50 hover:border-primary transition-all" type="button">
+            <span class="material-symbols-outlined text-base">calendar_month</span>
             Last 30 Days
           </button>
-          <button id="snapshotBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20" type="button">
-            <span class="material-symbols-outlined text-lg">insights</span>
+          <button id="snapshotBtn" class="flex items-center gap-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-lg shadow-teal-500/20 hover:shadow-xl hover:shadow-teal-500/30 transition-all" type="button">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">screenshot_monitor</span>
             Generate Snapshot
           </button>
         </div>
       </div>
 
+      <style>
+        .kpi-card { transition: transform .18s ease, box-shadow .18s ease; }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 20px 36px -18px rgba(15,23,42,.16); }
+      </style>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Revenue</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-2xl font-black text-primary">$<?php echo number_format($totalRevenue, 2); ?></span>
-            <span class="text-xs font-bold text-teal-600">live</span>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-emerald-600 text-2xl" style="font-variation-settings:'FILL' 1">trending_up</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-emerald-600 leading-none">$<?php echo number_format($totalRevenue, 0); ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Total Revenue</p>
           </div>
         </div>
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Orders</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-2xl font-black text-primary"><?php echo $orderCount; ?></span>
-            <span class="text-xs font-bold text-teal-600">completed: <?php echo $completedCount; ?></span>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-blue-600 text-2xl" style="font-variation-settings:'FILL' 1">shopping_cart</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-blue-600 leading-none"><?php echo $orderCount; ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Total Orders</p>
           </div>
         </div>
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Avg Order</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-2xl font-black text-primary">$<?php echo number_format($avgOrder, 2); ?></span>
-            <span class="text-xs font-bold text-amber-700">conversion <?php echo number_format($conversionRate, 1); ?>%</span>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-amber-600 text-2xl" style="font-variation-settings:'FILL' 1">average</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-amber-600 leading-none">$<?php echo number_format($avgOrder, 0); ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Avg Order</p>
           </div>
         </div>
-        <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-          <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Product Risk</p>
-          <div class="flex items-baseline gap-2">
-            <span class="text-2xl font-black text-primary"><?php echo $lowStockCount; ?></span>
-            <span class="text-xs font-bold text-error">low stock</span>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-red-600 text-2xl" style="font-variation-settings:'FILL' 1">warning</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-red-600 leading-none"><?php echo $lowStockCount; ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Low Stock</p>
           </div>
         </div>
       </div>
 
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <section class="xl:col-span-2 bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40">
-          <div class="flex items-center justify-between mb-5">
-            <h3 class="text-lg font-black text-primary">Revenue Trend (Generated)</h3>
-            <span class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">6 Months</span>
+        <section class="xl:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
+            <h3 class="text-lg font-black text-primary flex items-center gap-2">
+              <span class="material-symbols-outlined text-emerald-600" style="font-variation-settings:'FILL' 1">trending_up</span>
+              Revenue Trend
+            </h3>
+            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-2.5 py-1 rounded-full">6 Months</span>
           </div>
           <div class="h-64 flex items-end gap-3">
             <?php foreach ($monthlyTrend as $i => $value): ?>
               <?php $h = max(8, (int) round(($value / $maxTrend) * 100)); ?>
-              <div class="flex-1 flex flex-col items-center gap-2">
-                <div class="w-full rounded-t-lg bg-gradient-to-t from-primary/25 to-primary h-[<?php echo $h; ?>%]"></div>
+              <div class="flex-1 flex flex-col items-center gap-2 group">
+                <div class="w-full rounded-t-lg bg-gradient-to-t from-teal-600/30 to-teal-600 h-[<?php echo $h; ?>%] hover:from-teal-600/50 hover:to-teal-700 transition-all" title="$<?php echo number_format($value); ?>"></div>
                 <span class="text-[10px] font-bold text-slate-500 uppercase"><?php echo $months[$i]; ?></span>
               </div>
             <?php endforeach; ?>
           </div>
         </section>
 
-        <section class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40">
-          <h3 class="text-lg font-black text-primary mb-5">Category Mix</h3>
+        <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <h3 class="text-lg font-black text-primary flex items-center gap-2 mb-5 pb-4 border-b border-slate-100">
+            <span class="material-symbols-outlined text-amber-600" style="font-variation-settings:'FILL' 1">category</span>
+            Category Mix
+          </h3>
           <div class="space-y-4">
             <?php foreach ($topCategories as $cat => $count): ?>
               <?php $width = $productCount > 0 ? (int) round(($count / $productCount) * 100) : 0; ?>
               <div>
-                <div class="flex justify-between text-xs font-bold mb-1">
-                  <span class="text-primary"><?php echo htmlspecialchars(ucwords(str_replace('-', ' ', $cat))); ?></span>
-                  <span class="text-on-surface-variant"><?php echo $count; ?></span>
+                <div class="flex justify-between text-xs font-bold mb-2">
+                  <span class="text-slate-700"><?php echo htmlspecialchars(ucwords(str_replace('-', ' ', $cat))); ?></span>
+                  <span class="bg-amber-50 text-amber-700 px-2 py-0.5 rounded-full text-[10px]"><?php echo $count; ?> items</span>
                 </div>
-                <div class="h-2 rounded-full bg-surface-container-high overflow-hidden">
-                  <div class="h-full rounded-full bg-secondary" style="width: <?php echo $width; ?>%"></div>
+                <div class="h-3 rounded-full bg-slate-100 overflow-hidden border border-slate-200">
+                  <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-600" style="width: <?php echo $width; ?>%"></div>
                 </div>
               </div>
             <?php endforeach; ?>
@@ -248,29 +269,68 @@ $maxTrend = max($monthlyTrend ?: [1]);
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <section class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40">
-          <h4 class="text-sm font-black text-primary uppercase tracking-widest mb-4">Payments</h4>
-          <div class="space-y-3 text-sm">
-            <div class="flex justify-between"><span class="text-on-surface-variant">Paid</span><span class="font-bold text-primary"><?php echo $paidCount; ?></span></div>
-            <div class="flex justify-between"><span class="text-on-surface-variant">Pending</span><span class="font-bold text-primary"><?php echo $pendingCount; ?></span></div>
+        <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
+            <h4 class="text-sm font-black text-primary uppercase tracking-widest flex items-center gap-2">
+              <span class="material-symbols-outlined text-purple-600 text-base" style="font-variation-settings:'FILL' 1">payments</span>
+              Payments
+            </h4>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between p-3 rounded-lg bg-purple-50 border border-purple-100">
+              <span class="text-sm font-bold text-slate-700">Paid</span>
+              <span class="text-2xl font-black text-purple-600"><?php echo $paidCount; ?></span>
+            </div>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-orange-50 border border-orange-100">
+              <span class="text-sm font-bold text-slate-700">Pending</span>
+              <span class="text-2xl font-black text-orange-600"><?php echo $pendingCount; ?></span>
+            </div>
           </div>
         </section>
 
-        <section class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40">
-          <h4 class="text-sm font-black text-primary uppercase tracking-widest mb-4">Users</h4>
+        <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
+            <h4 class="text-sm font-black text-primary uppercase tracking-widest flex items-center gap-2">
+              <span class="material-symbols-outlined text-blue-600 text-base" style="font-variation-settings:'FILL' 1">people</span>
+              Users
+            </h4>
+          </div>
           <div class="space-y-3 text-sm">
-            <div class="flex justify-between"><span class="text-on-surface-variant">Total Users</span><span class="font-bold text-primary"><?php echo $userCount; ?></span></div>
-            <div class="flex justify-between"><span class="text-on-surface-variant">Customers</span><span class="font-bold text-primary"><?php echo $customerCount; ?></span></div>
-            <div class="flex justify-between"><span class="text-on-surface-variant">Admins</span><span class="font-bold text-primary"><?php echo $adminCount; ?></span></div>
+            <div class="flex justify-between p-2 rounded hover:bg-slate-50 transition-colors">
+              <span class="text-slate-600 font-medium">Total</span>
+              <span class="font-black text-blue-600 text-lg"><?php echo $userCount; ?></span>
+            </div>
+            <div class="flex justify-between p-2 rounded hover:bg-slate-50 transition-colors">
+              <span class="text-slate-600 font-medium">Customers</span>
+              <span class="font-black text-cyan-600 text-lg"><?php echo $customerCount; ?></span>
+            </div>
+            <div class="flex justify-between p-2 rounded hover:bg-slate-50 transition-colors">
+              <span class="text-slate-600 font-medium">Admins</span>
+              <span class="font-black text-rose-600 text-lg"><?php echo $adminCount; ?></span>
+            </div>
           </div>
         </section>
 
-        <section class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm shadow-slate-200/40">
-          <h4 class="text-sm font-black text-primary uppercase tracking-widest mb-4">Operations</h4>
+        <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5 pb-4 border-b border-slate-100">
+            <h4 class="text-sm font-black text-primary uppercase tracking-widest flex items-center gap-2">
+              <span class="material-symbols-outlined text-green-600 text-base" style="font-variation-settings:'FILL' 1">warehouse</span>
+              Operations
+            </h4>
+          </div>
           <div class="space-y-3 text-sm">
-            <div class="flex justify-between"><span class="text-on-surface-variant">Products</span><span class="font-bold text-primary"><?php echo $productCount; ?></span></div>
-            <div class="flex justify-between"><span class="text-on-surface-variant">Low Stock</span><span class="font-bold text-error"><?php echo $lowStockCount; ?></span></div>
-            <div class="flex justify-between"><span class="text-on-surface-variant">Processing Orders</span><span class="font-bold text-primary"><?php echo $processingCount; ?></span></div>
+            <div class="flex justify-between p-2 rounded hover:bg-slate-50 transition-colors">
+              <span class="text-slate-600 font-medium">Products</span>
+              <span class="font-black text-green-600 text-lg"><?php echo $productCount; ?></span>
+            </div>
+            <div class="flex justify-between p-2 rounded hover:bg-slate-50 transition-colors">
+              <span class="text-slate-600 font-medium">Low Stock</span>
+              <span class="font-black text-red-600 text-lg"><?php echo $lowStockCount; ?></span>
+            </div>
+            <div class="flex justify-between p-2 rounded hover:bg-slate-50 transition-colors">
+              <span class="text-slate-600 font-medium">Processing</span>
+              <span class="font-black text-yellow-600 text-lg"><?php echo $processingCount; ?></span>
+            </div>
           </div>
         </section>
       </div>

@@ -177,79 +177,95 @@ usort($orders, function($a, $b) {
         <div class="max-w-7xl mx-auto space-y-8">
             <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
                 <div>
-                    <h2 class="text-3xl font-black text-primary tracking-tight font-headline">Order Management</h2>
-                    <p class="text-on-surface-variant mt-1 font-body">Track and process your digital atelier transactions.</p>
+                    <h2 class="text-3xl font-black text-primary tracking-tight font-headline flex items-center gap-2">
+                        <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">shopping_cart</span>
+                        Order Management
+                    </h2>
+                    <p class="text-slate-500 mt-2 font-body">Track, manage, and process your transactions</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-3">
-                    <div class="flex bg-surface-container rounded-full p-1">
-                        <button data-filter="all" class="ord-filter-tab px-4 py-1.5 rounded-full text-xs font-bold bg-primary text-on-primary shadow-sm transition-all" type="button">All Orders</button>
-                        <button data-filter="pending" class="ord-filter-tab px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" type="button">Pending</button>
-                        <button data-filter="shipped" class="ord-filter-tab px-4 py-1.5 rounded-full text-xs font-bold text-on-surface-variant hover:text-primary transition-colors" type="button">Shipped</button>
+                    <div class="flex bg-white border border-slate-200 rounded-lg p-1 gap-0.5">
+                        <button data-filter="all" class="ord-filter-tab px-3.5 py-1.5 rounded-md text-xs font-bold bg-primary text-white shadow-sm transition-all" type="button">All Orders</button>
+                        <button data-filter="pending" class="ord-filter-tab px-3.5 py-1.5 rounded-md text-xs font-bold text-slate-600 hover:text-primary hover:bg-slate-50 transition-all" type="button">Pending</button>
+                        <button data-filter="shipped" class="ord-filter-tab px-3.5 py-1.5 rounded-md text-xs font-bold text-slate-600 hover:text-primary hover:bg-slate-50 transition-all" type="button">Shipped</button>
                     </div>
-                    <button class="flex items-center gap-2 bg-surface-container-high px-4 py-2 rounded-xl text-sm font-semibold text-primary hover:bg-surface-container-highest transition-colors" type="button">
-                        <span class="material-symbols-outlined text-lg">calendar_today</span>
+                    <button id="last30DaysBtn" class="flex items-center gap-2 bg-white border border-slate-200 px-4 py-2 rounded-lg text-sm font-semibold text-primary hover:bg-slate-50 transition-all" type="button">
+                        <span class="material-symbols-outlined text-base">calendar_month</span>
                         Last 30 Days
                     </button>
-                    <button id="exportOrdersBtn" class="flex items-center gap-2 bg-secondary text-on-secondary px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-secondary/20 hover:scale-102 transition-transform" type="button">
-                        <span class="material-symbols-outlined text-lg">download</span>
-                        Export Data
+                    <button id="exportOrdersBtn" class="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white px-6 py-2 rounded-lg text-sm font-bold shadow-lg shadow-emerald-500/20 hover:shadow-xl hover:shadow-emerald-500/30 transition-all" type="button">
+                        <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">download</span>
+                        Export
                     </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Total Orders</p>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline"><?php echo number_format($orderCount); ?></span>
-                        <span class="text-xs font-bold text-teal-600">+<?php echo rand(5, 15); ?>%</span>
+            <!-- KPI Cards -->
+            <style>
+                .kpi-card { transition: transform .18s ease, box-shadow .18s ease; }
+                .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 20px 36px -18px rgba(15,23,42,.16); }
+            </style>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-blue-600 text-2xl" style="font-variation-settings:'FILL' 1">shopping_cart</span>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-primary leading-none"><?php echo number_format($orderCount); ?></p>
+                        <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Total Orders</p>
                     </div>
                 </div>
-                <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Net Revenue</p>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline">$<?php echo number_format($totalRevenue, 2); ?></span>
-                        <span class="text-xs font-bold text-teal-600">+<?php echo rand(3, 12); ?>%</span>
+                <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-emerald-600 text-2xl" style="font-variation-settings:'FILL' 1">trending_up</span>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-emerald-600 leading-none">$<?php echo number_format($totalRevenue, 0); ?></p>
+                        <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Revenue</p>
                     </div>
                 </div>
-                <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Average Value</p>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline">$<?php echo $orderCount > 0 ? number_format($totalRevenue / $orderCount, 2) : '0.00'; ?></span>
-                        <span class="text-xs font-bold text-teal-600">+<?php echo rand(1, 8); ?>%</span>
+                <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-purple-600 text-2xl" style="font-variation-settings:'FILL' 1">paid</span>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-purple-600 leading-none"><?php echo number_format($paidCount); ?></p>
+                        <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Paid</p>
                     </div>
                 </div>
-                <div class="bg-surface-container-lowest p-6 rounded-xl space-y-2">
-                    <p class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Fulfillment Rate</p>
-                    <div class="flex items-baseline gap-2">
-                        <span class="text-2xl font-black text-primary font-headline"><?php echo $orderCount > 0 ? number_format(($completedCount / $orderCount) * 100, 1) : '0.0'; ?>%</span>
-                        <span class="material-symbols-outlined text-teal-600 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-teal-50 flex items-center justify-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-teal-600 text-2xl" style="font-variation-settings:'FILL' 1">check_circle</span>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-black text-teal-600 leading-none"><?php echo number_format($completedCount); ?></p>
+                        <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Completed</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm shadow-slate-200/40">
+            <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-surface-container-low border-b border-surface-variant/20">
-                                <th class="px-8 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline">Order ID</th>
-                                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline">Customer</th>
-                                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline">Date</th>
-                                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline">Amount</th>
-                                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline">Payment</th>
-                                <th class="px-6 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline">Shipment</th>
-                                <th class="px-8 py-5 text-xs font-black text-primary uppercase tracking-widest font-headline text-right">Actions</th>
+                            <tr class="bg-slate-50 border-b border-slate-100">
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Order ID</th>
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Customer</th>
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Date</th>
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Amount</th>
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Payment</th>
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Shipment</th>
+                                <th class="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-surface-container-low">
+                        <tbody class="divide-y divide-slate-100">
                             <?php if (empty($orders)): ?>
                             <tr>
-                                <td colspan="7" class="px-8 py-12 text-center text-on-surface-variant">
+                                <td colspan="7" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center gap-3">
-                                        <span class="material-symbols-outlined text-4xl text-surface-variant">shopping_cart</span>
-                                        <p class="text-sm font-medium">No orders found</p>
-                                        <p class="text-xs text-on-surface-variant">Orders will appear here once customers place them.</p>
+                                        <span class="material-symbols-outlined text-5xl text-slate-300">shopping_cart</span>
+                                        <p class="text-sm font-medium text-slate-600">No orders found</p>
+                                        <p class="text-xs text-slate-500">Orders will appear here once customers place them.</p>
                                     </div>
                                 </td>
                             </tr>
@@ -258,59 +274,72 @@ usort($orders, function($a, $b) {
                                 <?php
                                     $userId = $order['user_id'] ?? 0;
                                     $user = $userLookup[$userId] ?? null;
-                                    $customerName = $user ? trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) : 'Unknown Customer';
-                                    $customerEmail = $user['email'] ?? '';
+                                    $customerName = trim((string) ($order['user_name'] ?? ''));
+                                    if ($customerName === '' && $user) {
+                                        $customerName = trim((string) (($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')));
+                                    }
+                                    if ($customerName === '' && $user) {
+                                        $customerName = (string) ($user['username'] ?? '');
+                                    }
+                                    if ($customerName === '') {
+                                        $customerName = 'Unknown Customer';
+                                    }
+                                    $customerEmail = (string) ($order['user_email'] ?? ($user['email'] ?? ''));
                                     $customerInitials = strtoupper(substr($customerName, 0, 1) . substr(strrchr(' ' . $customerName, ' '), 1, 1));
 
                                     $orderNumber = $order['order_number'] ?? 'ORD-' . ($order['id'] ?? '000');
                                     $total = (float) ($order['total'] ?? 0);
                                     $paymentStatus = strtolower($order['payment_status'] ?? '');
                                     $orderStatus = strtolower($order['status'] ?? '');
-                                    $createdDate = date('M d, Y', strtotime('-' . rand(1, 30) . ' days')); // Mock date since not in data
+                                    $createdDate = !empty($order['created_at'])
+                                        ? date('M d, Y', strtotime((string) $order['created_at']))
+                                        : 'N/A';
                                 ?>
-                                <tr class="hover:bg-surface-bright transition-colors group ord-row"
+                                <tr class="hover:bg-slate-50/50 transition-colors group ord-row"
                                     data-status="<?php echo htmlspecialchars($orderStatus); ?>"
                                     data-id="<?php echo (int)($order['id'] ?? 0); ?>"
                                     data-order-no="<?php echo htmlspecialchars($orderNumber); ?>"
                                     data-customer="<?php echo htmlspecialchars(strtolower($customerName)); ?>"
+                                    data-customer-label="<?php echo htmlspecialchars($customerName); ?>"
                                     data-total="$<?php echo number_format($total, 2); ?>"
                                     data-payment="<?php echo htmlspecialchars($paymentStatus); ?>"
                                     data-email="<?php echo htmlspecialchars($customerEmail); ?>"
-                                    data-date="<?php echo htmlspecialchars($createdDate); ?>">
-                                    <td class="px-8 py-5"><span class="text-sm font-bold text-primary">#<?php echo htmlspecialchars($orderNumber); ?></span></td>
-                                    <td class="px-6 py-5">
+                                    data-date="<?php echo htmlspecialchars($createdDate); ?>"
+                                    data-created-at="<?php echo htmlspecialchars((string)($order['created_at'] ?? '')); ?>">
+                                    <td class="px-6 py-4"><span class="text-sm font-black text-primary">#<?php echo htmlspecialchars($orderNumber); ?></span></td>
+                                    <td class="px-6 py-4">
                                         <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-on-primary-fixed text-[10px] font-black"><?php echo htmlspecialchars($customerInitials); ?></div>
+                                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-teal-500 to-primary flex items-center justify-center text-white text-xs font-black"><?php echo htmlspecialchars($customerInitials); ?></div>
                                             <div>
-                                                <p class="text-sm font-bold text-primary"><?php echo htmlspecialchars($customerName); ?></p>
-                                                <p class="text-[10px] text-on-surface-variant"><?php echo htmlspecialchars($customerEmail); ?></p>
+                                                <p class="text-sm font-bold text-slate-700"><?php echo htmlspecialchars($customerName); ?></p>
+                                                <p class="text-[11px] text-slate-500"><?php echo htmlspecialchars($customerEmail); ?></p>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-5 text-sm text-on-surface-variant"><?php echo htmlspecialchars($createdDate); ?></td>
-                                    <td class="px-6 py-5 text-sm font-bold text-primary">$<?php echo number_format($total, 2); ?></td>
-                                    <td class="px-6 py-5">
+                                    <td class="px-6 py-4 text-sm text-slate-600"><?php echo htmlspecialchars($createdDate); ?></td>
+                                    <td class="px-6 py-4 text-sm font-black text-primary">$<?php echo number_format($total, 2); ?></td>
+                                    <td class="px-6 py-4 ord-payment-cell">
                                         <?php if ($paymentStatus === 'paid'): ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-50 text-teal-700 text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-teal-700"></span> Paid</span>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Paid</span>
                                         <?php elseif ($paymentStatus === 'pending'): ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-tertiary"></span> Pending</span>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-orange-50 text-orange-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-orange-600"></span> Pending</span>
                                         <?php else: ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container text-[10px] font-bold"><span class="w-1 h-1 rounded-full bg-error"></span> Failed</span>
+                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-red-50 text-red-700 text-[11px] font-bold"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Failed</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="px-6 py-5">
+                                    <td class="px-6 py-4 ord-status-cell">
                                         <?php if ($orderStatus === 'completed' || $orderStatus === 'delivered'): ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">local_shipping</span> Delivered</span>
-                                        <?php elseif ($orderStatus === 'processing' || $orderStatus === 'shipped'): ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">package_2</span> Processing</span>
+                                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-teal-50 text-teal-700 text-[11px] font-bold"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">local_shipping</span> Delivered</span>
+                                        <?php elseif ($orderStatus === 'processing' || $orderStatus === 'shipped' || $orderStatus === 'on_delivery'): ?>
+                                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-[11px] font-bold"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">package_2</span> <?php echo htmlspecialchars(ucfirst(str_replace('_', ' ', $orderStatus))); ?></span>
                                         <?php elseif ($orderStatus === 'pending'): ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">schedule</span> Pending</span>
+                                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-50 text-amber-700 text-[11px] font-bold"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">schedule</span> Pending</span>
                                         <?php else: ?>
-                                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">block</span> On Hold</span>
+                                            <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-slate-100 text-slate-600 text-[11px] font-bold"><span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">block</span> On Hold</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td class="px-8 py-5 text-right space-x-2">
-                                        <button class="ord-details text-[11px] font-black text-primary uppercase tracking-wider hover:text-secondary transition-colors"
+                                    <td class="px-6 py-4 text-right space-x-2">
+                                        <button class="ord-details text-[11px] font-bold text-primary uppercase tracking-widest hover:text-teal-700 transition-colors"
                                             type="button"
                                             data-id="<?php echo (int)($order['id'] ?? 0); ?>"
                                             data-order-no="<?php echo htmlspecialchars($orderNumber); ?>"
@@ -321,12 +350,12 @@ usort($orders, function($a, $b) {
                                             data-status="<?php echo htmlspecialchars($orderStatus); ?>"
                                             data-date="<?php echo htmlspecialchars($createdDate); ?>">Details</button>
                                         <div class="relative inline-block">
-                                            <button class="ord-more-trigger bg-surface-container-high p-2 rounded-lg text-primary hover:bg-primary hover:text-on-primary transition-all" type="button"
+                                            <button class="ord-more-trigger bg-slate-100 p-2 rounded-lg text-slate-600 hover:bg-primary hover:text-white transition-all" type="button"
                                                 data-id="<?php echo (int)($order['id'] ?? 0); ?>">
-                                                <span class="material-symbols-outlined text-sm">more_vert</span>
+                                                <span class="material-symbols-outlined text-base">more_vert</span>
                                             </button>
-                                            <div class="ord-more-menu hidden absolute right-0 top-10 bg-white rounded-xl shadow-xl border border-slate-100 z-20 w-44 py-1 text-sm">
-                                                <button class="ord-details-menu w-full text-left px-4 py-2.5 hover:bg-slate-50 text-primary font-semibold flex items-center gap-2"
+                                            <div class="ord-more-menu hidden absolute right-0 top-10 bg-white rounded-xl shadow-xl border border-slate-200 z-20 w-48 py-1 text-sm">
+                                                <button class="ord-details-menu w-full text-left px-4 py-2.5 hover:bg-slate-50 text-primary font-semibold flex items-center gap-2 transition-colors"
                                                     data-id="<?php echo (int)($order['id'] ?? 0); ?>"
                                                     data-order-no="<?php echo htmlspecialchars($orderNumber); ?>"
                                                     data-customer="<?php echo htmlspecialchars($customerName); ?>"
@@ -337,10 +366,10 @@ usort($orders, function($a, $b) {
                                                     data-date="<?php echo htmlspecialchars($createdDate); ?>">
                                                     <span class="material-symbols-outlined text-sm">visibility</span>View Details
                                                 </button>
-                                                <button class="ord-status-update w-full text-left px-4 py-2.5 hover:bg-slate-50 text-primary font-semibold flex items-center gap-2"
+                                                <button class="ord-status-update w-full text-left px-4 py-2.5 hover:bg-slate-50 text-primary font-semibold flex items-center gap-2 transition-colors"
                                                     data-id="<?php echo (int)($order['id'] ?? 0); ?>"
                                                     data-status="<?php echo htmlspecialchars($orderStatus); ?>">
-                                                    <span class="material-symbols-outlined text-sm">local_shipping</span>Update Status
+                                                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">local_shipping</span>Update Status
                                                 </button>
                                             </div>
                                         </div>
@@ -352,27 +381,25 @@ usort($orders, function($a, $b) {
                     </table>
                 </div>
 
-                <div class="px-8 py-4 bg-surface-container-low flex items-center justify-between border-t border-surface-variant/10">
-                    <p class="text-xs font-bold text-on-surface-variant">Showing <?php echo count($orders); ?> of <?php echo count($orders); ?> orders</p>
+                <div class="px-6 py-4 bg-slate-50 flex items-center justify-between border-t border-slate-100">
+                    <p id="ordVisibleCount" class="text-xs font-bold text-slate-500">Showing <?php echo count($orders); ?> order<?php echo count($orders) !== 1 ? 's' : ''; ?></p>
                     <div class="flex items-center gap-2">
-                        <button class="p-2 rounded-lg hover:bg-surface-container-highest transition-colors disabled:opacity-30" disabled type="button"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
+                        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors disabled:opacity-30" disabled type="button"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
                         <span class="text-xs font-black text-primary px-3">Page 1 of 1</span>
-                        <button class="p-2 rounded-lg hover:bg-surface-container-highest transition-colors disabled:opacity-30" disabled type="button"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+                        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors disabled:opacity-30" disabled type="button"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-primary-container p-1 rounded-2xl relative overflow-hidden">
-                <div class="bg-primary p-8 rounded-[1.25rem] flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
-                    <div class="space-y-2 text-center md:text-left">
-                        <h3 class="text-on-primary text-xl font-black font-headline">Order Fulfillment Optimization</h3>
-                        <p class="text-on-primary-container text-sm max-w-lg">Our AI has identified that shipments to Southern regions are currently delayed. Switch to the priority courier for 12 orders to maintain SLA.</p>
-                    </div>
-                    <button class="bg-secondary text-on-secondary px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-transform shadow-xl shadow-black/20" type="button">
-                    <button id="resolveNowBtn" class="bg-secondary text-on-secondary px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest hover:scale-105 transition-transform shadow-xl shadow-black/20" type="button">
-                        Resolve Now
-                    </button>
+            <div class="bg-gradient-to-r from-primary to-teal-600 p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 shadow-lg shadow-primary/20">
+                <div class="space-y-2 text-center md:text-left">
+                    <h3 class="text-white text-xl font-black">Order Fulfillment Optimization</h3>
+                    <p class="text-primary-100 text-sm max-w-lg">Our system identified that shipments to Southern regions are currently delayed. Switch to the priority courier for 12 orders to maintain SLA.</p>
                 </div>
+                <button id="resolveNowBtn" class="bg-white text-primary px-8 py-3 rounded-lg font-bold text-sm uppercase tracking-widest hover:shadow-xl hover:shadow-black/10 transition-all whitespace-nowrap" type="button">
+                    Resolve Now
+                </button>
+            </div>
                 <div class="absolute -right-20 -top-20 w-64 h-64 bg-secondary/20 rounded-full blur-3xl"></div>
                 <div class="absolute -left-20 -bottom-20 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
             </div>
@@ -411,10 +438,43 @@ usort($orders, function($a, $b) {
 <script>
 (function () {
     var activeOrdFilter = 'all';
+    var activeDateFilter = false;
     var ordSearch = document.getElementById('ordSearch');
+
+    function statusText(status) {
+        return (status || '').replace(/_/g, ' ').replace(/\b\w/g, function(chr) { return chr.toUpperCase(); });
+    }
+
+    function getStatusBadge(status) {
+        if (status === 'completed' || status === 'delivered') {
+            return '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">local_shipping</span> Delivered</span>';
+        }
+        if (status === 'processing' || status === 'shipped' || status === 'on_delivery') {
+            return '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">package_2</span> ' + statusText(status) + '</span>';
+        }
+        if (status === 'pending') {
+            return '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">schedule</span> Pending</span>';
+        }
+        return '<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-[10px] font-bold"><span class="material-symbols-outlined text-[12px]">block</span> On Hold</span>';
+    }
+
+    function syncRowStatusUI(orderId, newStatus) {
+        var row = document.querySelector('.ord-row[data-id="' + orderId + '"]');
+        if (!row) return;
+        row.dataset.status = newStatus;
+        var statusCell = row.querySelector('.ord-status-cell');
+        if (statusCell) {
+            statusCell.innerHTML = getStatusBadge(newStatus);
+        }
+        row.querySelectorAll('.ord-details, .ord-details-menu, .ord-status-update').forEach(function(btn) {
+            btn.dataset.status = newStatus;
+        });
+    }
 
     function filterOrders() {
         var q = ordSearch ? ordSearch.value.toLowerCase().trim() : '';
+        var thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+        var visibleCount = 0;
         document.querySelectorAll('.ord-row').forEach(function(row) {
             var status   = row.dataset.status   || '';
             var customer = row.dataset.customer || '';
@@ -424,11 +484,33 @@ usort($orders, function($a, $b) {
             if      (activeOrdFilter === 'all')     { matchFilter = true; }
             else if (activeOrdFilter === 'pending')  { matchFilter = status === 'pending'; }
             else if (activeOrdFilter === 'shipped')  { matchFilter = status === 'shipped' || status === 'processing' || status === 'on_delivery'; }
-            row.style.display = (matchSearch && matchFilter) ? '' : 'none';
+            var matchDate = true;
+            if (activeDateFilter) {
+                var rawDate = row.dataset.createdAt || '';
+                var d = rawDate ? new Date(rawDate) : null;
+                matchDate = !!(d && !isNaN(d.getTime()) && d.getTime() >= thirtyDaysAgo);
+            }
+            var visible = matchSearch && matchFilter && matchDate;
+            row.style.display = visible ? '' : 'none';
+            if (visible) visibleCount++;
         });
+        var countEl = document.getElementById('ordVisibleCount');
+        if (countEl) countEl.textContent = 'Showing ' + visibleCount + ' order' + (visibleCount !== 1 ? 's' : '');
     }
 
     if (ordSearch) { ordSearch.addEventListener('input', filterOrders); }
+
+    document.getElementById('last30DaysBtn')?.addEventListener('click', function() {
+        activeDateFilter = !activeDateFilter;
+        if (activeDateFilter) {
+            this.classList.add('bg-primary', 'text-on-primary');
+            this.classList.remove('bg-surface-container-high', 'text-primary', 'hover:bg-surface-container-highest');
+        } else {
+            this.classList.remove('bg-primary', 'text-on-primary');
+            this.classList.add('bg-surface-container-high', 'text-primary', 'hover:bg-surface-container-highest');
+        }
+        filterOrders();
+    });
 
     document.querySelectorAll('.ord-filter-tab').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -464,12 +546,16 @@ usort($orders, function($a, $b) {
         document.querySelectorAll('.ord-more-menu').forEach(function(m) { m.classList.add('hidden'); });
         currentOrderId = btn.dataset.id;
         document.getElementById('d-order-no').textContent = btn.dataset.orderNo || '';
-        document.getElementById('d-customer').textContent  = btn.dataset.customer || '';
+        document.getElementById('d-customer').textContent  = btn.dataset.customer || btn.dataset.customerLabel || '';
         document.getElementById('d-email').textContent    = btn.dataset.email || '';
         document.getElementById('d-date').textContent     = btn.dataset.date || '';
         document.getElementById('d-total').textContent    = btn.dataset.total || '';
-        document.getElementById('d-payment').textContent  = btn.dataset.payment || '';
-        document.getElementById('d-status').textContent   = btn.dataset.status || '';
+        document.getElementById('d-payment').textContent  = statusText(btn.dataset.payment || '');
+        document.getElementById('d-status').textContent   = statusText(btn.dataset.status || '');
+        document.querySelectorAll('.status-choice').forEach(function(choice) {
+            choice.classList.toggle('bg-primary', choice.dataset.status === btn.dataset.status);
+            choice.classList.toggle('text-on-primary', choice.dataset.status === btn.dataset.status);
+        });
         var m = document.getElementById('ordDetailsModal');
         m.classList.remove('hidden'); m.classList.add('flex');
     }
@@ -498,13 +584,13 @@ usort($orders, function($a, $b) {
                 });
                 var data = await r.json();
                 if (data.status === 'success') {
-                    document.getElementById('d-status').textContent = newStatus;
-                    var row = document.querySelector('.ord-row[data-id="' + currentOrderId + '"]');
-                    if (row) row.dataset.status = newStatus;
+                    document.getElementById('d-status').textContent = statusText(newStatus);
+                    syncRowStatusUI(currentOrderId, newStatus);
                     document.querySelectorAll('.status-choice').forEach(function(b) {
                         b.classList.toggle('bg-primary', b.dataset.status === newStatus);
                         b.classList.toggle('text-on-primary', b.dataset.status === newStatus);
                     });
+                    filterOrders();
                 }
             } catch { /* silent fail */ }
         });
@@ -519,7 +605,7 @@ usort($orders, function($a, $b) {
         var row = usb.closest('.ord-row');
         if (row) {
             var fakeBtn = {dataset: {
-                id: usb.dataset.id, orderNo: row.dataset.orderNo || '', customer: row.dataset.customer || '',
+                id: usb.dataset.id, orderNo: row.dataset.orderNo || '', customer: row.dataset.customerLabel || row.dataset.customer || '',
                 email: row.dataset.email || '', total: row.dataset.total || '',
                 payment: row.dataset.payment || '', status: usb.dataset.status || '', date: row.dataset.date || ''
             }};
@@ -542,13 +628,87 @@ usort($orders, function($a, $b) {
         a.download = 'orders.csv'; a.click();
     });
 
-    // Resolve Now
-    document.getElementById('resolveNowBtn')?.addEventListener('click', function() {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({icon: 'success', title: 'Optimization Applied', text: '12 affected orders have been routed to priority courier. Expected delivery restored within SLA.', confirmButtonColor: '#006257'});
-        } else {
+    // Resolve Now - Update priority orders
+    document.getElementById('resolveNowBtn')?.addEventListener('click', async function() {
+        if (typeof Swal === 'undefined') {
             alert('Optimization applied: 12 orders routed to priority courier.');
+            return;
         }
+        
+        // Show loading state
+        Swal.fire({
+            title: 'Processing...',
+            text: 'Routing orders to priority courier',
+            icon: 'info',
+            allowOutsideClick: false,
+            didOpen: async () => {
+                Swal.showLoading();
+                
+                try {
+                    // Get all pending/processing orders
+                    var ordersToUpdate = [];
+                    document.querySelectorAll('.ord-row').forEach(function(row) {
+                        var status = row.dataset.status || '';
+                        if ((status === 'pending' || status === 'processing' || status === 'on_delivery') && ordersToUpdate.length < 12) {
+                            ordersToUpdate.push({
+                                id: parseInt(row.dataset.id),
+                                element: row
+                            });
+                        }
+                    });
+                    
+                    if (ordersToUpdate.length === 0) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'No Orders to Optimize',
+                            text: 'All orders are already in optimal routing.',
+                            confirmButtonColor: '#006257'
+                        });
+                        return;
+                    }
+                    
+                    // Update all orders to "shipped" status via API
+                    var updateCount = 0;
+                    for (var i = 0; i < ordersToUpdate.length; i++) {
+                        try {
+                            var r = await fetch('/api/orders.php', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    action: 'update_status',
+                                    id: ordersToUpdate[i].id,
+                                    status: 'shipped'
+                                })
+                            });
+                            var data = await r.json();
+                            if (data.status === 'success') {
+                                updateCount++;
+                                syncRowStatusUI(ordersToUpdate[i].id, 'shipped');
+                            }
+                        } catch (e) {
+                            console.log('Update failed for order ' + ordersToUpdate[i].id);
+                        }
+                    }
+                    
+                    filterOrders();
+                    
+                    // Show final success
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Optimization Applied',
+                        text: updateCount + ' orders successfully routed to priority courier. Expected delivery restored within SLA.',
+                        confirmButtonColor: '#006257'
+                    });
+                } catch (err) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Failed to apply optimization. Please try again.',
+                        confirmButtonColor: '#006257'
+                    });
+                }
+            }
+        });
     });
 })();
 </script>

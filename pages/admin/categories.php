@@ -192,68 +192,99 @@ if (isset($_GET['deleted'])) {
   </header>
 
   <main class="admin-main admin-content ml-64 pt-24 p-8 min-h-screen">
-    <div class="max-w-6xl mx-auto space-y-6">
+    <div class="max-w-6xl mx-auto space-y-8">
+      <div>
+        <h2 class="text-3xl font-black text-primary tracking-tight flex items-center gap-2">
+          <span class="material-symbols-outlined text-3xl" style="font-variation-settings:'FILL' 1">category</span>
+          Category Manager
+        </h2>
+        <p class="text-slate-500 mt-2">Organize products into categories and manage their properties</p>
+      </div>
+
       <?php if ($flash !== ''): ?>
-      <div class="px-4 py-3 rounded-xl <?php echo $flashType === 'error' ? 'bg-red-50 text-red-700' : 'bg-emerald-50 text-emerald-700'; ?> text-sm font-semibold"><?php echo htmlspecialchars($flash); ?></div>
+      <div class="px-4 py-3 rounded-lg text-sm font-semibold flex items-center gap-3 <?php echo $flashType === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'; ?>">
+        <span class="material-symbols-outlined text-lg" style="font-variation-settings:'FILL' 1"><?php echo $flashType === 'error' ? 'error' : 'check_circle'; ?></span>
+        <?php echo htmlspecialchars($flash); ?>
+      </div>
       <?php endif; ?>
 
-      <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
-        <h3 class="font-black text-primary text-lg mb-4">Add Category</h3>
-        <form method="POST" class="grid grid-cols-1 md:grid-cols-5 gap-3">
-          <input type="hidden" name="action" value="add" />
-          <input class="rounded-lg border-slate-200 text-sm" type="text" name="name" placeholder="Category name" required />
-          <input class="rounded-lg border-slate-200 text-sm" type="text" name="slug" placeholder="Slug (optional)" />
-          <input class="rounded-lg border-slate-200 text-sm" type="text" name="description" placeholder="Description" />
-          <input class="rounded-lg border-slate-200 text-sm" type="number" name="sort_order" value="0" />
-          <div class="md:col-span-5 flex items-center justify-between gap-3">
-            <select name="status" class="rounded-lg border-slate-200 text-sm"><option value="active">Active</option><option value="inactive">Inactive</option></select>
-            <button class="px-5 py-2.5 bg-primary text-white rounded-xl font-bold text-sm" type="submit">Create Category</button>
+      <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <div class="flex items-center gap-3 mb-6 pb-5 border-b border-slate-100">
+          <div class="w-11 h-11 rounded-lg bg-amber-50 flex items-center justify-center">
+            <span class="material-symbols-outlined text-amber-600 text-2xl" style="font-variation-settings:'FILL' 1">add_circle</span>
           </div>
+          <div>
+            <h3 class="font-black text-primary text-lg">Add New Category</h3>
+            <p class="text-xs text-slate-500 mt-0.5">Create a new category for organizing products</p>
+          </div>
+        </div>
+        <form method="POST" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3">
+          <input type="hidden" name="action" value="add" />
+          <input class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" type="text" name="name" placeholder="Category name" required />
+          <input class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" type="text" name="slug" placeholder="Slug (auto-generated)" />
+          <input class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" type="text" name="description" placeholder="Description (optional)" />
+          <input class="rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" type="number" name="sort_order" value="0" placeholder="Sort order" />
+          <button class="px-6 py-2.5 bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-lg font-bold text-sm shadow-lg shadow-amber-500/20 hover:shadow-xl hover:shadow-amber-500/30 transition-all duration-200 flex items-center justify-center gap-2" type="submit">
+            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1">add</span>
+            Create
+          </button>
         </form>
       </section>
 
       <section class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-          <h3 class="font-black text-on-surface text-lg">Existing Categories</h3>
-          <span class="text-xs text-slate-500"><?php echo count($categories); ?> total</span>
+        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between">
+          <h3 class="font-black text-primary text-lg flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-600" style="font-variation-settings:'FILL' 1">category</span>
+            Existing Categories
+          </h3>
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 text-amber-700 text-xs font-bold">
+            <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">inventory_2</span>
+            <?php echo count($categories); ?> total
+          </span>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
-            <thead class="bg-slate-50 text-slate-500 uppercase text-xs">
+            <thead class="bg-slate-50 border-b border-slate-100">
               <tr>
-                <th class="p-3 text-left">Name</th>
-                <th class="p-3 text-left">Slug</th>
-                <th class="p-3 text-left">Description</th>
-                <th class="p-3 text-left">Sort</th>
-                <th class="p-3 text-left">Status</th>
-                <th class="p-3 text-right">Actions</th>
+                <th class="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Name</th>
+                <th class="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Slug</th>
+                <th class="px-6 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Description</th>
+                <th class="px-6 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest">Order</th>
+                <th class="px-6 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                <th class="px-6 py-3 text-right text-[11px] font-black text-slate-400 uppercase tracking-widest">Actions</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">
               <?php foreach ($categories as $category): ?>
-              <tr>
-                <td class="p-3">
+              <tr class="hover:bg-slate-50/50 transition-colors">
+                <td class="px-6 py-4">
                   <form method="POST" class="contents">
                     <input type="hidden" name="action" value="update" />
                     <input type="hidden" name="id" value="<?php echo (int) $category['id']; ?>" />
-                    <input class="w-full rounded-lg border-slate-200" type="text" name="name" value="<?php echo htmlspecialchars((string) ($category['name'] ?? '')); ?>" required />
+                    <input class="w-full max-w-xs rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" type="text" name="name" value="<?php echo htmlspecialchars((string) ($category['name'] ?? '')); ?>" required />
                 </td>
-                <td class="p-3"><input class="w-full rounded-lg border-slate-200" type="text" name="slug" value="<?php echo htmlspecialchars((string) ($category['slug'] ?? '')); ?>" /></td>
-                <td class="p-3"><input class="w-full rounded-lg border-slate-200" type="text" name="description" value="<?php echo htmlspecialchars((string) ($category['description'] ?? '')); ?>" /></td>
-                <td class="p-3"><input class="w-20 rounded-lg border-slate-200" type="number" name="sort_order" value="<?php echo (int) ($category['sort_order'] ?? 0); ?>" /></td>
-                <td class="p-3">
-                  <select name="status" class="rounded-lg border-slate-200">
-                    <option value="active" <?php echo (($category['status'] ?? 'active') === 'active') ? 'selected' : ''; ?>>Active</option>
-                    <option value="inactive" <?php echo (($category['status'] ?? 'active') === 'inactive') ? 'selected' : ''; ?>>Inactive</option>
+                <td class="px-6 py-4"><input class="w-full max-w-xs rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-slate-600" type="text" name="slug" value="<?php echo htmlspecialchars((string) ($category['slug'] ?? '')); ?>" /></td>
+                <td class="px-6 py-4"><input class="w-full max-w-md rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-slate-600" type="text" name="description" value="<?php echo htmlspecialchars((string) ($category['description'] ?? '')); ?>" /></td>
+                <td class="px-6 py-4 text-center"><input class="w-16 text-center rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" type="number" name="sort_order" value="<?php echo (int) ($category['sort_order'] ?? 0); ?>" /></td>
+                <td class="px-6 py-4 text-center">
+                  <select name="status" class="rounded-lg border border-slate-200 px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none font-semibold">
+                    <option value="active" <?php echo (($category['status'] ?? 'active') === 'active') ? 'selected' : ''; ?> class="text-emerald-700">✓ Active</option>
+                    <option value="inactive" <?php echo (($category['status'] ?? 'active') === 'inactive') ? 'selected' : ''; ?> class="text-slate-500">○ Inactive</option>
                   </select>
                 </td>
-                <td class="p-3 text-right space-x-2 whitespace-nowrap">
-                  <button class="px-3 py-2 bg-primary text-white rounded-lg text-xs font-bold" type="submit">Save</button>
+                <td class="px-6 py-4 text-right space-x-2 whitespace-nowrap">
+                  <button class="px-4 py-2 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-lg text-xs font-bold shadow-lg shadow-teal-500/10 hover:shadow-xl hover:shadow-teal-500/20 transition-all duration-200 flex items-center gap-1.5 inline-flex" type="submit">
+                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">save</span>
+                    Save
+                  </button>
                   </form>
                   <form method="POST" class="inline" onsubmit="return confirm('Delete this category?');">
                     <input type="hidden" name="action" value="delete" />
                     <input type="hidden" name="id" value="<?php echo (int) $category['id']; ?>" />
-                    <button class="px-3 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-bold" type="submit">Delete</button>
+                    <button class="px-4 py-2 bg-red-50 text-red-600 rounded-lg text-xs font-bold border border-red-100 hover:bg-red-100 hover:text-red-700 transition-colors duration-200 flex items-center gap-1.5" type="submit">
+                      <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1">delete</span>
+                      Delete
+                    </button>
                   </form>
                 </td>
               </tr>
@@ -261,6 +292,12 @@ if (isset($_GET['deleted'])) {
             </tbody>
           </table>
         </div>
+        <?php if (empty($categories)): ?>
+        <div class="px-6 py-12 text-center">
+          <span class="material-symbols-outlined text-5xl text-slate-300 mb-3 inline-block">category</span>
+          <p class="text-slate-500 font-medium">No categories yet. Create one to get started!</p>
+        </div>
+        <?php endif; ?>
       </section>
     </div>
   </main>

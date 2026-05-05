@@ -118,27 +118,47 @@ $categoryCount = $sourceCounts['category'] ?? 0;
         </div>
       </div>
 
-      <!-- Stats -->
+      <!-- KPI Cards -->
+      <style>
+        .kpi-card { transition: transform .18s ease, box-shadow .18s ease; }
+        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 20px 36px -18px rgba(15,23,42,.16); }
+      </style>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
-          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Total</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-primary/10"><span class="material-symbols-outlined text-primary text-lg">people</span></span></div>
-          <p class="text-3xl font-black text-primary"><?= $total ?></p>
-          <p class="text-xs text-on-surface-variant mt-1">All subscribers</p>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-blue-600 text-2xl" style="font-variation-settings:'FILL' 1">people</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-primary leading-none"><?= $total ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Total</p>
+          </div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
-          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Footer</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-blue-50"><span class="material-symbols-outlined text-blue-600 text-lg">web</span></span></div>
-          <p class="text-3xl font-black text-blue-600"><?= $footerCount ?></p>
-          <p class="text-xs text-on-surface-variant mt-1">Via footer form</p>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-cyan-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-cyan-600 text-2xl" style="font-variation-settings:'FILL' 1">web</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-cyan-600 leading-none"><?= $footerCount ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Footer</p>
+          </div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
-          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Blog</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-purple-50"><span class="material-symbols-outlined text-purple-600 text-lg">article</span></span></div>
-          <p class="text-3xl font-black text-purple-600"><?= $blogCount ?></p>
-          <p class="text-xs text-on-surface-variant mt-1">Via blog page</p>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-purple-600 text-2xl" style="font-variation-settings:'FILL' 1">article</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-purple-600 leading-none"><?= $blogCount ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Blog</p>
+          </div>
         </div>
-        <div class="bg-white rounded-2xl p-5 shadow-sm shadow-slate-200/50 border border-slate-100">
-          <div class="flex items-center justify-between mb-3"><span class="text-on-surface-variant text-sm font-semibold">Category</span><span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-amber-50"><span class="material-symbols-outlined text-amber-600 text-lg">category</span></span></div>
-          <p class="text-3xl font-black text-amber-600"><?= $categoryCount ?></p>
-          <p class="text-xs text-on-surface-variant mt-1">Via category page</p>
+        <div class="kpi-card bg-white rounded-2xl p-5 border border-slate-100 shadow-sm flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-amber-600 text-2xl" style="font-variation-settings:'FILL' 1">category</span>
+          </div>
+          <div>
+            <p class="text-2xl font-black text-amber-600 leading-none"><?= $categoryCount ?></p>
+            <p class="text-xs font-semibold text-slate-400 mt-1 uppercase tracking-wide">Category</p>
+          </div>
         </div>
       </div>
 

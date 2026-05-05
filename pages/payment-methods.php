@@ -221,7 +221,7 @@
 </div>
 </div>
 <div id="payment-auth-warning" class="hidden mb-4 rounded-xl border border-error/20 bg-error-container/10 px-4 py-3 text-sm text-on-error-container">
-    Tafadhali ingia kwanza ili kuthibitisha malipo yako.
+    Please sign in first to confirm your payment.
 </div>
 <button id="payment-confirm-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold font-headline mt-4 shadow-lg shadow-secondary/20 active:scale-95 transition-transform" disabled>
                     Confirm Payment
@@ -244,7 +244,7 @@
 </main>
 <!-- BottomNavBar -->
 <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 py-3 bg-white dark:bg-slate-900 pb-safe z-50 md:hidden shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] rounded-t-xl">
-<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-1.5 transition-all duration-300 ease-out active:scale-90" href="#">
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-4 py-1.5 transition-all duration-300 ease-out active:scale-90" href="/home">
 <span class="material-symbols-outlined">home</span>
 <span class="font-['Manrope'] text-[10px] font-semibold uppercase tracking-widest mt-1">Home</span>
 </a>
@@ -304,18 +304,49 @@
 
         const confirmButton = document.getElementById('payment-confirm-button');
         if (confirmButton) {
-            confirmButton.addEventListener('click', function() {
+            confirmButton.addEventListener('click', async function() {
                 const cart = getCart();
                 if (cart.length === 0) {
                     alert('Your cart is empty. Add items before confirming payment.');
                     return;
                 }
+
                 const method = getSelectedPaymentMethod();
-                localStorage.removeItem('cart');
-                alert('Payment confirmed using ' + method + '. Thank you for your order!');
-                window.location.href = '/order-status';
+
+                // Disable button to prevent double-submit
+                confirmButton.disabled = true;
+                confirmButton.textContent = 'Processing payment...';
+
+                try {
+                    const response = await fetch('/api/checkout.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            cart: cart,
+                            payment_method: method
+                        })
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Clear cart from localStorage
+                        localStorage.removeItem('cart');
+                        // Redirect to order status page
+                        window.location.href = '/order-status?placed=' + encodeURIComponent(result.order_number);
+                    } else {
+                        alert('Error: ' + (result.message || 'Please try again.'));
+                        confirmButton.disabled = false;
+                        confirmButton.textContent = 'Confirm Payment';
+                    }
+                } catch (err) {
+                    alert('Network error. Please check your connection and try again.');
+                    confirmButton.disabled = false;
+                    confirmButton.textContent = 'Confirm Payment';
+                }
             });
         }
     });
-</script>
-</body></html>
+ </script>
+</body>
+</html>
