@@ -1,0 +1,6 @@
+RewriteEngine On
+
+# Handle admin directory requests
+RewriteRule ^admin/(.*)$ admin/$1 [L]
+
+# Handle other requests normally

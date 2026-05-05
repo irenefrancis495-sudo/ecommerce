@@ -1,0 +1,10 @@
+RewriteEngine On
+RewriteBase /ecommerce/admin/
+
+# If the requested file or directory exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Otherwise route everything through admin/index.php
+RewriteRule ^(.*)$ index.php [L,QSA]
