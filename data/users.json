@@ -43,5 +43,14 @@
         "first_name": "",
         "last_name": "",
         "role": "customer"
+    },
+    {
+        "id": 6,
+        "username": "irene",
+        "email": "irene@gmail.com",
+        "password": "$2y$12$kNQ4cxGhhU\/5wmH0wCm8PeQcWV15HolMAQYddZQhn3I74QbzjaKsy",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer"
     }
 ]
