@@ -7,7 +7,31 @@ $requestUri = $_SERVER["REQUEST_URI"];
 if (preg_match('#^/uploads/(.+)$#', $requestUri, $matches)) {
     $uploadFile = __DIR__ . '/uploads/' . $matches[1];
     if (file_exists($uploadFile) && is_file($uploadFile)) {
-        $mimeType = mime_content_type($uploadFile);
+        if (function_exists('mime_content_type')) {
+            $mimeType = mime_content_type($uploadFile);
+        } elseif (function_exists('finfo_open')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = $finfo ? finfo_file($finfo, $uploadFile) : 'application/octet-stream';
+            if ($finfo) {
+                finfo_close($finfo);
+            }
+        } else {
+            $extension = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+            $types = [
+                'png' => 'image/png',
+                'jpg' => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'gif' => 'image/gif',
+                'webp' => 'image/webp',
+                'svg' => 'image/svg+xml',
+                'css' => 'text/css',
+                'js' => 'application/javascript',
+                'ico' => 'image/x-icon',
+                'json' => 'application/json',
+                'html' => 'text/html',
+            ];
+            $mimeType = $types[$extension] ?? 'application/octet-stream';
+        }
         header('Content-Type: ' . $mimeType);
         header('Cache-Control: public, max-age=31536000');
         readfile($uploadFile);

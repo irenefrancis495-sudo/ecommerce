@@ -42,7 +42,7 @@ if ($userLogged) {
                 return strcmp((string) ($b['created_at'] ?? ''), (string) ($a['created_at'] ?? ''));
             });
             foreach ($feedbackItems as $feedbackItem) {
-                if (!empty($feedbackItem['reply']) && strtolower((string) ($feedbackItem['status'] ?? '')) === 'replied') {
+                if ((!empty($feedbackItem['reply']) || !empty($feedbackItem['thread'])) && in_array(strtolower((string) ($feedbackItem['status'] ?? '')), ['replied', 'customer_replied'])) {
                     $newFeedbackReplies++;
                 }
             }
@@ -59,7 +59,7 @@ if ($userLogged) {
                 return strcmp((string) ($b['created_at'] ?? ''), (string) ($a['created_at'] ?? ''));
             });
             foreach ($messages as $messageItem) {
-                if (!empty($messageItem['reply']) && strtolower((string) ($messageItem['status'] ?? '')) === 'replied') {
+                if ((!empty($messageItem['reply']) || !empty($messageItem['thread'])) && in_array(strtolower((string) ($messageItem['status'] ?? '')), ['replied', 'customer_replied'])) {
                     $newMessageReplies++;
                 }
             }
@@ -253,23 +253,62 @@ function accountOrderProgressMessage(string $status): string {
                         </div>
                     </div>
                     <div class="p-6 sm:p-8">
-                        <!-- Send feedback form -->
-                        <form id="feedbackForm" class="rounded-2xl border border-slate-200 bg-slate-50 p-6 mb-8 space-y-4">
-                            <div class="flex items-center justify-between gap-4">
-                                <h3 class="text-base font-bold text-slate-900">Send new feedback</h3>
-                                <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white text-primary shadow-sm border border-slate-200">
-                                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">send</span>
-                                </span>
-                            </div>
+                        <!-- Send feedback form — iPhone 16 UI -->
+                        <form id="feedbackForm" class="mb-8">
                             <input id="feedbackName" type="hidden" value="<?= htmlspecialchars($_SESSION['user']['username'] ?? $_SESSION['user']['email'] ?? 'customer', ENT_QUOTES, 'UTF-8') ?>">
                             <input id="feedbackEmail" type="hidden" value="<?= htmlspecialchars($_SESSION['user']['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
-                            <textarea id="feedbackMessage" rows="4" class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10" placeholder="Share your experience, issue, or suggestion..."></textarea>
-                            <div class="flex flex-wrap items-center justify-between gap-3">
-                                <p id="feedbackStatus" class="text-sm text-slate-500">Admin will respond in this section.</p>
-                                <button type="submit" class="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-white hover:bg-primary/90 transition shadow-md shadow-primary/20">
-                                    <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
-                                    Send Feedback
-                                </button>
+
+                            <!-- Dynamic Island pill header -->
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="inline-flex items-center gap-2 bg-slate-900 text-white rounded-full px-5 py-2 text-xs font-semibold shadow-lg">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    New Feedback
+                                    <span class="w-1.5 h-1.5 rounded-full bg-white/30"></span>
+                                </div>
+                            </div>
+
+                            <!-- Main card -->
+                            <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden">
+                                <!-- Textarea area -->
+                                <div class="px-5 pt-5 pb-3">
+                                    <textarea id="feedbackMessage" rows="4"
+                                        class="w-full bg-transparent text-[15px] text-slate-900 placeholder-slate-400 focus:outline-none resize-none leading-relaxed"
+                                        placeholder="Share your experience, issue, or suggestion…"></textarea>
+                                </div>
+
+                                <!-- Image preview -->
+                                <div id="imgPreviewWrap" class="hidden px-5 pb-3">
+                                    <div class="relative inline-block">
+                                        <img id="imgPreviewEl" src="" alt="Preview" class="h-28 w-auto max-w-full rounded-2xl object-cover border border-slate-200 shadow-sm">
+                                        <button type="button" id="removeImgBtn"
+                                            class="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-slate-900 text-white text-xs flex items-center justify-center shadow hover:bg-red-600 transition">
+                                            <span class="material-symbols-outlined" style="font-size:14px">close</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Divider -->
+                                <div class="mx-5 border-t border-slate-100"></div>
+
+                                <!-- Toolbar row -->
+                                <div class="flex items-center justify-between gap-3 px-4 py-3">
+                                    <!-- Attach photo button -->
+                                    <label class="flex items-center gap-2 cursor-pointer rounded-full bg-slate-100 hover:bg-slate-200 transition px-3.5 py-2 text-xs font-semibold text-slate-600" for="feedbackImage">
+                                        <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_photo_alternate</span>
+                                        Photo
+                                    </label>
+                                    <input type="file" id="feedbackImage" name="image" accept="image/jpeg,image/png,image/webp,image/gif" class="sr-only">
+
+                                    <div class="flex items-center gap-3">
+                                        <p id="feedbackStatus" class="text-xs text-slate-400"></p>
+                                        <!-- Send button -->
+                                        <button type="submit"
+                                            class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-bold text-white hover:bg-slate-700 active:scale-95 transition shadow-md shadow-slate-900/20">
+                                            <span class="material-symbols-outlined text-base" style="font-variation-settings:'FILL' 1;">send</span>
+                                            Send
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </form>
 
@@ -282,38 +321,148 @@ function accountOrderProgressMessage(string $status): string {
                                     <p class="text-sm text-slate-400 mt-1">Once you send feedback, admin replies will show here.</p>
                                 </div>
                             <?php else: ?>
-                                <?php foreach ($feedbackItems as $feedback): ?>
+                                    <?php foreach ($feedbackItems as $feedback): ?>
                                     <?php
                                         $feedbackStatus = (string) ($feedback['status'] ?? 'new');
                                         $badgeClass = match ($feedbackStatus) {
-                                            'replied' => 'bg-emerald-100 text-emerald-700',
-                                            'read' => 'bg-blue-100 text-blue-700',
-                                            default => 'bg-amber-100 text-amber-700',
+                                            'replied'          => 'bg-emerald-100 text-emerald-700',
+                                            'customer_replied' => 'bg-blue-100 text-blue-700',
+                                            'read'             => 'bg-sky-100 text-sky-700',
+                                            default            => 'bg-amber-100 text-amber-700',
                                         };
+                                        $thread          = $feedback['thread'] ?? [];
+                                        $hasThread       = !empty($thread);
+                                        $lastEntry       = $hasThread ? end($thread) : null;
+                                        $hasAdminReply   = !empty($feedback['reply']) || ($lastEntry && $lastEntry['from'] === 'admin');
+                                        $lastIsAdmin     = $lastEntry && $lastEntry['from'] === 'admin';
+                                        // Show reply form when the last word is from admin (or legacy reply with no thread)
+                                        $showReplyForm   = ($hasThread ? $lastIsAdmin : !empty($feedback['reply']));
                                     ?>
-                                    <article class="rounded-2xl border border-slate-200 p-5 bg-white">
+                                    <article class="rounded-[2rem] border border-slate-200 p-5 bg-gradient-to-b from-white via-slate-50/70 to-white shadow-sm shadow-slate-200/60">
                                         <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
                                             <div>
                                                 <p class="text-sm font-bold text-slate-900">Sent <?= htmlspecialchars(date('M d, Y H:i', strtotime((string) ($feedback['created_at'] ?? 'now')))) ?></p>
                                                 <p class="text-xs text-slate-400 mt-0.5">ID #<?= (int) ($feedback['id'] ?? 0) ?></p>
                                             </div>
-                                            <span class="rounded-full px-3 py-1 text-xs font-bold <?= $badgeClass ?>"><?= htmlspecialchars(ucfirst(str_replace('_', ' ', $feedbackStatus))) ?></span>
+                                            <span class="rounded-full px-3 py-1 text-xs font-bold <?= $badgeClass ?>"><?= $feedbackStatus === 'customer_replied' ? 'You replied' : htmlspecialchars(ucfirst(str_replace('_', ' ', $feedbackStatus))) ?></span>
                                         </div>
-                                        <div class="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
-                                            <?= nl2br(htmlspecialchars((string) ($feedback['message'] ?? ''), ENT_QUOTES, 'UTF-8')) ?>
-                                        </div>
-                                        <?php if (!empty($feedback['reply'])): ?>
-                                            <div class="mt-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-4">
-                                                <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                                                    <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white">
-                                                        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">support_agent</span>
-                                                        Admin reply
-                                                    </span>
-                                                    <?php if (!empty($feedback['replied_at'])): ?>
-                                                        <p class="text-xs text-slate-500"><?= htmlspecialchars(date('M d, Y H:i', strtotime((string) $feedback['replied_at']))) ?></p>
-                                                    <?php endif; ?>
+                                        <div class="rounded-[1.75rem] border border-slate-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,245,249,0.9))] p-4">
+                                            <div class="mx-auto mb-4 h-1.5 w-16 rounded-full bg-slate-200"></div>
+                                            <div class="space-y-3">
+                                                <div class="flex justify-end">
+                                                    <div class="max-w-[85%] rounded-[1.4rem] rounded-br-md bg-[#0A84FF] px-4 py-3 text-white shadow-lg shadow-sky-500/20">
+                                                        <div class="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold text-white/80">
+                                                            <span>You</span>
+                                                            <span><?= htmlspecialchars(date('M d, H:i', strtotime((string) ($feedback['created_at'] ?? 'now')))) ?></span>
+                                                        </div>
+                                                        <?php if (!empty($feedback['message'])): ?>
+                                                            <p class="text-sm leading-relaxed"><?= nl2br(htmlspecialchars((string) ($feedback['message'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if (!empty($feedback['image'])): ?>
+                                                            <a href="<?= htmlspecialchars($feedback['image'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mt-2 inline-block">
+                                                                <img src="<?= htmlspecialchars($feedback['image'], ENT_QUOTES, 'UTF-8') ?>" alt="Attached photo"
+                                                                    class="h-36 w-auto max-w-[230px] rounded-2xl object-cover border border-white/20 shadow-sm hover:opacity-90 transition">
+                                                            </a>
+                                                        <?php endif; ?>
+                                                    </div>
                                                 </div>
-                                                <p class="text-sm text-slate-700"><?= nl2br(htmlspecialchars((string) ($feedback['reply'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+
+                                                <?php
+                                                    $latestAdminThreadImage = null;
+                                                    if ($hasThread) {
+                                                        foreach ($thread as $entry) {
+                                                            if (($entry['from'] ?? '') === 'admin' && !empty($entry['image'])) {
+                                                                $latestAdminThreadImage = $entry['image'];
+                                                            }
+                                                        }
+                                                    }
+                                                ?>
+                                                <?php if (!empty($latestAdminThreadImage) && empty($feedback['reply_image'])): ?>
+                                                    <div class="mt-3 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                                                        <p class="text-[10px] font-semibold uppercase tracking-wider text-slate-500 mb-2">Admin attachment</p>
+                                                        <a href="<?= htmlspecialchars($latestAdminThreadImage, ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="inline-block">
+                                                            <img src="<?= htmlspecialchars($latestAdminThreadImage, ENT_QUOTES, 'UTF-8') ?>" alt="Admin attachment" class="h-28 w-auto max-w-[230px] rounded-2xl object-cover border border-slate-200 shadow-sm hover:opacity-90 transition">
+                                                        </a>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <?php if ($hasThread): ?>
+                                                    <?php foreach ($thread as $entry): ?>
+                                                        <?php $entryIsAdmin = ($entry['from'] ?? '') === 'admin'; ?>
+                                                        <div class="flex <?= $entryIsAdmin ? 'justify-start' : 'justify-end' ?>">
+                                                            <div class="max-w-[85%] rounded-[1.4rem] px-4 py-3 shadow-sm <?= $entryIsAdmin ? 'rounded-bl-md bg-white border border-slate-200 text-slate-800' : 'rounded-br-md bg-[#0A84FF] text-white shadow-sky-500/20' ?>">
+                                                                <div class="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold <?= $entryIsAdmin ? 'text-slate-400' : 'text-white/80' ?>">
+                                                                    <span><?= $entryIsAdmin ? 'Admin' . (!empty($entry['by']) ? ' · ' . htmlspecialchars($entry['by']) : '') : 'You' ?></span>
+                                                                    <span><?= htmlspecialchars(date('M d, H:i', strtotime((string) ($entry['at'] ?? 'now')))) ?></span>
+                                                                </div>
+                                                                <?php if (!empty($entry['message'])): ?>
+                                                                    <p class="text-sm leading-relaxed <?= $entryIsAdmin ? 'text-slate-700' : 'text-white' ?>"><?= nl2br(htmlspecialchars((string) ($entry['message'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+                                                                <?php endif; ?>
+                                                                <?php if (!empty($entry['image'])): ?>
+                                                                    <a href="<?= htmlspecialchars((string) $entry['image'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mt-2 inline-block">
+                                                                        <img src="<?= htmlspecialchars((string) $entry['image'], ENT_QUOTES, 'UTF-8') ?>" alt="Reply attachment"
+                                                                            class="h-36 w-auto max-w-[230px] rounded-2xl object-cover border <?= $entryIsAdmin ? 'border-slate-200' : 'border-white/20' ?> shadow-sm hover:opacity-90 transition">
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                <?php elseif (!empty($feedback['reply']) || !empty($feedback['reply_image'])): ?>
+                                                    <div class="flex justify-start">
+                                                        <div class="max-w-[85%] rounded-[1.4rem] rounded-bl-md border border-slate-200 bg-white px-4 py-3 shadow-sm">
+                                                            <div class="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold text-slate-400">
+                                                                <span>Admin</span>
+                                                                <?php if (!empty($feedback['replied_at'])): ?>
+                                                                    <span><?= htmlspecialchars(date('M d, H:i', strtotime((string) $feedback['replied_at']))) ?></span>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                            <?php if (!empty($feedback['reply'])): ?>
+                                                                <p class="text-sm leading-relaxed text-slate-700"><?= nl2br(htmlspecialchars((string) ($feedback['reply'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+                                                            <?php endif; ?>
+                                                            <?php if (!empty($feedback['reply_image'])): ?>
+                                                                <a href="<?= htmlspecialchars((string) $feedback['reply_image'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" rel="noopener" class="mt-2 inline-block">
+                                                                    <img src="<?= htmlspecialchars((string) $feedback['reply_image'], ENT_QUOTES, 'UTF-8') ?>" alt="Admin attachment"
+                                                                        class="h-36 w-auto max-w-[230px] rounded-2xl object-cover border border-slate-200 shadow-sm hover:opacity-90 transition">
+                                                                </a>
+                                                            <?php endif; ?>
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+
+                                        <?php if ($showReplyForm): ?>
+                                            <div class="mt-4 rounded-[1.8rem] border border-slate-200 bg-white/90 p-3 shadow-inner shadow-slate-200/50">
+                                                <div class="mb-2 flex items-center justify-center">
+                                                    <div class="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-1.5 text-[11px] font-semibold text-white shadow-md">
+                                                        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                                                        Reply to admin
+                                                    </div>
+                                                </div>
+                                                <textarea id="fb-reply-<?= (int) ($feedback['id'] ?? 0) ?>" rows="2" class="w-full resize-none border-0 bg-transparent px-3 py-2 text-sm text-slate-900 placeholder-slate-400 focus:outline-none" placeholder="Type a reply or attach a photo..."></textarea>
+                                                <div id="fb-reply-preview-wrap-<?= (int) ($feedback['id'] ?? 0) ?>" class="hidden px-3 pb-2">
+                                                    <div class="relative inline-block">
+                                                        <img id="fb-reply-preview-<?= (int) ($feedback['id'] ?? 0) ?>" src="" alt="Reply preview" class="h-28 w-auto max-w-full rounded-2xl object-cover border border-slate-200 shadow-sm">
+                                                        <button type="button" onclick="clearFeedbackReplyImage(<?= (int) ($feedback['id'] ?? 0) ?>)" class="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-white shadow transition hover:bg-red-600">
+                                                            <span class="material-symbols-outlined" style="font-size:14px">close</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="mx-3 border-t border-slate-100"></div>
+                                                <div class="flex flex-wrap items-center justify-between gap-3 px-2 pt-3">
+                                                    <div class="flex items-center gap-2">
+                                                        <label for="fb-reply-image-<?= (int) ($feedback['id'] ?? 0) ?>" class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-slate-100 px-3.5 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-200">
+                                                            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings:'FILL' 1;">add_photo_alternate</span>
+                                                            Photo
+                                                        </label>
+                                                        <input type="file" id="fb-reply-image-<?= (int) ($feedback['id'] ?? 0) ?>" accept="image/jpeg,image/png,image/webp,image/gif" class="sr-only" onchange="handleFeedbackReplyImageChange(<?= (int) ($feedback['id'] ?? 0) ?>)">
+                                                        <p id="fb-reply-status-<?= (int) ($feedback['id'] ?? 0) ?>" class="text-xs text-slate-500"></p>
+                                                    </div>
+                                                    <button type="button" onclick="sendFeedbackReply(<?= (int) ($feedback['id'] ?? 0) ?>)" class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-md shadow-slate-900/20 transition hover:bg-slate-700">
+                                                        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">send</span>
+                                                        Send Reply
+                                                    </button>
+                                                </div>
                                             </div>
                                         <?php endif; ?>
                                     </article>
@@ -362,15 +511,21 @@ function accountOrderProgressMessage(string $status): string {
                             </div>
                         <?php else: ?>
                             <div class="space-y-4">
-                                <?php foreach ($messages as $message): ?>
+                                    <?php foreach ($messages as $message): ?>
                                     <?php
                                         $messageStatus = (string) ($message['status'] ?? 'new');
                                         $badgeClass = match ($messageStatus) {
-                                            'replied' => 'bg-emerald-100 text-emerald-700',
-                                            'read' => 'bg-blue-100 text-blue-700',
-                                            default => 'bg-amber-100 text-amber-700',
+                                            'replied'          => 'bg-emerald-100 text-emerald-700',
+                                            'customer_replied' => 'bg-blue-100 text-blue-700',
+                                            'read'             => 'bg-sky-100 text-sky-700',
+                                            default            => 'bg-amber-100 text-amber-700',
                                         };
-                                        $subjectText = ucfirst(str_replace('_', ' ', (string) ($message['subject'] ?? 'general')));
+                                        $subjectText  = ucfirst(str_replace('_', ' ', (string) ($message['subject'] ?? 'general')));
+                                        $msgThread    = $message['thread'] ?? [];
+                                        $hasMsgThread = !empty($msgThread);
+                                        $lastMsgEntry = $hasMsgThread ? end($msgThread) : null;
+                                        $lastMsgIsAdmin   = $lastMsgEntry && $lastMsgEntry['from'] === 'admin';
+                                        $showMsgReplyForm = ($hasMsgThread ? $lastMsgIsAdmin : !empty($message['reply']));
                                     ?>
                                     <article class="rounded-2xl border border-slate-200 p-5 bg-white">
                                         <div class="flex flex-wrap items-start justify-between gap-3 mb-3">
@@ -378,12 +533,43 @@ function accountOrderProgressMessage(string $status): string {
                                                 <p class="text-sm font-bold text-slate-900"><?= htmlspecialchars($subjectText) ?></p>
                                                 <p class="text-xs text-slate-400 mt-0.5">Sent <?= htmlspecialchars(date('M d, Y H:i', strtotime((string) ($message['created_at'] ?? 'now')))) ?></p>
                                             </div>
-                                            <span class="rounded-full px-3 py-1 text-xs font-bold <?= $badgeClass ?>"><?= htmlspecialchars(ucfirst(str_replace('_', ' ', $messageStatus))) ?></span>
+                                            <span class="rounded-full px-3 py-1 text-xs font-bold <?= $badgeClass ?>"><?= $messageStatus === 'customer_replied' ? 'You replied' : htmlspecialchars(ucfirst(str_replace('_', ' ', $messageStatus))) ?></span>
                                         </div>
                                         <div class="rounded-xl bg-slate-50 px-4 py-3 text-sm text-slate-700">
                                             <?= nl2br(htmlspecialchars((string) ($message['message'] ?? ''), ENT_QUOTES, 'UTF-8')) ?>
                                         </div>
-                                        <?php if (!empty($message['reply'])): ?>
+
+                                        <?php if ($hasMsgThread): ?>
+                                            <!-- Full conversation thread -->
+                                            <div class="mt-3 space-y-2">
+                                                <?php foreach ($msgThread as $entry): ?>
+                                                    <?php if ($entry['from'] === 'admin'): ?>
+                                                        <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3">
+                                                            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                                                <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white">
+                                                                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">support_agent</span>
+                                                                    Admin<?= !empty($entry['by']) ? ' · ' . htmlspecialchars($entry['by']) : '' ?>
+                                                                </span>
+                                                                <p class="text-xs text-slate-500"><?= htmlspecialchars(date('M d, Y H:i', strtotime((string) ($entry['at'] ?? 'now')))) ?></p>
+                                                            </div>
+                                                            <p class="text-sm text-slate-700"><?= nl2br(htmlspecialchars((string) ($entry['message'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+                                                        </div>
+                                                    <?php else: ?>
+                                                        <div class="rounded-xl border border-slate-200 bg-white px-4 py-3">
+                                                            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                                                <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-700 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white">
+                                                                    <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">person</span>
+                                                                    You
+                                                                </span>
+                                                                <p class="text-xs text-slate-500"><?= htmlspecialchars(date('M d, Y H:i', strtotime((string) ($entry['at'] ?? 'now')))) ?></p>
+                                                            </div>
+                                                            <p class="text-sm text-slate-700"><?= nl2br(htmlspecialchars((string) ($entry['message'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </div>
+                                        <?php elseif (!empty($message['reply'])): ?>
+                                            <!-- Legacy single admin reply -->
                                             <div class="mt-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-4">
                                                 <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                                                     <span class="inline-flex items-center gap-1.5 rounded-full bg-blue-600 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-white">
@@ -395,6 +581,21 @@ function accountOrderProgressMessage(string $status): string {
                                                     <?php endif; ?>
                                                 </div>
                                                 <p class="text-sm text-slate-700"><?= nl2br(htmlspecialchars((string) ($message['reply'] ?? ''), ENT_QUOTES, 'UTF-8')) ?></p>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if ($showMsgReplyForm): ?>
+                                            <!-- Customer reply form -->
+                                            <div class="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2">
+                                                <p class="text-xs font-semibold text-slate-600">Reply to admin</p>
+                                                <textarea id="msg-reply-<?= (int) ($message['id'] ?? 0) ?>" rows="2" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10 resize-none" placeholder="Write your reply..."></textarea>
+                                                <div class="flex items-center justify-between gap-3">
+                                                    <p id="msg-reply-status-<?= (int) ($message['id'] ?? 0) ?>" class="text-xs text-slate-500"></p>
+                                                    <button type="button" onclick="sendMessageReply(<?= (int) ($message['id'] ?? 0) ?>)" class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-800 transition shadow-sm">
+                                                        <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">send</span>
+                                                        Send Reply
+                                                    </button>
+                                                </div>
                                             </div>
                                         <?php endif; ?>
                                     </article>
@@ -455,53 +656,207 @@ function accountOrderProgressMessage(string $status): string {
     </main>
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
     <script>
+        // ── Image preview for feedback form ───────────────────────────────────
+        const feedbackImageInput = document.getElementById('feedbackImage');
+        const imgPreviewWrap     = document.getElementById('imgPreviewWrap');
+        const imgPreviewEl       = document.getElementById('imgPreviewEl');
+        const removeImgBtn       = document.getElementById('removeImgBtn');
+
+        feedbackImageInput?.addEventListener('change', function () {
+            const file = this.files?.[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                imgPreviewEl.src = e.target.result;
+                imgPreviewWrap.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        });
+
+        removeImgBtn?.addEventListener('click', function () {
+            feedbackImageInput.value = '';
+            imgPreviewEl.src = '';
+            imgPreviewWrap.classList.add('hidden');
+        });
+
+        // ── Feedback form submit (FormData — supports file) ───────────────────
         document.getElementById('feedbackForm')?.addEventListener('submit', async function (event) {
             event.preventDefault();
 
-            const name = document.getElementById('feedbackName')?.value.trim() || '';
-            const email = document.getElementById('feedbackEmail')?.value.trim() || '';
+            const name    = document.getElementById('feedbackName')?.value.trim() || '';
+            const email   = document.getElementById('feedbackEmail')?.value.trim() || '';
             const message = document.getElementById('feedbackMessage')?.value.trim() || '';
             const statusEl = document.getElementById('feedbackStatus');
 
             if (!message) {
                 if (statusEl) {
                     statusEl.textContent = 'Please enter your feedback message.';
-                    statusEl.className = 'text-sm text-red-600';
+                    statusEl.className = 'text-xs text-red-500';
                 }
                 return;
             }
 
             if (statusEl) {
-                statusEl.textContent = 'Sending feedback...';
-                statusEl.className = 'text-sm text-slate-500';
+                statusEl.textContent = 'Sending…';
+                statusEl.className = 'text-xs text-slate-400';
             }
 
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.disabled = true;
+
             try {
-                const response = await fetch('/api/comments.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, message })
-                });
-                const result = await response.json();
+                const formData = new FormData();
+                formData.append('name', name);
+                formData.append('email', email);
+                formData.append('message', message);
+
+                const imageFile = document.getElementById('feedbackImage')?.files?.[0];
+                if (imageFile) formData.append('image', imageFile);
+
+                const response = await fetch('/api/comments.php', { method: 'POST', body: formData });
+                const result   = await response.json();
+
+                if (!response.ok) throw new Error('Server error ' + response.status);
 
                 if (result.status === 'success') {
                     if (statusEl) {
-                        statusEl.textContent = result.message || 'Feedback sent successfully.';
-                        statusEl.className = 'text-sm text-emerald-600';
+                        statusEl.textContent = '✓ Sent!';
+                        statusEl.className = 'text-xs text-emerald-600';
                     }
                     document.getElementById('feedbackMessage').value = '';
-                    window.location.reload();
-                } else if (statusEl) {
-                    statusEl.textContent = result.message || 'Could not send feedback.';
-                    statusEl.className = 'text-sm text-red-600';
+                    const imgInput = document.getElementById('feedbackImage');
+                    if (imgInput) imgInput.value = '';
+                    const imgWrap = document.getElementById('imgPreviewWrap');
+                    if (imgWrap) imgWrap.classList.add('hidden');
+                    setTimeout(() => window.location.reload(), 700);
+                } else {
+                    if (statusEl) {
+                        statusEl.textContent = result.message || 'Could not send feedback.';
+                        statusEl.className = 'text-xs text-red-500';
+                    }
+                    if (submitBtn) submitBtn.disabled = false;
                 }
             } catch (error) {
                 if (statusEl) {
-                    statusEl.textContent = 'Network error. Please try again.';
-                    statusEl.className = 'text-sm text-red-600';
+                    statusEl.textContent = 'Error: ' + (error.message || 'Please try again.');
+                    statusEl.className = 'text-xs text-red-500';
                 }
+                if (submitBtn) submitBtn.disabled = false;
             }
         });
+
+        // Customer reply to admin feedback reply
+        function handleFeedbackReplyImageChange(id) {
+            const input = document.getElementById('fb-reply-image-' + id);
+            const previewWrap = document.getElementById('fb-reply-preview-wrap-' + id);
+            const previewImg = document.getElementById('fb-reply-preview-' + id);
+            if (!input || !previewWrap || !previewImg) return;
+
+            const file = input.files && input.files[0];
+            if (!file) {
+                previewWrap.classList.add('hidden');
+                previewImg.src = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                previewImg.src = event.target && event.target.result ? event.target.result : '';
+                previewWrap.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearFeedbackReplyImage(id) {
+            const input = document.getElementById('fb-reply-image-' + id);
+            const previewWrap = document.getElementById('fb-reply-preview-wrap-' + id);
+            const previewImg = document.getElementById('fb-reply-preview-' + id);
+            if (input) input.value = '';
+            if (previewImg) previewImg.src = '';
+            if (previewWrap) previewWrap.classList.add('hidden');
+        }
+
+        async function sendFeedbackReply(id) {
+            const textarea = document.getElementById('fb-reply-' + id);
+            const statusEl = document.getElementById('fb-reply-status-' + id);
+            const imageInput = document.getElementById('fb-reply-image-' + id);
+            if (!textarea || !statusEl) return;
+
+            const reply = textarea.value.trim();
+            const imageFile = imageInput && imageInput.files ? imageInput.files[0] : null;
+            if (!reply && !imageFile) {
+                statusEl.textContent = 'Please enter a reply or attach a photo.';
+                statusEl.className = 'text-xs text-red-600';
+                return;
+            }
+
+            statusEl.textContent = 'Sending...';
+            statusEl.className = 'text-xs text-slate-500';
+
+            try {
+                const formData = new FormData();
+                formData.append('action', 'customer_reply');
+                formData.append('id', String(id));
+                formData.append('reply', reply);
+                if (imageFile) formData.append('image', imageFile);
+
+                const response = await fetch('/api/comments.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    statusEl.textContent = result.message || 'Reply sent.';
+                    statusEl.className = 'text-xs text-emerald-600';
+                    textarea.value = '';
+                    clearFeedbackReplyImage(id);
+                    setTimeout(() => window.location.reload(), 700);
+                } else {
+                    statusEl.textContent = result.message || 'Could not send reply.';
+                    statusEl.className = 'text-xs text-red-600';
+                }
+            } catch (err) {
+                statusEl.textContent = 'Network error. Try again.';
+                statusEl.className = 'text-xs text-red-600';
+            }
+        }
+
+        // Customer reply to admin message reply
+        async function sendMessageReply(id) {
+            const textarea = document.getElementById('msg-reply-' + id);
+            const statusEl = document.getElementById('msg-reply-status-' + id);
+            if (!textarea || !statusEl) return;
+
+            const reply = textarea.value.trim();
+            if (!reply) {
+                statusEl.textContent = 'Please enter a reply.';
+                statusEl.className = 'text-xs text-red-600';
+                return;
+            }
+
+            statusEl.textContent = 'Sending...';
+            statusEl.className = 'text-xs text-slate-500';
+
+            try {
+                const response = await fetch('/api/messages.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'customer_reply', id: id, reply: reply })
+                });
+                const result = await response.json();
+                if (result.status === 'success') {
+                    statusEl.textContent = result.message || 'Reply sent.';
+                    statusEl.className = 'text-xs text-emerald-600';
+                    setTimeout(() => window.location.reload(), 700);
+                } else {
+                    statusEl.textContent = result.message || 'Could not send reply.';
+                    statusEl.className = 'text-xs text-red-600';
+                }
+            } catch (err) {
+                statusEl.textContent = 'Network error. Try again.';
+                statusEl.className = 'text-xs text-red-600';
+            }
+        }
 
         async function logout() {
             try {

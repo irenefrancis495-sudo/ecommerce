@@ -4,7 +4,134 @@
         "name": "sae",
         "email": "masaeboniface@gmail.com",
         "message": "ipo vizuri",
+        "status": "replied",
+        "created_at": "2026-05-04 11:18:48",
+        "reply": "ok rafiki",
+        "replied_at": "2026-05-05 13:15:10",
+        "replied_by": "Site Admin",
+        "thread": [
+            {
+                "from": "admin",
+                "message": "ok rafiki",
+                "at": "2026-05-05 13:15:10",
+                "by": "Site Admin"
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "name": "sae",
+        "email": "dignatheobard960@gmail.com",
+        "message": "ipo poa sana",
+        "status": "customer_replied",
+        "created_at": "2026-05-05 13:14:08",
+        "reply": "ok rafiki",
+        "replied_at": "2026-05-05 13:15:21",
+        "replied_by": "Site Admin",
+        "thread": [
+            {
+                "from": "admin",
+                "message": "ok",
+                "at": "2026-05-05 13:14:57",
+                "by": "Site Admin"
+            },
+            {
+                "from": "admin",
+                "message": "ok rafiki",
+                "at": "2026-05-05 13:15:21",
+                "by": "Site Admin"
+            },
+            {
+                "from": "customer",
+                "message": "thanks",
+                "at": "2026-05-05 13:16:18"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "name": "test",
+        "email": "test@test.com",
+        "message": "test message",
+        "image": null,
         "status": "new",
-        "created_at": "2026-05-04 11:18:48"
+        "created_at": "2026-05-05 13:29:22"
+    },
+    {
+        "id": 4,
+        "name": "testuser",
+        "email": "john@example.com",
+        "message": "manual test",
+        "image": null,
+        "status": "new",
+        "created_at": "2026-05-05 13:30:09"
+    },
+    {
+        "id": 5,
+        "name": "testuser",
+        "email": "john@example.com",
+        "message": "debug test",
+        "image": null,
+        "status": "new",
+        "created_at": "2026-05-05 13:32:53"
+    },
+    {
+        "id": 6,
+        "name": "john_doe",
+        "email": "john@example.com",
+        "message": "Real submit test from playwright",
+        "image": null,
+        "status": "new",
+        "created_at": "2026-05-05 13:34:26"
+    },
+    {
+        "id": 7,
+        "name": "john_doe",
+        "email": "john@example.com",
+        "message": "Final button test after fix",
+        "image": null,
+        "status": "customer_replied",
+        "created_at": "2026-05-05 13:41:30",
+        "reply": "Admin image reply test",
+        "replied_at": "2026-05-05 13:54:21",
+        "replied_by": "Site Admin",
+        "reply_image": "\/uploads\/feedback\/693f0e44f4384c982fcd8c074a92a86c.jpg",
+        "thread": [
+            {
+                "from": "admin",
+                "message": "Admin image reply test",
+                "image": "\/uploads\/feedback\/693f0e44f4384c982fcd8c074a92a86c.jpg",
+                "at": "2026-05-05 13:54:21",
+                "by": "Site Admin"
+            },
+            {
+                "from": "customer",
+                "message": "Customer image reply back",
+                "image": "\/uploads\/feedback\/6130158ed8ba80841d01af8839cb61a3.jpg",
+                "at": "2026-05-05 13:58:26"
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "name": "sae",
+        "email": "dignatheobard960@gmail.com",
+        "message": "good",
+        "image": "\/uploads\/feedback\/36b045b4c14abcc5e86e53ddb2bf4924.jpg",
+        "status": "replied",
+        "created_at": "2026-05-05 13:42:34",
+        "reply": "ok",
+        "replied_at": "2026-05-05 14:09:10",
+        "replied_by": "Site Admin",
+        "reply_image": "\/uploads\/feedback\/b0f8b474e898d43b28ff85d9a8798a22.jpg",
+        "thread": [
+            {
+                "from": "admin",
+                "message": "ok",
+                "image": "\/uploads\/feedback\/b0f8b474e898d43b28ff85d9a8798a22.jpg",
+                "at": "2026-05-05 14:09:10",
+                "by": "Site Admin"
+            }
+        ]
     }
 ]

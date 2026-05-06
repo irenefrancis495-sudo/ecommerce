@@ -17,18 +17,74 @@ $commentsFile = __DIR__ . '/../data/customer_comments.json';
 $inputBody = file_get_contents('php://input');
 $data = json_decode($inputBody, true) ?: [];
 
+function commentsRequestValue(array $data, string $key, $default = '') {
+    return $data[$key] ?? $_POST[$key] ?? $default;
+}
+
+function commentsHandleImageUpload(?array $file): ?string {
+    if (!$file || (($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE)) {
+        return null;
+    }
+
+    if (($file['error'] ?? UPLOAD_ERR_OK) !== UPLOAD_ERR_OK) {
+        Database::respondError('Image upload failed. Please try again.', 400);
+        exit;
+    }
+
+    $maxSize = 5 * 1024 * 1024;
+    if (($file['size'] ?? 0) > $maxSize) {
+        Database::respondError('Image too large. Maximum 5 MB.', 400);
+        exit;
+    }
+
+    $imgInfo = @getimagesize($file['tmp_name']);
+    if ($imgInfo === false) {
+        Database::respondError('Invalid file. Only image files are allowed.', 400);
+        exit;
+    }
+
+    $allowedTypes = [IMAGETYPE_JPEG, IMAGETYPE_PNG, IMAGETYPE_GIF, IMAGETYPE_WEBP];
+    if (!in_array($imgInfo[2], $allowedTypes, true)) {
+        Database::respondError('Invalid image type. Only JPEG, PNG, WebP, or GIF are allowed.', 400);
+        exit;
+    }
+
+    $extMap = [
+        IMAGETYPE_JPEG => 'jpg',
+        IMAGETYPE_PNG  => 'png',
+        IMAGETYPE_GIF  => 'gif',
+        IMAGETYPE_WEBP => 'webp',
+    ];
+
+    $uploadDir = __DIR__ . '/../uploads/feedback/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $filename = bin2hex(random_bytes(16)) . '.' . $extMap[$imgInfo[2]];
+    $destPath = $uploadDir . $filename;
+
+    if (!move_uploaded_file($file['tmp_name'], $destPath)) {
+        Database::respondError('Failed to save image. Please try again.', 500);
+        exit;
+    }
+
+    return '/uploads/feedback/' . $filename;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($data['action']) && $data['action'] === 'reply') {
+    if (commentsRequestValue($data, 'action', '') === 'reply') {
         if (empty($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
             Database::respondError('Unauthorized. Admin access only.', 401);
             exit;
         }
 
-        $commentId = (int) ($data['id'] ?? 0);
-        $replyText = trim((string) ($data['reply'] ?? ''));
+        $commentId  = (int) commentsRequestValue($data, 'id', 0);
+        $replyText  = trim((string) commentsRequestValue($data, 'reply', ''));
+        $replyImage = commentsHandleImageUpload($_FILES['image'] ?? null);
 
-        if ($commentId <= 0 || $replyText === '') {
-            Database::respondError('Please provide a valid comment and reply text.', 400);
+        if ($commentId <= 0 || ($replyText === '' && $replyImage === null)) {
+            Database::respondError('Please provide a valid comment and reply content.', 400);
             exit;
         }
 
@@ -41,10 +97,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updatedComment = null;
         foreach ($comments as &$comment) {
             if (isset($comment['id']) && (int) $comment['id'] === $commentId) {
-                $comment['reply'] = htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8');
-                $comment['status'] = 'replied';
-                $comment['replied_at'] = date('Y-m-d H:i:s');
-                $comment['replied_by'] = $_SESSION['admin_user']['name'] ?? 'Admin';
+                $sanitized               = htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8');
+                $comment['reply']        = $sanitized;
+                $comment['status']       = 'replied';
+                $comment['replied_at']   = date('Y-m-d H:i:s');
+                $comment['replied_by']   = $_SESSION['admin_user']['name'] ?? 'Admin';
+                $comment['reply_image']  = $replyImage;
+
+                // Append to conversation thread
+                if (!isset($comment['thread'])) {
+                    $comment['thread'] = [];
+                }
+                $comment['thread'][] = [
+                    'from'    => 'admin',
+                    'message' => $sanitized,
+                    'image'   => $replyImage,
+                    'at'      => $comment['replied_at'],
+                    'by'      => $comment['replied_by'],
+                ];
+
                 $updatedComment = $comment;
                 $found = true;
                 break;
@@ -66,9 +137,81 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $name = trim((string) ($data['name'] ?? ''));
-    $email = trim((string) ($data['email'] ?? ''));
-    $message = trim((string) ($data['message'] ?? ''));
+    // ── Customer reply-back ───────────────────────────────────────────────
+    if (commentsRequestValue($data, 'action', '') === 'customer_reply') {
+        if (empty($_SESSION['user'])) {
+            Database::respondError('Please log in to reply.', 401);
+            exit;
+        }
+
+        $commentId  = (int) commentsRequestValue($data, 'id', 0);
+        $replyText  = trim((string) commentsRequestValue($data, 'reply', ''));
+        $replyImage = commentsHandleImageUpload($_FILES['image'] ?? null);
+
+        if ($commentId <= 0 || ($replyText === '' && $replyImage === null)) {
+            Database::respondError('Please provide a reply message or image.', 400);
+            exit;
+        }
+
+        $comments      = file_exists($commentsFile) ? (json_decode(file_get_contents($commentsFile), true) ?: []) : [];
+        $customerEmail = strtolower(trim((string) ($_SESSION['user']['email'] ?? '')));
+        $found         = false;
+        $updatedComment = null;
+
+        foreach ($comments as &$comment) {
+            if (isset($comment['id']) && (int) $comment['id'] === $commentId) {
+                // Security: ensure this feedback belongs to the logged-in customer
+                if (strtolower(trim((string) ($comment['email'] ?? ''))) !== $customerEmail) {
+                    Database::respondError('Forbidden.', 403);
+                    exit;
+                }
+
+                // Migrate legacy single reply into thread
+                if (!isset($comment['thread'])) {
+                    $comment['thread'] = [];
+                    if (!empty($comment['reply'])) {
+                        $comment['thread'][] = [
+                            'from'    => 'admin',
+                            'message' => $comment['reply'],
+                            'image'   => $comment['reply_image'] ?? null,
+                            'at'      => $comment['replied_at'] ?? $comment['created_at'] ?? date('Y-m-d H:i:s'),
+                            'by'      => $comment['replied_by'] ?? 'Admin',
+                        ];
+                    }
+                }
+
+                $comment['thread'][] = [
+                    'from'    => 'customer',
+                    'message' => htmlspecialchars($replyText, ENT_QUOTES, 'UTF-8'),
+                    'image'   => $replyImage,
+                    'at'      => date('Y-m-d H:i:s'),
+                ];
+                $comment['status'] = 'customer_replied';
+                $updatedComment    = $comment;
+                $found             = true;
+                break;
+            }
+        }
+        unset($comment);
+
+        if (!$found) {
+            Database::respondError('Comment not found.', 404);
+            exit;
+        }
+
+        if (file_put_contents($commentsFile, json_encode($comments, JSON_PRETTY_PRINT)) === false) {
+            Database::respondError('Unable to save reply.', 500);
+            exit;
+        }
+
+        Database::respondJson('success', ['comment' => $updatedComment], 'Reply sent successfully.');
+        exit;
+    }
+
+    // Support both JSON body and multipart/form-data (file upload)
+    $name    = trim((string) commentsRequestValue($data, 'name', ''));
+    $email   = trim((string) commentsRequestValue($data, 'email', ''));
+    $message = trim((string) commentsRequestValue($data, 'message', ''));
 
     if ($name === '' || $email === '' || $message === '') {
         Database::respondError('Please enter name, email, and message.', 400);
@@ -79,6 +222,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         Database::respondError('Please enter a valid email.', 400);
         exit;
     }
+
+    // ── Image upload (optional) ───────────────────────────────────────────
+    $imagePath = commentsHandleImageUpload($_FILES['image'] ?? null);
 
     $comments = [];
     if (file_exists($commentsFile)) {
@@ -91,12 +237,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $newComment = [
-        'id' => $newId,
-        'name' => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
-        'email' => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
-        'message' => htmlspecialchars($message, ENT_QUOTES, 'UTF-8'),
-        'status' => 'new',
-        'created_at' => date('Y-m-d H:i:s')
+        'id'         => $newId,
+        'name'       => htmlspecialchars($name, ENT_QUOTES, 'UTF-8'),
+        'email'      => htmlspecialchars($email, ENT_QUOTES, 'UTF-8'),
+        'message'    => htmlspecialchars($message, ENT_QUOTES, 'UTF-8'),
+        'image'      => $imagePath,
+        'status'     => 'new',
+        'created_at' => date('Y-m-d H:i:s'),
     ];
 
     $comments[] = $newComment;
