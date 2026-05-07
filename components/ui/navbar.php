@@ -1,3 +1,7 @@
+<?php
+$mainMenuRoutes = \Mpemba\Utils\Router::getMenuRoutes('main');
+$currentRoute = \Mpemba\Utils\Router::getCurrentRoute();
+?>
 <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800 shadow-sm">
     <div class="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         <a href="/home" class="flex items-center gap-3">
@@ -9,9 +13,17 @@
         </a>
 
         <div class="hidden lg:flex items-center gap-6">
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/home">Home</a>
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/products">Products</a>
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/category">Categories</a>
+            <?php foreach ($mainMenuRoutes as $route):
+                $isActive = ($route['key'] === $currentRoute);
+                $disabled = $route['disabled'] ?? false;
+                $linkClasses = $disabled
+                    ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
+                    : ($isActive
+                        ? 'text-primary font-semibold'
+                        : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white');
+            ?>
+                <a class="<?php echo $linkClasses; ?> transition font-medium" href="<?php echo htmlspecialchars($route['href']); ?>"><?php echo htmlspecialchars($route['label']); ?></a>
+            <?php endforeach; ?>
         </div>
 
         <div class="hidden lg:flex items-center gap-4" id="auth-section">
@@ -25,9 +37,15 @@
 
     <div id="mobileMenu" class="lg:hidden hidden border-t border-slate-200/70 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl">
         <div class="px-6 py-5 space-y-3">
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/home">Home</a>
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/products">Products</a>
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/category">Categories</a>
+            <?php foreach ($mainMenuRoutes as $route):
+                $isActive = ($route['key'] === $currentRoute);
+                $disabled = $route['disabled'] ?? false;
+                $linkClasses = $disabled
+                    ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
+                    : 'block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition' . ($isActive ? ' bg-primary/10 text-primary font-semibold' : '');
+            ?>
+                <a class="<?php echo $linkClasses; ?>" href="<?php echo htmlspecialchars($route['href']); ?>"><?php echo htmlspecialchars($route['label']); ?></a>
+            <?php endforeach; ?>
             <div class="flex flex-col gap-3 pt-2 border-t border-slate-200/70 dark:border-slate-800" id="mobile-auth-section">
                 <!-- This will be populated by JavaScript -->
             </div>

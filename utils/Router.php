@@ -80,5 +80,172 @@ class Router {
 
         return $pageNames[$path] ?? $default;
     }
+
+    public static function getCurrentRoute(): string {
+        $path = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+
+        $basePath = 'dee';
+        if (strpos($path, $basePath) === 0) {
+            $path = ltrim(substr($path, strlen($basePath)), '/');
+        }
+
+        if ($path === '') {
+            return 'splash';
+        }
+
+        if ($path === 'admin') {
+            return 'admin/index';
+        }
+
+        return $path;
+    }
+
+    public static function getMenuRoutes(string $context = 'main'): array {
+        $mainRoutes = [
+            [
+                'key' => 'home',
+                'href' => '/home',
+                'label' => 'Home',
+                'disabled' => false,
+                'children' => [],
+            ],
+            [
+                'key' => 'products',
+                'href' => '/products',
+                'label' => 'Products',
+                'disabled' => false,
+                'children' => [],
+            ],
+            [
+                'key' => 'category',
+                'href' => '/category',
+                'label' => 'Categories',
+                'disabled' => false,
+                'children' => [],
+            ],
+        ];
+
+        $adminRoutes = [
+            [
+                'key' => 'admin/index',
+                'href' => '/admin/index',
+                'label' => 'Dashboard',
+                'icon' => 'dashboard',
+                'disabled' => false,
+                'children' => [],
+            ],
+            [
+                'key' => 'admin/inventory',
+                'href' => '/admin/inventory',
+                'label' => 'Inventory',
+                'icon' => 'inventory_2',
+                'disabled' => false,
+                'children' => [
+                    [
+                        'key' => 'admin/add-product',
+                        'href' => '/admin/add-product',
+                        'label' => 'Add Product',
+                        'disabled' => false,
+                        'children' => [],
+                    ],
+                ],
+            ],
+            [
+                'key' => 'admin/orders',
+                'href' => '/admin/orders',
+                'label' => 'Orders',
+                'icon' => 'shopping_cart',
+                'disabled' => false,
+                'children' => [],
+            ],
+            [
+                'key' => 'admin/customers',
+                'href' => '/admin/customers',
+                'label' => 'Users',
+                'icon' => 'group',
+                'disabled' => false,
+                'children' => [],
+            ],
+            [
+                'key' => 'admin/messages',
+                'href' => '/admin/messages',
+                'label' => 'Messages',
+                'icon' => 'mail',
+                'disabled' => false,
+                'children' => [
+                    [
+                        'key' => 'admin/feedback',
+                        'href' => '/admin/feedback',
+                        'label' => 'Feedback',
+                        'disabled' => false,
+                        'children' => [],
+                    ],
+                    [
+                        'key' => 'admin/subscribers',
+                        'href' => '/admin/subscribers',
+                        'label' => 'Subscribers',
+                        'disabled' => false,
+                        'children' => [],
+                    ],
+                    [
+                        'key' => 'admin/newsletters',
+                        'href' => '/admin/newsletters',
+                        'label' => 'Newsletters',
+                        'disabled' => true,
+                        'children' => [],
+                    ],
+                ],
+            ],
+            [
+                'key' => 'admin/reports',
+                'href' => '/admin/reports',
+                'label' => 'Analytics',
+                'icon' => 'analytics',
+                'disabled' => false,
+                'children' => [
+                    [
+                        'key' => 'admin/permissions',
+                        'href' => '/admin/permissions',
+                        'label' => 'Permissions',
+                        'disabled' => false,
+                        'children' => [],
+                    ],
+                    [
+                        'key' => 'admin/shipping',
+                        'href' => '/admin/shipping',
+                        'label' => 'Shipping',
+                        'disabled' => true,
+                        'children' => [],
+                    ],
+                ],
+            ],
+            [
+                'key' => 'admin/settings',
+                'href' => '/admin/settings',
+                'label' => 'Settings',
+                'icon' => 'settings',
+                'disabled' => false,
+                'children' => [],
+            ],
+        ];
+
+        return $context === 'admin' ? $adminRoutes : $mainRoutes;
+    }
+
+    public static function isRouteActive(array $route, string $currentRoute): bool {
+        if ($route['key'] === $currentRoute) {
+            return true;
+        }
+
+        if (!empty($route['children'])) {
+            foreach ($route['children'] as $child) {
+                if (self::isRouteActive($child, $currentRoute)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
 ?>

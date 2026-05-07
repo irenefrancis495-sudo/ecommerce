@@ -34,5 +34,45 @@
         "quantity": 1,
         "unit_price": 39.99,
         "subtotal": 39.99
+    },
+    {
+        "id": 5,
+        "order_id": 3,
+        "product_id": 403,
+        "name": "Bogolan Wrap Skirt",
+        "image": "",
+        "quantity": 1,
+        "unit_price": 210,
+        "subtotal": 210
+    },
+    {
+        "id": 6,
+        "order_id": 3,
+        "product_id": 404,
+        "name": "Midnight Silk Gown",
+        "image": "",
+        "quantity": 1,
+        "unit_price": 540,
+        "subtotal": 540
+    },
+    {
+        "id": 7,
+        "order_id": 3,
+        "product_id": 11,
+        "name": "Organic Face Serum",
+        "image": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400&h=400&fit=crop&crop=center",
+        "quantity": 1,
+        "unit_price": 49,
+        "subtotal": 49
+    },
+    {
+        "id": 8,
+        "order_id": 3,
+        "product_id": 14,
+        "name": "Essential Oil Blend",
+        "image": "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=400&fit=crop&crop=center",
+        "quantity": 1,
+        "unit_price": 24,
+        "subtotal": 24
     }
 ]

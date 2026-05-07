@@ -52,5 +52,14 @@
         "first_name": "",
         "last_name": "",
         "role": "customer"
+    },
+    {
+        "id": 7,
+        "username": "Dee",
+        "email": "deetheo04@gmail.com",
+        "password": "$2y$12$NgLDOdsIu3sJyXB6x5FE4.hb7CSn2YoOu01fc1MokmbezjwST3LPq",
+        "first_name": "",
+        "last_name": "",
+        "role": "customer"
     }
 ]

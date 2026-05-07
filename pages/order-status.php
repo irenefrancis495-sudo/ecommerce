@@ -77,6 +77,7 @@ $justPlaced = trim($_GET['placed'] ?? '');
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/assets/tailwindcss/tailwindv3.js"></script>
+    <script src="/assets/sweetalert2/sweetalert2.all.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
     <script>
         tailwind.config = {
@@ -108,16 +109,6 @@ $justPlaced = trim($_GET['placed'] ?? '');
     <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
 
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-
-        <?php if ($justPlaced): ?>
-        <div class="mb-6 flex items-start gap-3 rounded-2xl bg-green-50 border border-green-200 px-5 py-4 text-green-800">
-            <span class="material-symbols-outlined text-green-600 mt-0.5" style="font-variation-settings:'FILL' 1;">check_circle</span>
-            <div>
-                <p class="font-semibold">Payment successful.</p>
-                <p class="text-sm mt-0.5">Your order <strong><?= htmlspecialchars($justPlaced, ENT_QUOTES, 'UTF-8') ?></strong> has been received and is now being processed.</p>
-            </div>
-        </div>
-        <?php endif; ?>
 
         <div class="mb-8 flex items-start gap-4">
             <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-white shadow-lg shadow-primary/20">
@@ -239,5 +230,75 @@ $justPlaced = trim($_GET['placed'] ?? '');
     </main>
 
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if order was just placed
+            var justPlaced = '<?= $justPlaced ? htmlspecialchars($justPlaced, ENT_QUOTES, 'UTF-8') : '' ?>';
+            if (justPlaced && typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Payment Successful',
+                    text: 'Your order ' + justPlaced + ' has been received and is now being processed.',
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 4000,
+                    timerProgressBar: true,
+                    didOpen: function(toast) {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+            }
+
+            // Function to show order status update notification
+            window.showOrderNotification = function(type, title, message) {
+                if (typeof Swal === 'undefined') return;
+                
+                var iconMap = {
+                    'success': 'success',
+                    'error': 'error',
+                    'warning': 'warning',
+                    'info': 'info'
+                };
+
+                Swal.fire({
+                    icon: iconMap[type] || 'info',
+                    title: title,
+                    text: message,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                    didOpen: function(toast) {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+            };
+
+            // Check for status update notification from session/query
+            var statusUpdated = new URLSearchParams(window.location.search).get('statusUpdated');
+            if (statusUpdated && typeof Swal !== 'undefined') {
+                var statusText = statusUpdated.replace(/_/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Order Status Updated',
+                    text: 'Your order status has been updated to: ' + statusText,
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3500,
+                    timerProgressBar: true,
+                    didOpen: function(toast) {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
