@@ -23,6 +23,13 @@ if (empty($usersData)) {
     ];
 }
 
+$roleOptions = array_keys(adminLoadRolePermissions());
+
+function adminRoleLabel(string $role): string
+{
+    return ucwords(str_replace(['_', '-'], ' ', $role));
+}
+
 $displayUsers = [];
 $activeCount = 0;
 $adminCount = 0;
@@ -35,6 +42,9 @@ foreach ($usersData as $idx => $u) {
     $fullName = $fullName !== '' ? $fullName : (string) ($u['username'] ?? 'Unknown User');
 
     $role = strtolower((string) ($u['role'] ?? 'customer'));
+    if ($role === 'customer') {
+        $role = 'user';
+    }
     $isActive = ((int) ($u['id'] ?? 0) % 4) !== 0;
     if ($isActive) {
         $activeCount++;
@@ -432,8 +442,9 @@ foreach ($usersData as $u) {
               <div class="field-wrap">
                 <span class="material-symbols-outlined fi">shield_person</span>
                 <select id="new-role">
-                  <option value="customer">Customer</option>
-                  <option value="admin">Admin</option>
+                  <?php foreach ($roleOptions as $roleOption): ?>
+                  <option value="<?php echo htmlspecialchars($roleOption); ?>"><?php echo htmlspecialchars(adminRoleLabel($roleOption)); ?></option>
+                  <?php endforeach; ?>
                 </select>
                 <label for="new-role">Role</label>
               </div>
@@ -502,7 +513,8 @@ foreach ($usersData as $u) {
                   <span class="text-xs font-mono font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded-lg">@<?php echo htmlspecialchars($u['username']); ?></span>
                 </td>
                 <td class="px-4 py-4">
-                  <?php if ($u['role'] === 'admin'): ?>
+                  <?php $displayRole = strtolower((string) ($u['role'] ?? 'user')); if ($displayRole === 'customer') { $displayRole = 'user'; } ?>
+                  <?php if ($displayRole === 'admin'): ?>
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[11px] font-bold">
                       <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">shield</span>
                       Admin
@@ -510,7 +522,7 @@ foreach ($usersData as $u) {
                   <?php else: ?>
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold">
                       <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">person</span>
-                      Customer
+                      <?php echo htmlspecialchars(adminRoleLabel($displayRole)); ?>
                     </span>
                   <?php endif; ?>
                 </td>

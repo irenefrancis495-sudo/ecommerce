@@ -27,7 +27,10 @@ switch ($action) {
         $firstName = trim($data['first_name'] ?? '');
         $lastName = trim($data['last_name'] ?? '');
         $password = $data['password'] ?? '';
-        $role = trim($data['role'] ?? 'customer');
+        $role = trim($data['role'] ?? 'user');
+
+        require_once __DIR__ . '/../pages/admin/_permissions.php';
+        $availableRoles = array_keys(adminLoadRolePermissions());
 
         if (!$username || !$email || !$password) {
             Database::respondError('Username, email, and password are required.', 400);
@@ -61,13 +64,14 @@ switch ($action) {
             $newId = max($newId, (int) $user['id'] + 1);
         }
 
+        $allowedRoles = array_merge(['admin'], $availableRoles);
         $newUser = [
             'id' => $newId,
             'name' => trim($firstName . ' ' . $lastName) ?: $username,
             'username' => $username,
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
-            'role' => $role === 'admin' ? 'admin' : 'customer',
+            'role' => in_array(strtolower($role), $allowedRoles, true) ? strtolower($role) : 'user',
             'joined' => date('Y-m-d'),
             'orders' => 0,
             'spend' => 0,
