@@ -527,16 +527,18 @@ usort($orders, function($a, $b) {
 
     // More menu toggle
     document.addEventListener('click', function(e) {
-        if (!e.target.closest('.ord-more-trigger') && !e.target.closest('.ord-more-menu')) {
+        var trigger = e.target.closest('.ord-more-trigger');
+        var menu = trigger ? trigger.parentElement.querySelector('.ord-more-menu') : null;
+        if (trigger && menu) {
+            var isOpen = !menu.classList.contains('hidden');
             document.querySelectorAll('.ord-more-menu').forEach(function(m) { m.classList.add('hidden'); });
-        }
-        var t = e.target.closest('.ord-more-trigger');
-        if (t) {
-            var menu = t.parentElement.querySelector('.ord-more-menu');
-            if (menu) {
-                document.querySelectorAll('.ord-more-menu').forEach(function(m) { m.classList.add('hidden'); });
+            if (!isOpen) {
                 menu.classList.remove('hidden');
             }
+            return;
+        }
+        if (!e.target.closest('.ord-more-menu')) {
+            document.querySelectorAll('.ord-more-menu').forEach(function(m) { m.classList.add('hidden'); });
         }
     });
 
