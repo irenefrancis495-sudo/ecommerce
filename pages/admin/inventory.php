@@ -427,18 +427,17 @@ $pageProducts = array_slice($allProducts, $offset, $perPage);
 
     // Row menu
     document.addEventListener('click', function(e) {
-        var trigger = e.target.closest('.row-menu-trigger');
-        var menu = trigger ? trigger.closest('tr')?.querySelector('.row-menu') : null;
-        if (trigger && menu) {
-            var isOpen = !menu.classList.contains('hidden');
+        if (!e.target.closest('.row-menu-trigger') && !e.target.closest('.row-menu')) {
             document.querySelectorAll('.row-menu').forEach(function(m) { m.classList.add('hidden'); });
-            if (!isOpen) {
+        }
+        var trigger = e.target.closest('.row-menu-trigger');
+        if (trigger) {
+            var row  = trigger.closest('tr');
+            var menu = row ? row.querySelector('.row-menu') : null;
+            if (menu) {
+                document.querySelectorAll('.row-menu').forEach(function(m) { m.classList.add('hidden'); });
                 menu.classList.remove('hidden');
             }
-            return;
-        }
-        if (!e.target.closest('.row-menu')) {
-            document.querySelectorAll('.row-menu').forEach(function(m) { m.classList.add('hidden'); });
         }
     });
 

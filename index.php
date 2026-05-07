@@ -19,12 +19,11 @@ if ($requestedPath === '') {
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<base href="/">
 <title><?php echo htmlspecialchars(\Mpemba\Utils\Router::getPathName()); ?></title>
-<link href="/styles.css" rel="stylesheet">
-    <script src="/assets/jquery/jquery.min.js"></script>
-    <script src="/assets/sweetalert2/sweetalert2.all.min.js"></script>
-    <link href="/assets/DataTables/datatables.min.css" rel="stylesheet">
+<link href="styles.css" rel="stylesheet">
+    <script src="assets/jquery/jquery.min.js"></script>
+    <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
+    <link href="assets/DataTables/datatables.min.css" rel="stylesheet">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- <script src="assets/tailwindcss/tailwindv3.js"></script> -->
