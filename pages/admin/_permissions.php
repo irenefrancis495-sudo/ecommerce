@@ -4,46 +4,32 @@ function adminDefaultRolePermissions(): array
 {
     return [
         'admin' => [
-            // Admin panel permissions
-            'dashboard.view' => true,
-            'inventory.manage' => true,
-            'categories.manage' => true,
-            'orders.manage' => true,
-            'users.manage' => true,
-            'feedback.manage' => true,
-            'messages.manage' => true,
-            'subscribers.manage' => true,
-            'reports.view' => true,
-            'settings.manage' => true,
-            'permissions.manage' => true,
-            // Storefront customer permissions
-            'shop.browse' => true,
-            'shop.cart' => true,
-            'shop.checkout' => true,
-            'shop.orders' => true,
-            'shop.profile' => true,
-            'shop.reviews' => true,
+            'create' => true,
+            'read' => true,
+            'update' => true,
+            'delete' => true,
+            'manage.users' => true,
         ],
-        'customer' => [
-            // Admin panel permissions (customers cannot access admin)
-            'dashboard.view' => false,
-            'inventory.manage' => false,
-            'categories.manage' => false,
-            'orders.manage' => false,
-            'users.manage' => false,
-            'feedback.manage' => false,
-            'messages.manage' => false,
-            'subscribers.manage' => false,
-            'reports.view' => false,
-            'settings.manage' => false,
-            'permissions.manage' => false,
-            // Storefront customer permissions (customers can do all shop actions)
-            'shop.browse' => true,
-            'shop.cart' => true,
-            'shop.checkout' => true,
-            'shop.orders' => true,
-            'shop.profile' => true,
-            'shop.reviews' => true,
+        'manager' => [
+            'create' => true,
+            'read' => true,
+            'update' => true,
+            'delete' => true,
+            'manage.users' => false,
+        ],
+        'editor' => [
+            'create' => true,
+            'read' => true,
+            'update' => true,
+            'delete' => false,
+            'manage.users' => false,
+        ],
+        'user' => [
+            'create' => false,
+            'read' => true,
+            'update' => false,
+            'delete' => false,
+            'manage.users' => false,
         ],
     ];
 }
@@ -92,6 +78,9 @@ function adminSaveRolePermissions(array $permissions): void
 function adminCurrentRole(): string
 {
     $role = strtolower((string) ($_SESSION['admin_user']['role'] ?? 'admin'));
+    if ($role === 'customer') {
+        return 'user';
+    }
     return $role !== '' ? $role : 'admin';
 }
 
@@ -135,19 +124,19 @@ function adminEnforcePagePermission(): void
     $path = trim((string) parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH), '/');
 
     $map = [
-        'admin' => 'dashboard.view',
-        'admin/index' => 'dashboard.view',
-        'admin/inventory' => 'inventory.manage',
-        'admin/add-product' => 'inventory.manage',
-        'admin/categories' => 'categories.manage',
-        'admin/orders' => 'orders.manage',
-        'admin/customers' => 'users.manage',
-        'admin/feedback' => 'feedback.manage',
-        'admin/messages' => 'messages.manage',
-        'admin/subscribers' => 'subscribers.manage',
-        'admin/reports' => 'reports.view',
-        'admin/settings' => 'settings.manage',
-        'admin/permissions' => 'permissions.manage',
+        'admin' => 'read',
+        'admin/index' => 'read',
+        'admin/inventory' => 'create',
+        'admin/add-product' => 'create',
+        'admin/categories' => 'update',
+        'admin/orders' => 'read',
+        'admin/customers' => 'manage.users',
+        'admin/feedback' => 'read',
+        'admin/messages' => 'read',
+        'admin/subscribers' => 'read',
+        'admin/reports' => 'read',
+        'admin/settings' => 'update',
+        'admin/permissions' => 'manage.users',
     ];
 
     if (!isset($map[$path])) {

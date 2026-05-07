@@ -127,7 +127,7 @@ class UserController {
             'password' => password_hash($password, PASSWORD_DEFAULT),
             'first_name' => $firstName,
             'last_name' => $lastName,
-            'role' => 'customer'
+            'role' => 'user'
         ];
 
         $users[] = $newUser;
