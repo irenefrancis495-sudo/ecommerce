@@ -1,6 +1,64 @@
 <?php
 $mainMenuRoutes = \Mpemba\Utils\Router::getMenuRoutes('main');
 $currentRoute = \Mpemba\Utils\Router::getCurrentRoute();
+
+function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bool $isMobile = false) {
+    $html = '';
+    foreach ($routes as $route) {
+        $hasChildren = !empty($route['children']);
+        $isActive = \Mpemba\Utils\Router::isRouteActive($route, $currentRoute);
+        $disabled = $route['disabled'] ?? false;
+        $linkClasses = $disabled
+            ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
+            : ($isActive
+                ? 'text-primary font-semibold'
+                : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white');
+
+        $itemId = 'menu-' . str_replace(['/', ' '], ['-', '-'], $route['key']);
+        $submenuId = $itemId . '-submenu';
+
+        if ($isMobile) {
+            $html .= '<div class="space-y-1">';
+            $html .= '<div class="flex items-center justify-between gap-2">';
+            $html .= '<a class="block rounded-3xl px-4 py-3 ' . $linkClasses . ($isActive ? ' bg-primary/10 text-primary font-semibold' : '') . '" href="' . htmlspecialchars($route['href']) . '">' . htmlspecialchars($route['label']) . '</a>';
+            if ($hasChildren) {
+                $html .= '<button type="button" class="mobile-submenu-toggle inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200" aria-expanded="false" aria-controls="' . $submenuId . '" data-submenu-id="' . $submenuId . '">';
+                $html .= '<span class="material-symbols-outlined">expand_more</span>';
+                $html .= '</button>';
+            }
+            $html .= '</div>';
+
+            if ($hasChildren) {
+                $html .= '<div id="' . $submenuId . '" class="mobile-submenu hidden space-y-1">';
+                $html .= renderMenuItems($route['children'], $currentRoute, $level + 1, true);
+                $html .= '</div>';
+            }
+
+            $html .= '</div>';
+            continue;
+        }
+
+        $html .= '<div class="relative">';
+        $html .= '<div class="flex items-center gap-2">';
+        $html .= '<a class="' . $linkClasses . ' transition font-medium" href="' . htmlspecialchars($route['href']) . '">' . htmlspecialchars($route['label']) . '</a>';
+        if ($hasChildren) {
+            $html .= '<button type="button" class="desktop-submenu-toggle inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200" aria-expanded="false" aria-controls="' . $submenuId . '" data-submenu-id="' . $submenuId . '">';
+            $html .= '<span class="material-symbols-outlined">expand_more</span>';
+            $html .= '</button>';
+        }
+        $html .= '</div>';
+
+        if ($hasChildren) {
+            $html .= '<div id="' . $submenuId . '" class="desktop-submenu hidden absolute left-0 top-full z-50 mt-2 w-56 rounded-3xl border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-800 dark:bg-slate-950">';
+            $html .= renderMenuItems($route['children'], $currentRoute, $level + 1, false);
+            $html .= '</div>';
+        }
+
+        $html .= '</div>';
+    }
+
+    return $html;
+}
 ?>
 <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800 shadow-sm">
     <div class="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
@@ -13,17 +71,7 @@ $currentRoute = \Mpemba\Utils\Router::getCurrentRoute();
         </a>
 
         <div class="hidden lg:flex items-center gap-6">
-            <?php foreach ($mainMenuRoutes as $route):
-                $isActive = ($route['key'] === $currentRoute);
-                $disabled = $route['disabled'] ?? false;
-                $linkClasses = $disabled
-                    ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
-                    : ($isActive
-                        ? 'text-primary font-semibold'
-                        : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white');
-            ?>
-                <a class="<?php echo $linkClasses; ?> transition font-medium" href="<?php echo htmlspecialchars($route['href']); ?>"><?php echo htmlspecialchars($route['label']); ?></a>
-            <?php endforeach; ?>
+            <?php echo renderMenuItems($mainMenuRoutes, $currentRoute); ?>
         </div>
 
         <div class="hidden lg:flex items-center gap-4" id="auth-section">
@@ -37,15 +85,7 @@ $currentRoute = \Mpemba\Utils\Router::getCurrentRoute();
 
     <div id="mobileMenu" class="lg:hidden hidden border-t border-slate-200/70 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl">
         <div class="px-6 py-5 space-y-3">
-            <?php foreach ($mainMenuRoutes as $route):
-                $isActive = ($route['key'] === $currentRoute);
-                $disabled = $route['disabled'] ?? false;
-                $linkClasses = $disabled
-                    ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
-                    : 'block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition' . ($isActive ? ' bg-primary/10 text-primary font-semibold' : '');
-            ?>
-                <a class="<?php echo $linkClasses; ?>" href="<?php echo htmlspecialchars($route['href']); ?>"><?php echo htmlspecialchars($route['label']); ?></a>
-            <?php endforeach; ?>
+            <?php echo renderMenuItems($mainMenuRoutes, $currentRoute, 0, true); ?>
             <div class="flex flex-col gap-3 pt-2 border-t border-slate-200/70 dark:border-slate-800" id="mobile-auth-section">
                 <!-- This will be populated by JavaScript -->
             </div>
@@ -59,6 +99,33 @@ $currentRoute = \Mpemba\Utils\Router::getCurrentRoute();
             const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
             mobileMenuButton.setAttribute('aria-expanded', String(!expanded));
             mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.desktop-submenu-toggle, .mobile-submenu-toggle').forEach((toggleButton) => {
+            toggleButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const submenuId = toggleButton.getAttribute('data-submenu-id');
+                const submenu = document.getElementById(submenuId);
+                if (!submenu) return;
+
+                const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+                toggleButton.setAttribute('aria-expanded', String(!isExpanded));
+                submenu.classList.toggle('hidden');
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            const isToggle = event.target.closest('.desktop-submenu-toggle, .mobile-submenu-toggle');
+            const isSubmenu = event.target.closest('.desktop-submenu, .mobile-submenu');
+            if (!isToggle && !isSubmenu) {
+                document.querySelectorAll('.desktop-submenu, .mobile-submenu').forEach((submenu) => {
+                    submenu.classList.add('hidden');
+                });
+                document.querySelectorAll('.desktop-submenu-toggle, .mobile-submenu-toggle').forEach((button) => {
+                    button.setAttribute('aria-expanded', 'false');
+                });
+            }
         });
 
         // Check authentication status and update navbar

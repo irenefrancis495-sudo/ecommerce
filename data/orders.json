@@ -17,7 +17,7 @@
         "user_id": 5,
         "user_name": "sae",
         "user_email": "dignatheobard960@gmail.com",
-        "status": "processing",
+        "status": "shipped",
         "payment_status": "paid",
         "payment_method": "Vodacom M-Pesa",
         "subtotal": 89.98,
