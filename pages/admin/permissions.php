@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'add_role') {
         $rawName = trim((string) ($_POST['new_role_name'] ?? ''));
         $newRole = strtolower(trim(preg_replace('/[^a-z0-9_]+/', '_', $rawName), '_'));
+        $newRoleLabel = ucwords(str_replace(['_', '-'], ' ', $newRole));
 
         if ($newRole === '') {
             $flash = 'Role name is required.';
@@ -71,10 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $permissions[$newRole] = array_fill_keys(array_keys($permissionLabels), false);
             adminSaveRolePermissions($permissions);
             if ($isAjax) {
-                echo json_encode(['success' => true, 'message' => 'Role "' . $newRole . '" added successfully.', 'role' => $newRole]);
-                exit;
-            } else {
-                header('Location: ' . $currentPath . '?added=' . urlencode($newRole));
+                echo json_encode(['success' => true, 'message' => 'Role "' . $newRoleLabel . '" added successfully.', 'role' => $newRole, 'label' => $newRoleLabel]);
                 exit;
             }
         }
@@ -100,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($action === 'remove_role') {
         $roleToRemove = strtolower(trim((string) ($_POST['role'] ?? '')));
         $defaultRoles = array_keys(adminDefaultRolePermissions());
+        $removeLabel = ucwords(str_replace(['_', '-'], ' ', $roleToRemove));
 
         if ($roleToRemove === '') {
             $flash = 'Role selection is required to remove a role.';
@@ -123,10 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             file_put_contents($usersFile, json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 
             if ($isAjax) {
-                echo json_encode(['success' => true, 'message' => 'Role "' . $roleToRemove . '" removed successfully.', 'role' => $roleToRemove]);
-                exit;
-            } else {
-                header('Location: ' . $currentPath . '?removed=' . urlencode($roleToRemove));
+                echo json_encode(['success' => true, 'message' => 'Role "' . $removeLabel . '" removed successfully.', 'role' => $roleToRemove, 'label' => $removeLabel]);
                 exit;
             }
         }
@@ -290,7 +286,7 @@ function userRoleLabel(string $role): string
                 <p class="text-xs text-slate-500">Remove any custom role that is no longer needed.</p>
               </div>
             </div>
-            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div id="customRolesGrid" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <?php $defaultRoles = array_keys(adminDefaultRolePermissions()); ?>
               <?php foreach ($roleColumns as $roleKey => $roleLabel): ?>
                 <?php if (in_array($roleKey, $defaultRoles, true)): ?>
@@ -321,18 +317,18 @@ function userRoleLabel(string $role): string
                 <p class="text-xs text-slate-500">Assign Create / Read / Update / Delete / Manage Users permissions for each role.</p>
               </div>
               <div class="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
-                <table class="w-full text-sm">
+                <table id="permissionMatrixTable" class="w-full text-sm">
                   <thead class="bg-slate-50 border-b border-slate-100">
                     <tr>
                       <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Permission</th>
-                      <?php foreach ($roleColumns as $roleLabel): ?>
-                      <th class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-32"><?php echo htmlspecialchars($roleLabel); ?></th>
+                      <?php foreach ($roleColumns as $roleKey => $roleLabel): ?>
+                      <th data-role-key="<?php echo htmlspecialchars($roleKey); ?>" class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-32"><?php echo htmlspecialchars($roleLabel); ?></th>
                       <?php endforeach; ?>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-slate-100">
                     <?php foreach ($permissionLabels as $permissionKey => $label): ?>
-                    <tr class="hover:bg-slate-50/60 transition-colors">
+                    <tr class="hover:bg-slate-50/60 transition-colors" data-permission-key="<?php echo htmlspecialchars($permissionKey); ?>">
                       <td class="px-5 py-3 font-medium text-slate-700"><?php echo htmlspecialchars($label); ?></td>
                       <?php foreach ($roleColumns as $roleKey => $roleLabel): ?>
                       <td class="px-5 py-3 text-center">
@@ -369,7 +365,7 @@ function userRoleLabel(string $role): string
         <form method="POST" action="<?php echo htmlspecialchars($currentPath); ?>" class="p-6">
           <input type="hidden" name="action" value="update_user_roles" />
           <div class="overflow-x-auto rounded-lg border border-slate-100 shadow-sm">
-            <table class="w-full text-sm">
+            <table id="userRolesTable" class="w-full text-sm">
               <thead class="bg-slate-50 border-b border-slate-100">
                 <tr>
                   <th class="px-5 py-3 text-left text-[11px] font-black text-slate-400 uppercase tracking-widest">Username</th>
@@ -409,39 +405,161 @@ function userRoleLabel(string $role): string
 
 <script>
 $(document).ready(function() {
-    $('form').on('submit', function(e) {
+    const $formContainer = $('.admin-main');
+    const $rolesGrid = $('#customRolesGrid');
+    const $permissionMatrix = $('#permissionMatrixTable');
+    const $userRolesTable = $('#userRolesTable');
+
+    function normalizeRoleKey(value) {
+        return value
+            .toString()
+            .trim()
+            .toLowerCase()
+            .replace(/[^a-z0-9_]+/g, '_')
+            .replace(/^_+|_+$/g, '');
+    }
+
+    function addRoleCard(roleKey, roleLabel) {
+        const removeForm = `
+          <form method="POST" action="${window.location.pathname}" class="space-y-0 remove-role-form">
+            <input type="hidden" name="action" value="remove_role" />
+            <input type="hidden" name="role" value="${roleKey}" />
+            <button type="submit" class="rounded-lg bg-red-50 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-100 transition">Remove</button>
+          </form>`;
+
+        const card = `
+          <div id="role-card-${roleKey}" class="rounded-3xl border border-slate-200 bg-slate-50 p-5 shadow-sm">
+            <p class="text-sm font-semibold text-slate-900 mb-2">${roleLabel}</p>
+            <p class="text-xs text-slate-500 mb-4">Custom role</p>
+            ${removeForm}
+          </div>`;
+
+        $rolesGrid.append(card);
+    }
+
+    function addRoleColumn(roleKey, roleLabel) {
+        if (!$permissionMatrix.length || !$userRolesTable.length) {
+            return;
+        }
+
+        // Add header cell
+        $permissionMatrix.find('thead tr').append(
+            `<th data-role-key="${roleKey}" class="px-5 py-3 text-center text-[11px] font-black text-slate-400 uppercase tracking-widest w-32">${roleLabel}</th>`
+        );
+
+        // Add checkbox for every permission row
+        $permissionMatrix.find('tbody tr[data-permission-key]').each(function() {
+            const permissionKey = $(this).data('permission-key');
+            const fieldName = `perm_${roleKey}_${permissionKey.toString().replace(/\./g, '_')}`;
+            $(this).append(
+                `<td class="px-5 py-3 text-center"><input type="checkbox" class="w-4 h-4 accent-primary rounded cursor-pointer" name="${fieldName}" /></td>`
+            );
+        });
+
+        // Add option for each user role select
+        $userRolesTable.find('select[name^="user_role["]')
+            .append(`<option value="${roleKey}">${roleLabel}</option>`);
+    }
+
+    function removeRoleColumn(roleKey) {
+        if (!$permissionMatrix.length || !$userRolesTable.length) {
+            return;
+        }
+
+        const $header = $permissionMatrix.find(`thead tr th[data-role-key="${roleKey}"]`);
+        if (!$header.length) {
+            return;
+        }
+
+        const removeIndex = $header.index();
+        $header.remove();
+
+        $permissionMatrix.find('tbody tr').each(function() {
+            $(this).find('td').eq(removeIndex).remove();
+        });
+
+        $userRolesTable.find(`select[name^="user_role["] option[value="${roleKey}"]`).remove();
+        $(`#role-card-${roleKey}`).remove();
+    }
+
+    function showToast(message, type) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: type,
+            title: message,
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/40'
+            }
+        });
+    }
+
+    $(document).on('submit', 'form', function(e) {
+        const $form = $(this);
+        const action = $form.find('input[name="action"]').val();
+        const $submitButton = $form.find('button[type="submit"]');
+
+        if (!action) {
+            return false;
+        }
+
         e.preventDefault();
-        const form = $(this);
-        const formData = form.serialize();
+        e.stopImmediatePropagation();
+        const formData = $form.serialize();
+        $submitButton.prop('disabled', true).addClass('opacity-70 cursor-not-allowed');
 
         $.ajax({
             url: window.location.pathname,
             type: 'POST',
             data: formData,
             dataType: 'json',
+            cache: false,
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             },
             success: function(response) {
-                if (response.success) {
-                    Swal.fire({
-                        title: 'Success',
-                        text: response.message,
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                        confirmButtonColor: '#003345'
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
+                if (!response || !response.success) {
                     Swal.fire({
                         title: 'Error',
-                        text: response.message,
+                        text: (response && response.message) ? response.message : 'An unexpected error occurred. Please try again.',
                         icon: 'error',
                         confirmButtonText: 'OK',
                         confirmButtonColor: '#dc2626'
                     });
+                    return;
                 }
+
+                window.history.replaceState(null, '', window.location.pathname);
+
+                if (action === 'add_role') {
+                    addRoleCard(response.role, response.label || response.role);
+                    addRoleColumn(response.role, response.label || response.role);
+                    showToast(response.message, 'success');
+                    $form.find('input[name="new_role_name"]').val('');
+                    return;
+                }
+
+                if (action === 'remove_role') {
+                    removeRoleColumn(response.role);
+                    showToast(response.message, 'success');
+                    return;
+                }
+
+                if (action === 'save_role_permissions' || action === 'update_user_roles') {
+                    showToast(response.message, 'success');
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'Success',
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#003345'
+                });
             },
             error: function(xhr, status, error) {
                 Swal.fire({
@@ -451,8 +569,13 @@ $(document).ready(function() {
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#dc2626'
                 });
+            },
+            complete: function() {
+                $submitButton.prop('disabled', false).removeClass('opacity-70 cursor-not-allowed');
             }
         });
+
+        return false;
     });
 });
 </script>

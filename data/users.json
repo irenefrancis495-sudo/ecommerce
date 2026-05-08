@@ -1,7 +1,7 @@
 [
     {
         "username": "admin",
-        "password": "$2y$12$g0pG5lSgawRkfKC.i\/DpFOC4zInoYxQNDf0xansJmuyBVhgt88626",
+        "password": "$2y$12$g0pG5lSgawRkfKC.i/DpFOC4zInoYxQNDf0xansJmuyBVhgt88626",
         "email": "admin@mpemba.com",
         "first_name": "Admin",
         "last_name": "User",
@@ -38,7 +38,7 @@
         "id": 5,
         "username": "sae",
         "email": "dignatheobard960@gmail.com",
-        "password": "$2y$12$OfEkY85Xg2offZi654DCSeRR5jMiV\/mDYZ1F\/67e91rgFdxm3r\/oi",
+        "password": "$2y$12$OfEkY85Xg2offZi654DCSeRR5jMiV/mDYZ1F/67e91rgFdxm3r/oi",
         "first_name": "",
         "last_name": "",
         "role": "user"
@@ -47,7 +47,7 @@
         "id": 6,
         "username": "irene",
         "email": "irene@gmail.com",
-        "password": "$2y$12$kNQ4cxGhhU\/5wmH0wCm8PeQcWV15HolMAQYddZQhn3I74QbzjaKsy",
+        "password": "$2y$12$kNQ4cxGhhU/5wmH0wCm8PeQcWV15HolMAQYddZQhn3I74QbzjaKsy",
         "first_name": "",
         "last_name": "",
         "role": "user"
@@ -56,9 +56,9 @@
         "id": 7,
         "username": "Dee",
         "email": "deetheo04@gmail.com",
-        "password": "$2y$12$uCdx7i9Az6eOCqshkszX\/.\/o3MFA9Wi.PpONo3Dy\/viiHvEtRg2Bi",
+        "password": "$2y$12$uCdx7i9Az6eOCqshkszX/./o3MFA9Wi.PpONo3Dy/viiHvEtRg2Bi",
         "first_name": "",
         "last_name": "",
-        "role": "user"
+        "role": "manager"
     }
 ]

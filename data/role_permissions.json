@@ -10,7 +10,7 @@
         "create": true,
         "read": true,
         "update": true,
-        "delete": true,
+        "delete": false,
         "manage.users": false
     },
     "editor": {
@@ -21,15 +21,8 @@
         "manage.users": false
     },
     "user": {
-        "create": false,
+        "create": true,
         "read": true,
-        "update": false,
-        "delete": false,
-        "manage.users": false
-    },
-    "agent": {
-        "create": false,
-        "read": false,
         "update": false,
         "delete": false,
         "manage.users": false

@@ -8,19 +8,25 @@ function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bo
         $hasChildren = !empty($route['children']);
         $isActive = \Mpemba\Utils\Router::isRouteActive($route, $currentRoute);
         $disabled = $route['disabled'] ?? false;
-        $linkClasses = $disabled
-            ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
-            : ($isActive
-                ? 'text-primary font-semibold'
-                : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white');
 
         $itemId = 'menu-' . str_replace(['/', ' '], ['-', '-'], $route['key']);
         $submenuId = $itemId . '-submenu';
 
+        $baseLinkClasses = 'inline-flex items-center gap-2 rounded-full transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary/20';
+        $activeBaseClasses = 'bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20';
+        $defaultBaseClasses = 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white';
+        $disabledBaseClasses = 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600';
+
         if ($isMobile) {
+            $linkClasses = $disabled
+                ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
+                : ($isActive
+                    ? $baseLinkClasses . ' ' . $activeBaseClasses . ' px-4 py-3 text-sm font-semibold'
+                    : $baseLinkClasses . ' text-slate-700 dark:text-slate-200 px-4 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-900');
+
             $html .= '<div class="space-y-1">';
             $html .= '<div class="flex items-center justify-between gap-2">';
-            $html .= '<a class="block rounded-3xl px-4 py-3 ' . $linkClasses . ($isActive ? ' bg-primary/10 text-primary font-semibold' : '') . '" href="' . htmlspecialchars($route['href']) . '">' . htmlspecialchars($route['label']) . '</a>';
+            $html .= '<a class="block w-full ' . $linkClasses . '" href="' . htmlspecialchars($route['href']) . '"' . ($isActive ? ' aria-current="page"' : '') . '>' . htmlspecialchars($route['label']) . '</a>';
             if ($hasChildren) {
                 $html .= '<button type="button" class="mobile-submenu-toggle inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200" aria-expanded="false" aria-controls="' . $submenuId . '" data-submenu-id="' . $submenuId . '">';
                 $html .= '<span class="material-symbols-outlined">expand_more</span>';
@@ -29,7 +35,7 @@ function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bo
             $html .= '</div>';
 
             if ($hasChildren) {
-                $html .= '<div id="' . $submenuId . '" class="mobile-submenu hidden space-y-1">';
+                $html .= '<div id="' . $submenuId . '" class="mobile-submenu hidden space-y-1 pl-4">';
                 $html .= renderMenuItems($route['children'], $currentRoute, $level + 1, true);
                 $html .= '</div>';
             }
@@ -38,9 +44,15 @@ function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bo
             continue;
         }
 
-        $html .= '<div class="relative">';
+        $linkClasses = $disabled
+            ? $disabledBaseClasses . ' ' . $baseLinkClasses . ' px-4 py-2 text-sm'
+            : ($isActive
+                ? $baseLinkClasses . ' ' . $activeBaseClasses . ' px-4 py-2 text-sm font-semibold'
+                : $baseLinkClasses . ' ' . $defaultBaseClasses . ' px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-900');
+
+        $html .= '<div class="relative group">';
         $html .= '<div class="flex items-center gap-2">';
-        $html .= '<a class="' . $linkClasses . ' transition font-medium" href="' . htmlspecialchars($route['href']) . '">' . htmlspecialchars($route['label']) . '</a>';
+        $html .= '<a class="' . $linkClasses . '" href="' . htmlspecialchars($route['href']) . '"' . ($isActive ? ' aria-current="page"' : '') . '>' . htmlspecialchars($route['label']) . '</a>';
         if ($hasChildren) {
             $html .= '<button type="button" class="desktop-submenu-toggle inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200" aria-expanded="false" aria-controls="' . $submenuId . '" data-submenu-id="' . $submenuId . '">';
             $html .= '<span class="material-symbols-outlined">expand_more</span>';
@@ -49,7 +61,7 @@ function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bo
         $html .= '</div>';
 
         if ($hasChildren) {
-            $html .= '<div id="' . $submenuId . '" class="desktop-submenu hidden absolute left-0 top-full z-50 mt-2 w-56 rounded-3xl border border-slate-200 bg-white p-3 shadow-xl dark:border-slate-800 dark:bg-slate-950">';
+            $html .= '<div id="' . $submenuId . '" class="desktop-submenu hidden absolute left-0 top-full z-50 mt-2 min-w-[14rem] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-xl transition duration-200 dark:border-slate-800 dark:bg-slate-950">';
             $html .= renderMenuItems($route['children'], $currentRoute, $level + 1, false);
             $html .= '</div>';
         }
@@ -112,6 +124,7 @@ function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bo
                 const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
                 toggleButton.setAttribute('aria-expanded', String(!isExpanded));
                 submenu.classList.toggle('hidden');
+                toggleButton.classList.toggle('rotate-180');
             });
         });
 
@@ -124,6 +137,7 @@ function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bo
                 });
                 document.querySelectorAll('.desktop-submenu-toggle, .mobile-submenu-toggle').forEach((button) => {
                     button.setAttribute('aria-expanded', 'false');
+                    button.classList.remove('rotate-180');
                 });
             }
         });
