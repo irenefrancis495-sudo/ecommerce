@@ -1,0 +1,26 @@
+{
+  "name": "mpemba/crud",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Mpemba\\Crud\\": "src/",
+      "App\\Types\\": "types/",
+      "Mpemba\\Utils\\": "utils/",
+      "Mpemba\\Entity\\": "entity/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Mpemba",
+      "email": "mpemba@gmail.com"
+    }
+  ],
+  "require": {
+    "doctrine/dbal": "^4",
+    "symfony/cache": "^7",
+    "symfony/console": "^7.2",
+    "vlucas/phpdotenv": "^5.6",
+    "doctrine/migrations": "^3.9",
+    "symfony/var-exporter": "^7.2"
+  }
+}
