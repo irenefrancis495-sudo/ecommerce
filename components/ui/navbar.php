@@ -1,3 +1,77 @@
+<?php
+$mainMenuRoutes = \Mpemba\Utils\Router::getMenuRoutes('main');
+$currentRoute = \Mpemba\Utils\Router::getCurrentRoute();
+
+function renderMenuItems(array $routes, string $currentRoute, int $level = 0, bool $isMobile = false) {
+    $html = '';
+    foreach ($routes as $route) {
+        $hasChildren = !empty($route['children']);
+        $isActive = \Mpemba\Utils\Router::isRouteActive($route, $currentRoute);
+        $disabled = $route['disabled'] ?? false;
+
+        $itemId = 'menu-' . str_replace(['/', ' '], ['-', '-'], $route['key']);
+        $submenuId = $itemId . '-submenu';
+
+        $baseLinkClasses = 'inline-flex items-center gap-2 rounded-full transition duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary/20';
+        $activeBaseClasses = 'bg-primary/10 text-primary shadow-sm ring-1 ring-primary/20';
+        $defaultBaseClasses = 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white';
+        $disabledBaseClasses = 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600';
+
+        if ($isMobile) {
+            $linkClasses = $disabled
+                ? 'pointer-events-none opacity-50 text-slate-400 dark:text-slate-600'
+                : ($isActive
+                    ? $baseLinkClasses . ' ' . $activeBaseClasses . ' px-4 py-3 text-sm font-semibold'
+                    : $baseLinkClasses . ' text-slate-700 dark:text-slate-200 px-4 py-3 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-900');
+
+            $html .= '<div class="space-y-1">';
+            $html .= '<div class="flex items-center justify-between gap-2">';
+            $html .= '<a class="block w-full ' . $linkClasses . '" href="' . htmlspecialchars($route['href']) . '"' . ($isActive ? ' aria-current="page"' : '') . '>' . htmlspecialchars($route['label']) . '</a>';
+            if ($hasChildren) {
+                $html .= '<button type="button" class="mobile-submenu-toggle inline-flex h-11 w-11 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200" aria-expanded="false" aria-controls="' . $submenuId . '" data-submenu-id="' . $submenuId . '">';
+                $html .= '<span class="material-symbols-outlined">expand_more</span>';
+                $html .= '</button>';
+            }
+            $html .= '</div>';
+
+            if ($hasChildren) {
+                $html .= '<div id="' . $submenuId . '" class="mobile-submenu hidden space-y-1 pl-4">';
+                $html .= renderMenuItems($route['children'], $currentRoute, $level + 1, true);
+                $html .= '</div>';
+            }
+
+            $html .= '</div>';
+            continue;
+        }
+
+        $linkClasses = $disabled
+            ? $disabledBaseClasses . ' ' . $baseLinkClasses . ' px-4 py-2 text-sm'
+            : ($isActive
+                ? $baseLinkClasses . ' ' . $activeBaseClasses . ' px-4 py-2 text-sm font-semibold'
+                : $baseLinkClasses . ' ' . $defaultBaseClasses . ' px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-900');
+
+        $html .= '<div class="relative group">';
+        $html .= '<div class="flex items-center gap-2">';
+        $html .= '<a class="' . $linkClasses . '" href="' . htmlspecialchars($route['href']) . '"' . ($isActive ? ' aria-current="page"' : '') . '>' . htmlspecialchars($route['label']) . '</a>';
+        if ($hasChildren) {
+            $html .= '<button type="button" class="desktop-submenu-toggle inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-100 transition dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200" aria-expanded="false" aria-controls="' . $submenuId . '" data-submenu-id="' . $submenuId . '">';
+            $html .= '<span class="material-symbols-outlined">expand_more</span>';
+            $html .= '</button>';
+        }
+        $html .= '</div>';
+
+        if ($hasChildren) {
+            $html .= '<div id="' . $submenuId . '" class="desktop-submenu hidden absolute left-0 top-full z-50 mt-2 min-w-[14rem] overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-xl transition duration-200 dark:border-slate-800 dark:bg-slate-950">';
+            $html .= renderMenuItems($route['children'], $currentRoute, $level + 1, false);
+            $html .= '</div>';
+        }
+
+        $html .= '</div>';
+    }
+
+    return $html;
+}
+?>
 <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-slate-950/95 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800 shadow-sm">
     <div class="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         <a href="/home" class="flex items-center gap-3">
@@ -9,9 +83,7 @@
         </a>
 
         <div class="hidden lg:flex items-center gap-6">
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/home">Home</a>
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/products">Products</a>
-            <a class="text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white transition font-medium" href="/category">Categories</a>
+            <?php echo renderMenuItems($mainMenuRoutes, $currentRoute); ?>
         </div>
 
         <div class="hidden lg:flex items-center gap-4" id="auth-section">
@@ -25,9 +97,7 @@
 
     <div id="mobileMenu" class="lg:hidden hidden border-t border-slate-200/70 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl">
         <div class="px-6 py-5 space-y-3">
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/home">Home</a>
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/products">Products</a>
-            <a class="block rounded-3xl px-4 py-3 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition" href="/category">Categories</a>
+            <?php echo renderMenuItems($mainMenuRoutes, $currentRoute, 0, true); ?>
             <div class="flex flex-col gap-3 pt-2 border-t border-slate-200/70 dark:border-slate-800" id="mobile-auth-section">
                 <!-- This will be populated by JavaScript -->
             </div>
@@ -41,6 +111,35 @@
             const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
             mobileMenuButton.setAttribute('aria-expanded', String(!expanded));
             mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('.desktop-submenu-toggle, .mobile-submenu-toggle').forEach((toggleButton) => {
+            toggleButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                const submenuId = toggleButton.getAttribute('data-submenu-id');
+                const submenu = document.getElementById(submenuId);
+                if (!submenu) return;
+
+                const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+                toggleButton.setAttribute('aria-expanded', String(!isExpanded));
+                submenu.classList.toggle('hidden');
+                toggleButton.classList.toggle('rotate-180');
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            const isToggle = event.target.closest('.desktop-submenu-toggle, .mobile-submenu-toggle');
+            const isSubmenu = event.target.closest('.desktop-submenu, .mobile-submenu');
+            if (!isToggle && !isSubmenu) {
+                document.querySelectorAll('.desktop-submenu, .mobile-submenu').forEach((submenu) => {
+                    submenu.classList.add('hidden');
+                });
+                document.querySelectorAll('.desktop-submenu-toggle, .mobile-submenu-toggle').forEach((button) => {
+                    button.setAttribute('aria-expanded', 'false');
+                    button.classList.remove('rotate-180');
+                });
+            }
         });
 
         // Check authentication status and update navbar

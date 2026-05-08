@@ -14,6 +14,23 @@ $categoryImages = [
     'Natural Beauty' => 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&h=800&fit=crop&crop=center',
     'Lifestyle Essentials' => 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=800&fit=crop&crop=center',
 ];
+
+$selectedCategoryLabel = $_GET['route_meta_category_label'] ?? null;
+$selectedCategorySlug = $_GET['route_meta_category_slug'] ?? null;
+$activeCategory = null;
+if ($selectedCategoryLabel && isset($categories[$selectedCategoryLabel])) {
+    $activeCategory = $selectedCategoryLabel;
+} elseif ($selectedCategorySlug) {
+    $candidate = ucwords(str_replace('-', ' ', $selectedCategorySlug));
+    if (isset($categories[$candidate])) {
+        $activeCategory = $candidate;
+    }
+}
+
+$heroTitle = $activeCategory ? $activeCategory . ' Collection' : 'Collections for every lifestyle';
+$heroText = $activeCategory
+    ? 'Explore the best products curated for ' . $activeCategory . '.'
+    : 'Browse signature categories that blend craftsmanship, technology and wellness into one elevated marketplace experience.';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -119,8 +136,8 @@ $categoryImages = [
             </div>
             <div class="relative z-10 text-center px-6">
                 <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.4em] text-white/90">Curated categories</span>
-                <h1 class="font-display font-black text-5xl md:text-7xl text-white tracking-tighter mb-4 mt-6">Collections for every lifestyle</h1>
-                <p class="font-body text-white/80 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">Browse signature categories that blend craftsmanship, technology and wellness into one elevated marketplace experience.</p>
+                <h1 class="font-display font-black text-5xl md:text-7xl text-white tracking-tighter mb-4 mt-6"><?php echo htmlspecialchars($heroTitle); ?></h1>
+                <p class="font-body text-white/80 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed"><?php echo htmlspecialchars($heroText); ?></p>
             </div>
         </section>
 

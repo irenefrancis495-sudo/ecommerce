@@ -6,7 +6,7 @@
         "tax": 16.5,
         "shipping_cost": 10,
         "total": 191.48,
-        "status": "completed",
+        "status": "shipped",
         "payment_status": "paid",
         "payment_method": "card",
         "id": 1
@@ -25,5 +25,20 @@
         "shipping_cost": 24,
         "total": 120.28,
         "created_at": "2026-05-05 10:48:42"
+    },
+    {
+        "id": 3,
+        "order_number": "ORD-20260507-003",
+        "user_id": 7,
+        "user_name": "Dee",
+        "user_email": "deetheo04@gmail.com",
+        "status": "shipped",
+        "payment_status": "paid",
+        "payment_method": "Airtel Money\n\nAirtel Money",
+        "subtotal": 823,
+        "tax": 57.61,
+        "shipping_cost": 24,
+        "total": 904.61,
+        "created_at": "2026-05-07 08:14:44"
     }
 ]

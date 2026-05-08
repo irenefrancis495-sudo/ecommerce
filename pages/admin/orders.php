@@ -553,8 +553,13 @@ usort($orders, function($a, $b) {
         document.getElementById('d-payment').textContent  = statusText(btn.dataset.payment || '');
         document.getElementById('d-status').textContent   = statusText(btn.dataset.status || '');
         document.querySelectorAll('.status-choice').forEach(function(choice) {
-            choice.classList.toggle('bg-primary', choice.dataset.status === btn.dataset.status);
-            choice.classList.toggle('text-on-primary', choice.dataset.status === btn.dataset.status);
+            if (choice.dataset.status === btn.dataset.status) {
+                choice.classList.add('bg-primary', 'text-on-primary');
+                choice.classList.remove('border-outline-variant', 'text-primary');
+            } else {
+                choice.classList.remove('bg-primary', 'text-on-primary');
+                choice.classList.add('border-outline-variant', 'text-primary');
+            }
         });
         var m = document.getElementById('ordDetailsModal');
         m.classList.remove('hidden'); m.classList.add('flex');
@@ -586,13 +591,72 @@ usort($orders, function($a, $b) {
                 if (data.status === 'success') {
                     document.getElementById('d-status').textContent = statusText(newStatus);
                     syncRowStatusUI(currentOrderId, newStatus);
+                    // Update all status choice buttons with proper styling
                     document.querySelectorAll('.status-choice').forEach(function(b) {
-                        b.classList.toggle('bg-primary', b.dataset.status === newStatus);
-                        b.classList.toggle('text-on-primary', b.dataset.status === newStatus);
+                        if (b.dataset.status === newStatus) {
+                            b.classList.add('bg-primary', 'text-on-primary');
+                            b.classList.remove('border-outline-variant', 'text-primary');
+                        } else {
+                            b.classList.remove('bg-primary', 'text-on-primary');
+                            b.classList.add('border-outline-variant', 'text-primary');
+                        }
                     });
                     filterOrders();
+                    
+                    // Show success notification
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order status updated',
+                            text: 'Admin successfully changed the order status to ' + statusText(newStatus),
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 2500,
+                            timerProgressBar: true,
+                            didOpen: function(toast) {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+                    }
+                } else {
+                    // Show error notification
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Status update failed',
+                            text: data.message || 'Admin could not change the order status.',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: function(toast) {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+                    }
                 }
-            } catch { /* silent fail */ }
+            } catch (err) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Status update failed',
+                        text: 'Unable to update order status. Please try again.',
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: function(toast) {
+                            toast.addEventListener('mouseenter', Swal.stopTimer);
+                            toast.addEventListener('mouseleave', Swal.resumeTimer);
+                        }
+                    });
+                }
+            }
         });
     });
 
@@ -712,4 +776,5 @@ usort($orders, function($a, $b) {
     });
 })();
 </script>
+<script src="/assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="/js/admin.js"></script>
