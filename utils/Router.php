@@ -1,6 +1,8 @@
 <?php
 namespace Mpemba\Utils;
 
+use Mpemba\Utils\Utility;
+
 class Router {
     public static function load() {
         if (preg_match('/\.(?:png|jpg|jpeg|gif|css|js|ico|svg)$/', $_SERVER["REQUEST_URI"])) {
@@ -104,7 +106,20 @@ class Router {
     }
 
     public static function getMenuRoutes(string $context = 'main'): array {
-        $mainRoutes = [
+    
+    // $menuItems = Utility::safeQuery("
+    // SELECT p.name AS title, p.link AS href,
+    // FROM menu p WHERE p.parent_id IS NULL
+    // ");
+
+
+    // if(empty($menuItems)){
+    //   return [];
+    // }
+
+    //   $menus = self::packChildrens($menuItems);
+    
+    $mainRoutes = [
             [
                 'key' => 'home',
                 'href' => '/home',
@@ -422,6 +437,37 @@ class Router {
         }
 
         return false;
+    }
+
+
+    public static function getChildrens($parentKey):array{
+        $menuItems = Utility::safeQuery("
+        SELECT p.name AS title, p.link AS href,
+        FROM menu p WHERE p.parent_id = '$parentKey'
+        ");
+
+        return $menuItems;
+    }
+    public static function packChildrens($parentKey = null):array {
+        $items = self::getChildrens($parentKey);
+
+        if(empty($items)){
+            return [];
+        }
+
+        $grouped = [];
+        foreach ($items as $item) {
+            $key = $item['key'] ?? null;
+            if ($key === null) continue;
+
+            if (isset($item['parent']) && $item['parent'] === $parentKey) {
+                $grouped[$item['parent']]['children'][] = $item;
+            } else {
+                $grouped[$key] = $item + ['children' => []];
+            }
+        }
+
+        return array_values($grouped);
     }
 }
 ?>
