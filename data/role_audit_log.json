@@ -1,0 +1,46 @@
+[
+    {
+        "timestamp": "2026-05-11 07:31:58",
+        "action": "disable",
+        "role": "manager",
+        "actor_name": "Site Admin",
+        "actor_username": "admin",
+        "actor_email": "admin@mpemba.local",
+        "meta": {
+            "label": "Manager"
+        }
+    },
+    {
+        "timestamp": "2026-05-11 07:32:06",
+        "action": "disable",
+        "role": "manager",
+        "actor_name": "Site Admin",
+        "actor_username": "admin",
+        "actor_email": "admin@mpemba.local",
+        "meta": {
+            "label": "Manager"
+        }
+    },
+    {
+        "timestamp": "2026-05-11 07:32:13",
+        "action": "enable",
+        "role": "manager",
+        "actor_name": "Site Admin",
+        "actor_username": "admin",
+        "actor_email": "admin@mpemba.local",
+        "meta": {
+            "label": "Manager"
+        }
+    },
+    {
+        "timestamp": "2026-05-11 07:32:23",
+        "action": "enable",
+        "role": "manager",
+        "actor_name": "Site Admin",
+        "actor_username": "admin",
+        "actor_email": "admin@mpemba.local",
+        "meta": {
+            "label": "Manager"
+        }
+    }
+]

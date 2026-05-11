@@ -39,9 +39,62 @@ function adminPermissionsFilePath(): string
     return __DIR__ . '/../../data/role_permissions.json';
 }
 
+function adminRoleStatusFilePath(): string
+{
+    return __DIR__ . '/../../data/role_status.json';
+}
+
+function adminRoleAuditFilePath(): string
+{
+    return __DIR__ . '/../../data/role_audit_log.json';
+}
+
+function adminDeletedDefaultsFilePath(): string
+{
+    return __DIR__ . '/../../data/role_deleted_defaults.json';
+}
+
+function adminLoadDeletedDefaultRoles(): array
+{
+    $file = adminDeletedDefaultsFilePath();
+    if (!file_exists($file)) {
+        file_put_contents($file, json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        return [];
+    }
+
+    $data = json_decode((string) file_get_contents($file), true);
+    if (!is_array($data)) {
+        return [];
+    }
+
+    $normalized = [];
+    foreach ($data as $role) {
+        $roleKey = strtolower(trim((string) $role));
+        if ($roleKey !== '' && $roleKey !== 'admin') {
+            $normalized[] = $roleKey;
+        }
+    }
+    return array_values(array_unique($normalized));
+}
+
+function adminSaveDeletedDefaultRoles(array $roles): void
+{
+    $normalized = [];
+    foreach ($roles as $role) {
+        $roleKey = strtolower(trim((string) $role));
+        if ($roleKey !== '' && $roleKey !== 'admin') {
+            $normalized[] = $roleKey;
+        }
+    }
+
+    $normalized = array_values(array_unique($normalized));
+    file_put_contents(adminDeletedDefaultsFilePath(), json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+}
+
 function adminLoadRolePermissions(): array
 {
     $defaults = adminDefaultRolePermissions();
+    $deletedDefaults = adminLoadDeletedDefaultRoles();
     $file = adminPermissionsFilePath();
 
     if (!file_exists($file)) {
@@ -55,6 +108,10 @@ function adminLoadRolePermissions(): array
     }
 
     foreach ($defaults as $role => $permissions) {
+        if ($role !== 'admin' && in_array($role, $deletedDefaults, true)) {
+            continue;
+        }
+
         if (!isset($data[$role]) || !is_array($data[$role])) {
             $data[$role] = $permissions;
             continue;
@@ -73,6 +130,105 @@ function adminLoadRolePermissions(): array
 function adminSaveRolePermissions(array $permissions): void
 {
     file_put_contents(adminPermissionsFilePath(), json_encode($permissions, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+}
+
+function adminLoadRoleStatus(): array
+{
+    $permissions = adminLoadRolePermissions();
+    $roleKeys = array_keys($permissions);
+    $file = adminRoleStatusFilePath();
+
+    if (!file_exists($file)) {
+        $defaults = array_fill_keys($roleKeys, true);
+        file_put_contents($file, json_encode($defaults, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        return $defaults;
+    }
+
+    $data = json_decode((string) file_get_contents($file), true);
+    if (!is_array($data)) {
+        return array_fill_keys($roleKeys, true);
+    }
+
+    $normalized = [];
+    foreach ($roleKeys as $roleKey) {
+        if (!array_key_exists($roleKey, $data)) {
+            $normalized[$roleKey] = true;
+            continue;
+        }
+        $normalized[$roleKey] = (bool) $data[$roleKey];
+    }
+
+    if (!isset($normalized['admin'])) {
+        $normalized['admin'] = true;
+    }
+
+    if ($normalized['admin'] === false) {
+        $normalized['admin'] = true;
+    }
+
+    file_put_contents($file, json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    return $normalized;
+}
+
+function adminSaveRoleStatus(array $status): void
+{
+    if (isset($status['admin']) && $status['admin'] === false) {
+        $status['admin'] = true;
+    }
+    file_put_contents(adminRoleStatusFilePath(), json_encode($status, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+}
+
+function adminIsRoleEnabled(string $role): bool
+{
+    $status = adminLoadRoleStatus();
+    return (bool) ($status[$role] ?? true);
+}
+
+function adminGetFallbackRole(array $roleStatus = []): string
+{
+    $status = $roleStatus ?: adminLoadRoleStatus();
+
+    if (!empty($status['user'])) {
+        return 'user';
+    }
+
+    foreach (['manager', 'editor', 'admin'] as $candidate) {
+        if (!empty($status[$candidate])) {
+            return $candidate;
+        }
+    }
+
+    return 'admin';
+}
+
+function adminLoadRoleAuditLog(): array
+{
+    $file = adminRoleAuditFilePath();
+
+    if (!file_exists($file)) {
+        file_put_contents($file, json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        return [];
+    }
+
+    $data = json_decode((string) file_get_contents($file), true);
+    return is_array($data) ? $data : [];
+}
+
+function adminAppendRoleAudit(string $action, string $role, array $meta = [], array $actor = []): void
+{
+    $entries = adminLoadRoleAuditLog();
+    $entries[] = [
+        'timestamp' => date('Y-m-d H:i:s'),
+        'action' => $action,
+        'role' => $role,
+        'actor_name' => (string) ($actor['name'] ?? ($_SESSION['admin_user']['name'] ?? 'Admin')),
+        'actor_username' => (string) ($actor['username'] ?? ($_SESSION['admin_user']['username'] ?? 'admin')),
+        'actor_email' => (string) ($actor['email'] ?? ($_SESSION['admin_user']['email'] ?? '')),
+        'meta' => $meta,
+    ];
+
+    $entries = array_slice($entries, -250);
+    file_put_contents(adminRoleAuditFilePath(), json_encode($entries, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 }
 
 function adminCurrentRole(): string
@@ -100,6 +256,10 @@ function adminHasPermission(string $permission): bool
 
     $permissions = adminLoadRolePermissions();
     $role = adminCurrentRole();
+
+    if (!adminIsRoleEnabled($role)) {
+        return false;
+    }
 
     return (bool) ($permissions[$role][$permission] ?? false);
 }

@@ -1,0 +1,6 @@
+{
+    "admin": true,
+    "manager": true,
+    "editor": true,
+    "user": true
+}
