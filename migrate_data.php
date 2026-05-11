@@ -12,7 +12,7 @@ try {
     $usersFile = __DIR__ . '/data/users.json';
     if (file_exists($usersFile)) {
         $users = json_decode(file_get_contents($usersFile), true) ?: [];
-        if (Database::saveUsers($users)) {
+        if (Utility::bulkInsert('users', ['id', 'username', 'email', 'password', 'created_at'], $users)) {
             echo "Users migrated successfully: " . count($users) . " records\n";
         } else {
             echo "Failed to migrate users\n";
