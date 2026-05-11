@@ -89,6 +89,7 @@ class Router {
             'admin/subscribers' => 'Subscribers - Mpemba Admin',
             'admin/categories' => 'Categories - Mpemba Admin',
             'admin/permissions' => 'Permissions - Mpemba Admin',
+            'admin/shipping' => 'Shipping - Mpemba Admin',
         ];
 
         return $pageNames[$normalizedPath] ?? $default;
@@ -308,7 +309,7 @@ class Router {
                         'label' => 'Newsletters',
                         'page' => 'admin/newsletters.php',
                         'title' => 'Newsletters - Mpemba Admin',
-                        'disabled' => true,
+                        'disabled' => false,
                         'children' => [],
                     ],
                 ],
@@ -339,7 +340,7 @@ class Router {
                         'label' => 'Shipping',
                         'page' => 'admin/shipping.php',
                         'title' => 'Shipping - Mpemba Admin',
-                        'disabled' => true,
+                        'disabled' => false,
                         'children' => [],
                     ],
                 ],

@@ -32,7 +32,7 @@
         "password": "$2y$12$q1B4uRVLbjBpvvh.paOTY.vH6FAOxTcMDE.IbqeHrNAWLV1YQM0G.",
         "first_name": "",
         "last_name": "",
-        "role": "manager"
+        "role": "user"
     },
     {
         "id": 5,
@@ -59,6 +59,6 @@
         "password": "$2y$12$uCdx7i9Az6eOCqshkszX/./o3MFA9Wi.PpONo3Dy/viiHvEtRg2Bi",
         "first_name": "",
         "last_name": "",
-        "role": "manager"
+        "role": "user"
     }
 ]
