@@ -152,7 +152,7 @@ class Router {
                         'parent' => 'category',
                         'href' => '/category/natural-beauty',
                         'label' => 'Natural Beauty',
-                        'page' => 'category.php',
+                        'page' => 'natural-beauty.php',
                         'title' => 'Natural Beauty - Mpemba Store',
                         'disabled' => false,
                         'meta' => [
@@ -166,7 +166,7 @@ class Router {
                         'parent' => 'category',
                         'href' => '/category/atelier-electronics',
                         'label' => 'Atelier Electronics',
-                        'page' => 'category.php',
+                        'page' => 'atelier-electronics.php',
                         'title' => 'Atelier Electronics - Mpemba Store',
                         'disabled' => false,
                         'meta' => [
@@ -180,7 +180,7 @@ class Router {
                         'parent' => 'category',
                         'href' => '/category/heritage-fashion',
                         'label' => 'Heritage Fashion',
-                        'page' => 'category.php',
+                        'page' => 'heritage-fashion.php',
                         'title' => 'Heritage Fashion - Mpemba Store',
                         'disabled' => false,
                         'meta' => [
@@ -194,7 +194,7 @@ class Router {
                         'parent' => 'category',
                         'href' => '/category/sanctuary-home',
                         'label' => 'Sanctuary Home',
-                        'page' => 'category.php',
+                        'page' => 'sanctuary-home.php',
                         'title' => 'Sanctuary Home - Mpemba Store',
                         'disabled' => false,
                         'meta' => [
@@ -208,7 +208,7 @@ class Router {
                         'parent' => 'category',
                         'href' => '/category/lifestyle-essentials',
                         'label' => 'Lifestyle Essentials',
-                        'page' => 'category.php',
+                        'page' => 'lifestyle-essentials.php',
                         'title' => 'Lifestyle Essentials - Mpemba Store',
                         'disabled' => false,
                         'meta' => [
