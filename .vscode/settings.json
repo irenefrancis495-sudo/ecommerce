@@ -1,0 +1,7 @@
+{
+    "intelephense.diagnostics.undefinedFunctions": false,
+    "intelephense.diagnostics.undefinedTypes": false,
+    "intelephense.files.associations": [
+        "*.php"
+    ]
+}

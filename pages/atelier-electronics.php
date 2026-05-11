@@ -105,14 +105,14 @@
         <section class="max-w-7xl mx-auto px-8 mb-12">
             <div class="bg-surface-container-low rounded-2xl p-6 flex flex-col md:flex-row gap-6 items-center justify-between">
                 <div class="flex flex-wrap gap-3">
-                    <button class="px-6 py-2 bg-primary-fixed text-on-primary-fixed rounded-full font-label text-sm flex items-center gap-2">
+                    <button data-category-filter="all" class="px-6 py-2 bg-primary-fixed text-on-primary-fixed rounded-full font-label text-sm flex items-center gap-2">
                         <span>All Categories</span>
                         <span class="material-symbols-outlined text-sm">expand_more</span>
                     </button>
-                    <button class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Connectivity</button>
-                    <button class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Acoustics</button>
-                    <button class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Smart Home</button>
-                    <button class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Wearables</button>
+                    <button data-category-filter="Connectivity" class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Connectivity</button>
+                    <button data-category-filter="Acoustics" class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Acoustics</button>
+                    <button data-category-filter="Smart Home" class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Smart Home</button>
+                    <button data-category-filter="Wearables" class="px-6 py-2 bg-surface-container-highest text-on-surface rounded-full font-label text-sm hover:bg-surface-container-high transition-colors">Wearables</button>
                 </div>
                 <div class="flex items-center gap-4 w-full md:w-auto">
                     <div class="relative flex-grow md:w-64">
@@ -128,7 +128,7 @@
 
         <section class="max-w-7xl mx-auto px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2 group relative bg-surface-container-lowest rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-xl transition-all duration-500">
+                <div class="lg:col-span-2 group relative bg-surface-container-lowest rounded-3xl overflow-hidden flex flex-col md:flex-row shadow-sm hover:shadow-xl transition-all duration-500" data-category="Acoustics">
                     <div class="md:w-1/2 overflow-hidden">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1400&q=80" alt="Premium over-ear headphones" />
                     </div>
@@ -136,7 +136,7 @@
                         <div>
                             <div class="flex justify-between items-start mb-6">
                                 <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase">Atelier Selection</span>
-                                <button class="text-outline hover:text-error transition-colors">
+                                <button class="wishlist-btn text-outline hover:text-error transition-colors" data-id="301">
                                     <span class="material-symbols-outlined">favorite</span>
                                 </button>
                             </div>
@@ -163,15 +163,12 @@
                     </div>
                 </div>
 
-                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-id="5" data-name="Core Hub Ultra" data-price="299" data-image="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80">
+                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-category="Smart Home" data-id="5" data-name="Core Hub Ultra" data-price="299" data-image="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Smart home hub" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="material-symbols-outlined text-primary">add_circle</span>
+                        <button class="wishlist-btn absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-id="5">
+                            <span class="material-symbols-outlined text-primary">favorite</span>
                         </button>
-                    </div>
-                    <div class="flex-grow">
-                        <span class="text-xs font-bold uppercase tracking-widest text-outline mb-2 block">Smart Home</span>
                         <h4 class="text-2xl font-bold text-primary font-display mb-4">Core Hub Ultra</h4>
                         <p class="text-sm text-on-surface-variant leading-relaxed mb-6">Centralize your entire digital atelier with zero-latency thread connectivity and localized AI processing.</p>
                     </div>
@@ -184,11 +181,11 @@
                     </div>
                 </div>
 
-                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-id="6" data-name="Pulse Pro Band" data-price="189" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
+                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-category="Wearables" data-id="6" data-name="Pulse Pro Band" data-price="189" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Wearable device" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="material-symbols-outlined text-primary">add_circle</span>
+                        <button class="wishlist-btn absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-id="6">
+                            <span class="material-symbols-outlined text-primary">favorite</span>
                         </button>
                     </div>
                     <div class="flex-grow">
@@ -210,7 +207,7 @@
                     <div class="relative z-10 space-y-6 md:w-2/3">
                         <h3 class="text-4xl font-bold font-display tracking-tight leading-tight">Can't decide on your <br/>tech ecosystem?</h3>
                         <p class="text-primary-fixed-dim text-lg leading-relaxed">Our Atelier Comparison Tool allows you to analyze technical specs side-by-side. From chipset architecture to tactile feedback profiles.</p>
-                        <button class="bg-white text-primary px-10 py-4 rounded-xl font-black tracking-tight hover:scale-105 transition-transform shadow-2xl">Compare 0/3 Devices</button>
+                        <button data-compare-btn class="bg-white text-primary px-10 py-4 rounded-xl font-black tracking-tight hover:scale-105 transition-transform shadow-2xl">Compare 0/3 Devices</button>
                     </div>
                     <div class="relative md:w-1/3 flex gap-4">
                         <div class="w-32 h-48 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/5 rotate-[-5deg] flex items-center justify-center">
@@ -222,11 +219,11 @@
                     </div>
                 </div>
 
-                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500">
+                <div class="bg-surface-container-lowest rounded-3xl p-8 flex flex-col group shadow-sm hover:shadow-xl transition-all duration-500" data-category="Acoustics" data-id="7" data-name="Sonic Array 5" data-price="650.00">
                     <div class="relative mb-8 h-64 rounded-2xl overflow-hidden bg-surface-container-low">
                         <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80" alt="Desktop speakers" />
-                        <button class="absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span class="material-symbols-outlined text-primary">add_circle</span>
+                        <button class="wishlist-btn absolute top-4 right-4 bg-white/80 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" data-id="7">
+                            <span class="material-symbols-outlined text-primary">favorite</span>
                         </button>
                     </div>
                     <div class="flex-grow">
@@ -251,12 +248,66 @@
                 <p class="text-on-surface-variant max-w-xl mx-auto mb-10 text-lg">Receive exclusive early access to the Digital Atelier's next hardware drop and firmware insights.</p>
                 <div class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
                     <input class="flex-grow bg-white border-none px-8 py-4 rounded-2xl focus:ring-2 focus:ring-primary" placeholder="Your work email" type="email" />
-                    <button class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-primary-container transition-all">Join Waitlist</button>
+                    <button data-waitlist-btn class="bg-primary text-white px-10 py-4 rounded-2xl font-bold hover:bg-primary-container transition-all">Join Waitlist</button>
                 </div>
             </div>
         </section>
     </main>
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 <script src="/js/app.js"></script>
+<script>
+(function(){
+  // Category filter
+  var compareIds=[];
+  document.querySelectorAll('[data-category-filter]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var cat=this.dataset.categoryFilter;
+      document.querySelectorAll('[data-category-filter]').forEach(function(b){
+        b.classList.remove('bg-primary-fixed','text-on-primary-fixed');
+        b.classList.add('bg-surface-container-highest','text-on-surface');
+      });
+      this.classList.remove('bg-surface-container-highest','text-on-surface');
+      this.classList.add('bg-primary-fixed','text-on-primary-fixed');
+      document.querySelectorAll('[data-category]').forEach(function(card){
+        card.style.display=(cat==='all'||card.dataset.category===cat)?'':'none';
+      });
+    });
+  });
+  // Wishlist buttons
+  document.querySelectorAll('.wishlist-btn').forEach(function(btn){
+    var id=String(btn.dataset.id);
+    var icon=btn.querySelector('.material-symbols-outlined');
+    var wl=JSON.parse(localStorage.getItem('wishlist')||'[]');
+    if(icon) icon.style.color=wl.includes(id)?'#e11d48':'';
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var wl2=JSON.parse(localStorage.getItem('wishlist')||'[]');
+      var idx=wl2.indexOf(id);
+      if(idx===-1){wl2.push(id);if(icon)icon.style.color='#e11d48';}
+      else{wl2.splice(idx,1);if(icon)icon.style.color='';}
+      localStorage.setItem('wishlist',JSON.stringify(wl2));
+    });
+  });
+  // Compare button
+  var cmpBtn=document.querySelector('[data-compare-btn]');
+  if(cmpBtn) cmpBtn.addEventListener('click',function(){
+    if(typeof Swal!=='undefined') Swal.fire({icon:'info',title:'Device Comparison',text:'Select products and add them to cart first, then use this tool to compare specs. Full comparison view coming soon.',confirmButtonColor:'#003345'});
+    else alert('Comparison feature coming soon!');
+  });
+  // Join Waitlist
+  var wlBtn=document.querySelector('[data-waitlist-btn]');
+  if(wlBtn) wlBtn.addEventListener('click',function(){
+    var inp=this.closest('div').querySelector('input[type="email"]');
+    if(!inp||!inp.value.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value)){
+      if(typeof Swal!=='undefined') Swal.fire({icon:'warning',title:'Valid Email Required',text:'Please enter your work email address.',confirmButtonColor:'#003345'});
+      else alert('Please enter a valid email.');
+      return;
+    }
+    inp.value='';
+    if(typeof Swal!=='undefined') Swal.fire({icon:'success',title:"You're on the list!",text:"We'll notify you before the next hardware drop.",confirmButtonColor:'#003345'});
+    else alert("You're on the waitlist!");
+  });
+})();
+</script>
 </body>
 </html>

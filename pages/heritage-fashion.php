@@ -109,7 +109,7 @@
             <div class="bg-surface-container-low/90 backdrop-blur-md rounded-xl p-4 flex flex-wrap items-center gap-8 shadow-sm">
                 <div class="flex flex-col gap-1">
                     <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Collection</label>
-                    <select class="bg-transparent border-none text-primary font-bold text-sm focus:ring-0 cursor-pointer p-0">
+                    <select id="heritage-collection-select" class="bg-transparent border-none text-primary font-bold text-sm focus:ring-0 cursor-pointer p-0">
                         <option>All Collections</option>
                         <option>The Sahel Echo</option>
                         <option>Savanna Bloom</option>
@@ -119,9 +119,10 @@
                 <div class="flex flex-col gap-1">
                     <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Material</label>
                     <div class="flex gap-2">
-                        <span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-semibold cursor-pointer">Organic Cotton</span>
-                        <span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-semibold hover:bg-surface-variant cursor-pointer transition-colors">Artisan Silk</span>
-                        <span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-semibold hover:bg-surface-variant cursor-pointer transition-colors">Hemp Fiber</span>
+                        <span class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-semibold cursor-pointer" data-material-pill="all">All</span>
+                        <span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-semibold hover:bg-surface-variant cursor-pointer transition-colors" data-material-pill="Organic Cotton">Organic Cotton</span>
+                        <span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-semibold hover:bg-surface-variant cursor-pointer transition-colors" data-material-pill="Artisan Silk">Artisan Silk</span>
+                        <span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-semibold hover:bg-surface-variant cursor-pointer transition-colors" data-material-pill="Hemp Fiber">Hemp Fiber</span>
                     </div>
                 </div>
                 <div class="flex flex-col gap-1">
@@ -133,9 +134,16 @@
                         <button class="w-8 h-8 rounded-lg text-xs font-bold bg-surface-container-highest text-on-surface-variant hover:bg-primary hover:text-white transition-all">XL</button>
                     </div>
                 </div>
+                <div class="flex flex-col gap-1 flex-grow max-w-xs">
+                    <label class="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter">Search</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+                        <input type="search" data-search-target="cards" placeholder="Search pieces..." class="w-full pl-10 pr-4 py-1.5 bg-surface-container-high border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" />
+                    </div>
+                </div>
                 <div class="ml-auto flex items-center gap-4">
-                    <span class="text-sm text-on-surface-variant font-medium">Showing 24 Artifacts</span>
-                    <button class="bg-primary text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:scale-102 transition-transform shadow-md">
+                    <span id="heritage-count-label" class="text-sm text-on-surface-variant font-medium">Showing 6 Artifacts</span>
+                    <button id="heritage-advanced-filters-btn" class="bg-primary text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:scale-102 transition-transform shadow-md">
                         <span class="material-symbols-outlined text-sm">tune</span>
                         <span class="text-sm font-bold">Advanced Filters</span>
                     </button>
@@ -146,7 +154,7 @@
         <!-- Product Grid - 3 items per row with enhanced styling -->
         <section class="max-w-7xl mx-auto px-8 py-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <!-- Product 1: Saharan Nomad Robe -->
-            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-collection="The Sahel Echo" data-material="Organic Cotton">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -175,7 +183,7 @@
             </div>
 
             <!-- Product 2: Veldt Tailored Vest -->
-            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-collection="Savanna Bloom" data-material="Artisan Silk">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -204,7 +212,7 @@
             </div>
 
             <!-- Product 3: Bogolan Wrap Skirt -->
-            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-collection="Coastal Loom" data-material="Organic Cotton">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -233,7 +241,7 @@
             </div>
 
             <!-- Product 4: Midnight Silk Gown -->
-            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-collection="The Sahel Echo" data-material="Artisan Silk">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -262,7 +270,7 @@
             </div>
 
             <!-- Product 5: Kwara Bead Sandals -->
-            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-collection="Savanna Bloom" data-material="Hemp Fiber">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -291,7 +299,7 @@
             </div>
 
             <!-- Product 6: Axum Minimalist Shirt -->
-            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-white rounded-2xl border border-outline-variant/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-collection="Coastal Loom" data-material="Organic Cotton">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/10 via-white to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -336,6 +344,144 @@
         </section>
     </main>
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
-    <script src="/js/app.js"></script>
+<script src="/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var productGrid = document.querySelector('section.grid.gap-6');
+    var countLabel = document.getElementById('heritage-count-label');
+    var activeCollection = 'all';
+    var activeMaterial = 'all';
+    var activeSize = 'M';
+
+    function getCards() {
+        return productGrid ? Array.from(productGrid.querySelectorAll('[data-collection]')) : [];
+    }
+
+    function getProductId(card) {
+        var btn = card.querySelector('.add-to-cart');
+        return btn ? String(btn.dataset.id) : null;
+    }
+
+    function getWishlist() { return JSON.parse(localStorage.getItem('wishlist') || '[]'); }
+    function setWishlist(l) { localStorage.setItem('wishlist', JSON.stringify(l)); }
+
+    function applyFilters() {
+        var cards = getCards();
+        var visible = 0;
+        cards.forEach(function (card) {
+            var col = card.dataset.collection || '';
+            var mat = card.dataset.material || '';
+            var showCol = activeCollection === 'all' || col === activeCollection;
+            var showMat = activeMaterial === 'all' || mat === activeMaterial;
+            var show = showCol && showMat;
+            card.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        if (countLabel) countLabel.textContent = 'Showing ' + visible + ' Artifact' + (visible !== 1 ? 's' : '');
+    }
+
+    // --- Collection select ---
+    var collectionSelect = document.getElementById('heritage-collection-select');
+    if (collectionSelect) {
+        collectionSelect.addEventListener('change', function () {
+            activeCollection = this.value === 'All Collections' ? 'all' : this.value;
+            applyFilters();
+        });
+    }
+
+    // --- Material pills (with data-material-pill) ---
+    var pills = document.querySelectorAll('[data-material-pill]');
+    pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+            var mat = this.dataset.materialPill;
+            activeMaterial = mat;
+            pills.forEach(function (p) {
+                p.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+                p.classList.add('bg-surface-container-highest', 'text-on-surface-variant');
+            });
+            this.classList.remove('bg-surface-container-highest', 'text-on-surface-variant');
+            this.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+            applyFilters();
+        });
+    });
+
+    // --- Size buttons ---
+    var sizeBtns = document.querySelectorAll('.flex.gap-1 button');
+    sizeBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            activeSize = this.textContent.trim();
+            sizeBtns.forEach(function (b) {
+                b.classList.remove('bg-primary', 'text-white');
+                b.classList.add('bg-surface-container-highest', 'text-on-surface-variant');
+            });
+            this.classList.remove('bg-surface-container-highest', 'text-on-surface-variant');
+            this.classList.add('bg-primary', 'text-white');
+        });
+    });
+
+    // --- Favorites ---
+    getCards().forEach(function (card) {
+        var favBtn = card.querySelector('button:not(.add-to-cart)');
+        if (!favBtn) return;
+        var icon = favBtn.querySelector('.material-symbols-outlined');
+        if (!icon) return;
+        var id = getProductId(card);
+        var wishlist = getWishlist();
+        if (id && wishlist.includes(id)) {
+            icon.style.fontVariationSettings = "'FILL' 1";
+            icon.classList.add('text-red-500');
+            icon.classList.remove('text-primary');
+        }
+        favBtn.addEventListener('click', function () {
+            var list = getWishlist();
+            var idx = list.indexOf(id);
+            if (idx > -1) {
+                list.splice(idx, 1);
+                icon.style.fontVariationSettings = "'FILL' 0";
+                icon.classList.remove('text-red-500');
+                icon.classList.add('text-primary');
+            } else {
+                if (id) list.push(id);
+                icon.style.fontVariationSettings = "'FILL' 1";
+                icon.classList.add('text-red-500');
+                icon.classList.remove('text-primary');
+            }
+            setWishlist(list);
+        });
+    });
+
+    // --- "Explore the Heritage Map" button ---
+    var heritageMapBtn = document.querySelector('section.max-w-7xl.mx-auto.px-8.mb-20 button.bg-secondary');
+    if (heritageMapBtn) {
+        heritageMapBtn.addEventListener('click', function () {
+            var target = productGrid ? productGrid.closest('section') : null;
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    }
+
+    // --- Advanced Filters button (reset) ---
+    var advBtn = document.getElementById('heritage-advanced-filters-btn');
+    if (advBtn) {
+        advBtn.addEventListener('click', function () {
+            activeCollection = 'all';
+            activeMaterial = 'all';
+            if (collectionSelect) collectionSelect.value = 'All Collections';
+            pills.forEach(function (p, i) {
+                p.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+                p.classList.add('bg-surface-container-highest', 'text-on-surface-variant');
+                if (i === 0) {
+                    p.classList.remove('bg-surface-container-highest', 'text-on-surface-variant');
+                    p.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+                }
+            });
+            applyFilters();
+        });
+    }
+
+    applyFilters();
+});
+</script>
 </body>
 </html>

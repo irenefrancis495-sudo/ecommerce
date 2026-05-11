@@ -112,28 +112,35 @@
 </section>
 <!-- Filters Section -->
 <section class="max-w-7xl mx-auto px-8 mb-12">
+<div class="flex flex-col gap-6">
 <div class="flex flex-col md:flex-row gap-8 justify-between items-start md:items-center">
 <div class="flex flex-wrap gap-3">
 <span class="text-sm font-bold uppercase tracking-widest text-primary/40 mr-2 flex items-center">Room</span>
-<button class="px-6 py-2 rounded-full bg-primary-fixed text-on-primary-fixed font-medium text-sm transition-all hover:scale-105">All Spaces</button>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Lounge</button>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Dining</button>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Bedroom</button>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Studio</button>
+<button data-room-filter="all" class="px-6 py-2 rounded-full bg-primary-fixed text-on-primary-fixed font-medium text-sm transition-all hover:scale-105">All Spaces</button>
+<button data-room-filter="Lounge" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Lounge</button>
+<button data-room-filter="Dining" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Dining</button>
+<button data-room-filter="Bedroom" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Bedroom</button>
+<button data-room-filter="Studio" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Studio</button>
 </div>
 <div class="flex flex-wrap gap-3">
 <span class="text-sm font-bold uppercase tracking-widest text-primary/40 mr-2 flex items-center">Material</span>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Raw Ceramic</button>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Oak Wood</button>
-<button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Brushed Brass</button>
+<button data-material-filter="all" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">All Materials</button>
+<button data-material-filter="Raw Ceramic" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Raw Ceramic</button>
+<button data-material-filter="Oak Wood" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Oak Wood</button>
+<button data-material-filter="Brushed Brass" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-medium text-sm hover:bg-surface-container-high transition-all">Brushed Brass</button>
+</div>
+</div>
+<div class="relative max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input type="search" data-search-target="cards" placeholder="Search pieces..." class="w-full pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" />
 </div>
 </div>
 </section>
 <!-- Product Grid: Asymmetric Composition -->
-<section class="max-w-7xl mx-auto px-8">
+<section id="sanctuary-products-grid" class="max-w-7xl mx-auto px-8">
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
 <!-- Product 1 -->
-<div class="flex flex-col group">
+<div class="flex flex-col group" data-room="Lounge" data-material="Raw Ceramic">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6 relative">
                 <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center" alt="Handcrafted ceramic bowl" />
 <div class="absolute top-4 right-4 bg-white/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] uppercase tracking-widest font-bold">Limited Edition</div>
@@ -148,13 +155,13 @@
 <button class="add-to-cart mt-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-container transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="101" data-name="Obsidian Rimmed Vessel" data-price="124.00" data-image="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center">
 <span class="material-symbols-outlined text-sm">shopping_cart</span>
 </button>
-<button class="mt-6 w-full py-4 bg-primary text-white font-bold tracking-widest uppercase text-xs hover:bg-primary-container transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
+<button class="view-piece mt-6 w-full py-4 bg-primary text-white font-bold tracking-widest uppercase text-xs hover:bg-primary-container transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="101">
                         View Piece
                         <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
 </button>
 </div>
 <!-- Product 2 (Large Vertical) -->
-<div class="flex flex-col group lg:row-span-2">
+<div class="flex flex-col group lg:row-span-2" data-room="Studio" data-material="Oak Wood">
 <div class="aspect-[3/4] bg-surface-container-lowest overflow-hidden mb-6">
                 <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=center" alt="Minimalist wooden floor lamp" />
 </div>
@@ -168,13 +175,13 @@
 <button class="add-to-cart mt-4 w-10 h-10 bg-secondary text-on-secondary rounded-full flex items-center justify-center hover:bg-secondary/80 transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="102" data-name="Nordic Oak Luminary" data-price="490.00" data-image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=center">
 <span class="material-symbols-outlined text-sm">shopping_cart</span>
 </button>
-<button class="mt-6 w-full py-4 bg-secondary text-on-secondary font-bold tracking-widest uppercase text-xs hover:scale-102 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
+<button class="add-to-cart mt-6 w-full py-4 bg-secondary text-on-secondary font-bold tracking-widest uppercase text-xs hover:scale-102 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="102" data-name="Nordic Oak Luminary" data-price="490.00" data-image="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=center">
                         Add to Collection
                         <span class="material-symbols-outlined text-sm" data-icon="add">add</span>
 </button>
 </div>
 <!-- Product 3 -->
-<div class="flex flex-col group">
+<div class="flex flex-col group" data-room="Lounge" data-material="Brushed Brass">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6">
                 <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=600&fit=crop&crop=center" alt="Architectural lounge chair" />
 </div>
@@ -188,12 +195,12 @@
 <button class="add-to-cart mt-4 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-container transition-all opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300" data-id="103" data-name="Void Lounge Chair" data-price="1200.00" data-image="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&h=600&fit=crop&crop=center">
 <span class="material-symbols-outlined text-sm">shopping_cart</span>
 </button>
-<button class="mt-6 w-full py-4 bg-primary text-white font-bold tracking-widest uppercase text-xs hover:bg-primary-container transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
+<button id="inquire-btn" class="mt-6 w-full py-4 bg-primary text-white font-bold tracking-widest uppercase text-xs hover:bg-primary-container transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 duration-300">
                         Inquire
                     </button>
 </div>
 <!-- Product 4 -->
-<div class="flex flex-col group">
+<div class="flex flex-col group" data-room="Dining" data-material="Raw Ceramic">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6 relative">
                 <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=600&fit=crop&crop=center" alt="Clay bud vases" />
 </div>
@@ -209,7 +216,7 @@
 </button>
 </div>
 <!-- Product 5 -->
-<div class="flex flex-col group">
+<div class="flex flex-col group" data-room="Bedroom" data-material="Oak Wood">
 <div class="aspect-square bg-surface-container-lowest overflow-hidden mb-6">
                 <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1585399363000-c9ffd4e4b308?w=600&h=600&fit=crop&crop=center" alt="Linen throw blanket" />
 </div>
@@ -227,13 +234,13 @@
 </div>
 </section>
 <!-- CTA Section -->
-<section class="max-w-7xl mx-auto px-8 mt-40">
+<section id="studio-cta" class="max-w-7xl mx-auto px-8 mt-40">
 <div class="bg-primary-container rounded-xl p-12 md:p-20 relative overflow-hidden text-center md:text-left flex flex-col md:flex-row items-center gap-12">
 <div class="relative z-10 max-w-2xl">
 <span class="text-primary-fixed uppercase tracking-widest font-bold text-xs mb-4 block">Personal Consultation</span>
 <h2 class="text-4xl md:text-5xl font-bold text-on-primary-container font-headline mb-6">Create your bespoke living sanctuary</h2>
 <p class="text-on-primary-container opacity-80 mb-8 text-lg">Work with our interior curators to select the perfect architectural pieces for your space.</p>
-<button class="px-10 py-4 bg-secondary text-white font-bold rounded-lg hover:scale-105 transition-all shadow-lg">Book Studio Tour</button>
+<button id="book-studio-tour-btn" class="px-10 py-4 bg-secondary text-white font-bold rounded-lg hover:scale-105 transition-all shadow-lg">Book Studio Tour</button>
 </div>
 <div class="w-full md:w-1/3 aspect-square rounded-full overflow-hidden border-8 border-white/10 relative z-10">
 <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1494526585095-c41746248156?w=800&h=800&fit=crop&crop=center" alt="Interior designer with blueprints" />
@@ -246,4 +253,53 @@
 </main>
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 <script src="/js/app.js"></script>
+<script>
+(function(){
+  var activeRoom='all', activeMaterial='all';
+  function getCards(){ return document.querySelectorAll('#sanctuary-products-grid .grid > [data-room]'); }
+  function applyFilters(){
+    getCards().forEach(function(c){
+      var rm=c.dataset.room||'', mt=c.dataset.material||'';
+      c.style.display=((activeRoom==='all'||rm===activeRoom)&&(activeMaterial==='all'||mt===activeMaterial))?'':'none';
+    });
+  }
+  document.querySelectorAll('[data-room-filter]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      activeRoom=this.dataset.roomFilter;
+      document.querySelectorAll('[data-room-filter]').forEach(function(b){
+        b.classList.remove('bg-primary-fixed','text-on-primary-fixed');
+        b.classList.add('bg-surface-container-highest','text-on-surface-variant');
+      });
+      this.classList.remove('bg-surface-container-highest','text-on-surface-variant');
+      this.classList.add('bg-primary-fixed','text-on-primary-fixed');
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('[data-material-filter]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      activeMaterial=this.dataset.materialFilter;
+      document.querySelectorAll('[data-material-filter]').forEach(function(b){
+        b.classList.remove('bg-primary-fixed','text-on-primary-fixed');
+        b.classList.add('bg-surface-container-highest','text-on-surface-variant');
+      });
+      this.classList.remove('bg-surface-container-highest','text-on-surface-variant');
+      this.classList.add('bg-primary-fixed','text-on-primary-fixed');
+      applyFilters();
+    });
+  });
+  document.querySelectorAll('.view-piece').forEach(function(btn){
+    btn.addEventListener('click',function(){ window.location.href='/product-details?id='+this.dataset.id; });
+  });
+  var inqBtn=document.getElementById('inquire-btn');
+  if(inqBtn) inqBtn.addEventListener('click',function(){
+    var cta=document.getElementById('studio-cta');
+    if(cta) cta.scrollIntoView({behavior:'smooth'});
+  });
+  var tourBtn=document.getElementById('book-studio-tour-btn');
+  if(tourBtn) tourBtn.addEventListener('click',function(){
+    if(typeof Swal!=='undefined') Swal.fire({icon:'success',title:'Tour Request Sent!',text:'Our studio curators will contact you within 24 hours to confirm your visit.',confirmButtonColor:'#003345'});
+    else alert('Tour request sent! We will contact you shortly.');
+  });
+})();
+</script>
 </body></html>

@@ -104,22 +104,27 @@
         <section class="max-w-7xl mx-auto px-8 mb-12">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
                 <div class="flex flex-wrap gap-3">
-                    <button class="px-6 py-2 rounded-full bg-primary-fixed text-on-primary-fixed font-label text-sm font-semibold transition-all shadow-sm">All Essentials</button>
-                    <button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Leather Goods</button>
-                    <button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Stationery</button>
-                    <button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Travel Gear</button>
-                    <button class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Personal Care</button>
+                    <button data-category-filter="all" class="px-6 py-2 rounded-full bg-primary-fixed text-on-primary-fixed font-label text-sm font-semibold transition-all shadow-sm">All Essentials</button>
+                    <button data-category-filter="Leather Goods" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Leather Goods</button>
+                    <button data-category-filter="Stationery" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Stationery</button>
+                    <button data-category-filter="Travel Gear" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Travel Gear</button>
+                    <button data-category-filter="Personal Care" class="px-6 py-2 rounded-full bg-surface-container-highest text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">Personal Care</button>
                 </div>
                 <div class="flex items-center gap-4">
+                    <div class="relative flex-grow md:max-w-xs">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+                        <input type="search" data-search-target="cards" placeholder="Search essentials..." class="w-full pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-xl text-sm focus:ring-2 focus:ring-primary transition-all" />
+                    </div>
                     <div class="relative">
-                        <select class="appearance-none bg-surface-container-low border-none rounded-lg px-6 py-2 pr-12 font-label text-sm text-on-surface-variant focus:ring-2 focus:ring-primary">
-                            <option>Sort by: Curated</option>
-                            <option>Price: High to Low</option>
-                            <option>Newest Arrivals</option>
+                        <select id="lifestyle-sort" class="appearance-none bg-surface-container-low border-none rounded-lg px-6 py-2 pr-12 font-label text-sm text-on-surface-variant focus:ring-2 focus:ring-primary">
+                            <option value="">Sort by: Curated</option>
+                            <option value="price-asc">Price: Low to High</option>
+                            <option value="price-desc">Price: High to Low</option>
+                            <option value="newest">Newest Arrivals</option>
                         </select>
                         <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
                     </div>
-                    <button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">
+                    <button id="filters-reset-btn" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container-low text-on-surface-variant font-label text-sm hover:bg-surface-container-high transition-all">
                         <span class="material-symbols-outlined text-xl">tune</span>
                         Filters
                     </button>
@@ -130,7 +135,7 @@
         <!-- Product Grid - 3 items per row with enhanced styling -->
         <section class="max-w-7xl mx-auto px-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <!-- Product 1: Heritage Leather Bag -->
-            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-category="Leather Goods" data-price="480">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -138,7 +143,7 @@
                         alt="Heritage Leather Bag"
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200" data-id="401">
                         <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
@@ -159,7 +164,7 @@
             </div>
 
             <!-- Product 2: Obsidian Scent Candle -->
-            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-category="Personal Care" data-price="62">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -167,7 +172,7 @@
                         alt="Obsidian & Driftwood Scent"
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200" data-id="402">
                         <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
@@ -188,7 +193,7 @@
             </div>
 
             <!-- Product 3: Pebble Wallet -->
-            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-category="Leather Goods" data-price="85">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -196,7 +201,7 @@
                         alt="Slimline Pebble Wallet"
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200" data-id="403">
                         <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
@@ -217,7 +222,7 @@
             </div>
 
             <!-- Product 4: Eclipse Eyewear -->
-            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-category="Personal Care" data-price="185">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -225,7 +230,7 @@
                         alt="Eclipse Frame Eyewear"
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200" data-id="404">
                         <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
@@ -246,7 +251,7 @@
             </div>
 
             <!-- Product 5: Archive Journal -->
-            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-category="Stationery" data-price="45">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -254,7 +259,7 @@
                         alt="Gilded Edge Journal"
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200" data-id="405">
                         <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
@@ -275,7 +280,7 @@
             </div>
 
             <!-- Product 6: Travel Gear -->
-            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full">
+            <div class="group bg-surface-container-lowest rounded-2xl border border-outline/20 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full" data-category="Travel Gear" data-price="95">
                 <div class="relative overflow-hidden bg-gradient-to-br from-secondary/20 via-surface to-transparent aspect-[3/4]">
                     <img 
                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
@@ -283,7 +288,7 @@
                         alt="Premium Travel Kit"
                         loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <button class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200">
+                    <button class="wishlist-btn absolute top-4 right-4 w-10 h-10 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center shadow-lg hover:bg-white transition-colors hover:scale-110 transform duration-200" data-id="406">
                         <span class="material-symbols-outlined text-primary text-lg">favorite</span>
                     </button>
                 </div>
@@ -314,7 +319,7 @@
                 <div class="relative z-10 w-full md:w-auto">
                     <div class="flex flex-col sm:flex-row gap-4">
                         <input class="px-6 py-4 rounded-lg bg-white border-none focus:ring-2 focus:ring-secondary w-full sm:w-80 font-body" placeholder="atelier@member.com" type="email" />
-                        <button class="bg-primary text-white px-10 py-4 rounded-lg font-label font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors whitespace-nowrap">Join Now</button>
+                        <button data-join-btn class="bg-primary text-white px-10 py-4 rounded-lg font-label font-bold uppercase tracking-widest hover:bg-primary/90 transition-colors whitespace-nowrap">Join Now</button>
                     </div>
                     <p class="mt-4 text-xs text-outline font-label">By joining, you agree to our heritage standards and privacy policy.</p>
                 </div>
@@ -323,5 +328,83 @@
     </main>
     <?php include __DIR__ . '/../components/ui/footer.php'; ?>
     <script src="/js/app.js"></script>
+    <script>
+    (function(){
+      // Category filter
+      var allCards=Array.from(document.querySelectorAll('[data-category]'));
+      var origOrder=allCards.slice();
+      function renderCards(cards){
+        var grid=document.querySelector('section.max-w-7xl.mx-auto.px-8.grid');
+        if(!grid)return;
+        cards.forEach(function(c){grid.appendChild(c);});
+      }
+      document.querySelectorAll('[data-category-filter]').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          var cat=this.dataset.categoryFilter;
+          document.querySelectorAll('[data-category-filter]').forEach(function(b){
+            b.classList.remove('bg-primary-fixed','text-on-primary-fixed');
+            b.classList.add('bg-surface-container-highest','text-on-surface-variant');
+          });
+          this.classList.remove('bg-surface-container-highest','text-on-surface-variant');
+          this.classList.add('bg-primary-fixed','text-on-primary-fixed');
+          allCards.forEach(function(c){
+            c.style.display=(cat==='all'||c.dataset.category===cat)?'':'none';
+          });
+        });
+      });
+      // Sort
+      var sortSel=document.getElementById('lifestyle-sort');
+      if(sortSel) sortSel.addEventListener('change',function(){
+        var val=this.value;
+        var grid=document.querySelector('section.max-w-7xl.mx-auto.px-8.grid');
+        if(!grid)return;
+        var visible=allCards.filter(function(c){return c.style.display!=='none';});
+        if(val==='price-asc') visible.sort(function(a,b){return parseFloat(a.dataset.price||0)-parseFloat(b.dataset.price||0);});
+        else if(val==='price-desc') visible.sort(function(a,b){return parseFloat(b.dataset.price||0)-parseFloat(a.dataset.price||0);});
+        else visible=origOrder.filter(function(c){return c.style.display!=='none';});
+        visible.forEach(function(c){grid.appendChild(c);});
+      });
+      // Reset filters button
+      var resetBtn=document.getElementById('filters-reset-btn');
+      if(resetBtn) resetBtn.addEventListener('click',function(){
+        allCards.forEach(function(c){c.style.display='';});
+        if(sortSel) sortSel.value='';
+        document.querySelectorAll('[data-category-filter]').forEach(function(b){
+          b.classList.remove('bg-primary-fixed','text-on-primary-fixed');
+          b.classList.add('bg-surface-container-highest','text-on-surface-variant');
+        });
+        var allBtn=document.querySelector('[data-category-filter="all"]');
+        if(allBtn){ allBtn.classList.add('bg-primary-fixed','text-on-primary-fixed'); allBtn.classList.remove('bg-surface-container-highest','text-on-surface-variant'); }
+      });
+      // Wishlist buttons
+      document.querySelectorAll('.wishlist-btn').forEach(function(btn){
+        var id=String(btn.dataset.id);
+        var icon=btn.querySelector('.material-symbols-outlined');
+        var wl=JSON.parse(localStorage.getItem('wishlist')||'[]');
+        if(icon) icon.style.color=wl.includes(id)?'#e11d48':'';
+        btn.addEventListener('click',function(e){
+          e.stopPropagation();
+          var wl2=JSON.parse(localStorage.getItem('wishlist')||'[]');
+          var idx=wl2.indexOf(id);
+          if(idx===-1){wl2.push(id);if(icon)icon.style.color='#e11d48';}
+          else{wl2.splice(idx,1);if(icon)icon.style.color='';}
+          localStorage.setItem('wishlist',JSON.stringify(wl2));
+        });
+      });
+      // Join Now button
+      var joinBtn=document.querySelector('[data-join-btn]');
+      if(joinBtn) joinBtn.addEventListener('click',function(){
+        var inp=document.querySelector('input[type="email"]');
+        if(!inp||!inp.value.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value)){
+          if(typeof Swal!=='undefined') Swal.fire({icon:'warning',title:'Email Required',text:'Please enter a valid email address to join.',confirmButtonColor:'#003345'});
+          else alert('Please enter a valid email.');
+          return;
+        }
+        inp.value='';
+        if(typeof Swal!=='undefined') Swal.fire({icon:'success',title:'Welcome to the Atelier!',text:'You now have early access to seasonal drops and curated lifestyle insights.',confirmButtonColor:'#003345'});
+        else alert('Welcome! You have joined successfully.');
+      });
+    })();
+    </script>
 </body>
 </html>

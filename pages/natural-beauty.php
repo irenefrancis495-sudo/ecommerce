@@ -124,10 +124,10 @@
 
     <section class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between mb-12">
         <div class="flex flex-wrap gap-3">
-            <button class="rounded-full border border-slate-200 bg-primary px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition">All Products</button>
-            <button class="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Skincare</button>
-            <button class="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Hair Care</button>
-            <button class="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Essential Oils</button>
+            <button data-filter="all" class="nb-filter rounded-full border border-slate-200 bg-primary px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary/90 transition">All Products</button>
+            <button data-filter="Skincare" class="nb-filter rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Skincare</button>
+            <button data-filter="Hair Care" class="nb-filter rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Hair Care</button>
+            <button data-filter="Essential Oils" class="nb-filter rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 transition">Essential Oils</button>
         </div>
         <div class="flex items-center gap-4">
             <label class="text-sm font-medium text-slate-600">Sort by</label>
@@ -397,3 +397,126 @@
 
 <script src="assets/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var productGrid = document.querySelector('section.grid.gap-6');
+
+    // --- Helpers ---
+    function getArticleCategory(article) {
+        var badge = article.querySelector('span.rounded-full');
+        return badge ? badge.textContent.trim() : '';
+    }
+    function getPrice(article) {
+        var btn = article.querySelector('.add-to-cart');
+        return btn ? parseFloat(btn.dataset.price) || 0 : 0;
+    }
+    function getRating(article) {
+        var ratingEl = article.querySelector('.flex.items-center.gap-1 span.font-semibold');
+        return ratingEl ? parseFloat(ratingEl.textContent) || 0 : 0;
+    }
+    function getProductId(article) {
+        var btn = article.querySelector('.add-to-cart');
+        return btn ? String(btn.dataset.id) : null;
+    }
+    function getWishlist() {
+        return JSON.parse(localStorage.getItem('wishlist') || '[]');
+    }
+    function setWishlist(list) {
+        localStorage.setItem('wishlist', JSON.stringify(list));
+    }
+    function setFavActive(icon) {
+        icon.style.fontVariationSettings = "'FILL' 1";
+        icon.classList.add('text-red-500');
+        icon.classList.remove('text-slate-700');
+    }
+    function setFavInactive(icon) {
+        icon.style.fontVariationSettings = "'FILL' 0";
+        icon.classList.remove('text-red-500');
+        icon.classList.add('text-slate-700');
+    }
+
+    // --- Filter ---
+    var filterBtns = document.querySelectorAll('.nb-filter');
+    var activeFilter = 'all';
+
+    function applyFilter(filter) {
+        if (!productGrid) return;
+        productGrid.querySelectorAll('article').forEach(function (article) {
+            var cat = getArticleCategory(article);
+            var show = filter === 'all' || cat === filter;
+            article.style.display = show ? '' : 'none';
+        });
+    }
+
+    filterBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            activeFilter = this.dataset.filter;
+            filterBtns.forEach(function (b) {
+                b.classList.remove('bg-primary', 'text-white', 'font-semibold', 'shadow-sm');
+                b.classList.add('bg-white', 'text-slate-700', 'font-medium');
+            });
+            this.classList.add('bg-primary', 'text-white', 'font-semibold', 'shadow-sm');
+            this.classList.remove('bg-white', 'text-slate-700', 'font-medium');
+            applyFilter(activeFilter);
+        });
+    });
+
+    // --- Sort ---
+    var sortSelect = document.querySelector('select');
+    var originalOrder = null;
+
+    if (sortSelect && productGrid) {
+        sortSelect.addEventListener('change', function () {
+            var articles = Array.from(productGrid.querySelectorAll('article'));
+            if (!originalOrder) originalOrder = articles.slice();
+
+            var sorted;
+            switch (this.value) {
+                case 'Price: Low to High':
+                    sorted = articles.slice().sort(function (a, b) { return getPrice(a) - getPrice(b); });
+                    break;
+                case 'Price: High to Low':
+                    sorted = articles.slice().sort(function (a, b) { return getPrice(b) - getPrice(a); });
+                    break;
+                case 'Best Seller':
+                    sorted = articles.slice().sort(function (a, b) { return getRating(b) - getRating(a); });
+                    break;
+                default:
+                    sorted = originalOrder ? originalOrder.slice() : articles;
+            }
+            sorted.forEach(function (article) { productGrid.appendChild(article); });
+            // Re-apply active filter after reorder
+            applyFilter(activeFilter);
+        });
+    }
+
+    // --- Favorites ---
+    var wishlist = getWishlist();
+
+    productGrid && productGrid.querySelectorAll('article').forEach(function (article) {
+        var favBtn = article.querySelector('button:not(.add-to-cart)');
+        if (!favBtn) return;
+        var icon = favBtn.querySelector('.material-symbols-outlined');
+        if (!icon) return;
+        var id = getProductId(article);
+
+        // Restore saved state
+        if (id && wishlist.includes(id)) {
+            setFavActive(icon);
+        }
+
+        favBtn.addEventListener('click', function () {
+            var list = getWishlist();
+            var idx = list.indexOf(id);
+            if (idx > -1) {
+                list.splice(idx, 1);
+                setFavInactive(icon);
+            } else {
+                if (id) list.push(id);
+                setFavActive(icon);
+            }
+            setWishlist(list);
+        });
+    });
+});
+</script>
