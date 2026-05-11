@@ -73,6 +73,25 @@ class Utility{
     }
 
     /**
+     * Insert multiple rows into a table
+     * @param $table String Name of the table
+     * @param $columns Array of columns to be inserted
+     * @param $data Array of all rows to tbe inserted
+     * @return bool
+     * @throws JsonException
+     */
+    public static function bulkInsert($table, $columns, $data)
+    {
+        $q = "INSERT INTO {$table} (" . implode(', ', $columns) . ') VALUES ';
+        foreach ($data as $index => $datum) {
+            $line = '("' . implode('", "', $datum) . '")' . (($index + 1 < (is_countable($data) ? count($data) : 0)) ? ', ' : '');
+            $q .= str_replace("''", "NULL", $line);
+        }
+        return self::safeQuery($q, 'INSERT');
+    }
+
+
+    /**
     * @param string $table
     * @param mixed $id
     * @param array $post_array
