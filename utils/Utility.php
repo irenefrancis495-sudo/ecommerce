@@ -82,12 +82,21 @@ class Utility{
      */
     public static function bulkInsert($table, $columns, $data)
     {
-        $q = "INSERT INTO {$table} (" . implode(', ', $columns) . ') VALUES ';
-        foreach ($data as $index => $datum) {
-            $line = '("' . implode('", "', $datum) . '")' . (($index + 1 < (is_countable($data) ? count($data) : 0)) ? ', ' : '');
-            $q .= str_replace("''", "NULL", $line);
+        if (empty($data)) return true;
+
+        $q = "INSERT INTO `{$table}` (" . implode(', ', $columns) . ') VALUES ';
+        $rows = [];
+        foreach ($data as $datum) {
+            $escapedValues = array_map(function($value) {
+                if ($value === null || $value === '') return 'NULL';
+                if (is_numeric($value) && !is_string($value)) return $value;
+                return "'" . addslashes((string)$value) . "'";
+            }, array_values($datum));
+            $rows[] = "(" . implode(', ', $escapedValues) . ")";
         }
-        return self::safeQuery($q, 'INSERT');
+        $q .= implode(', ', $rows);
+        
+        return self::safeQuery($q, [], 'INSERT');
     }
 
 
