@@ -143,7 +143,6 @@ final class Version20260511100024 extends AbstractMigration
         $messages = json_decode(file_get_contents($messagesFile), true) ?: [];
         utility::bulkInsert('contact_messages', ['id', 'name', 'email', 'message', 'created_at'], $messages);
         }
-
     // Migrate customer comments
     $commentsFile = __DIR__ . '../../data/customer_comments.json';
     if (file_exists($commentsFile)) {
