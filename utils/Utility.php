@@ -22,10 +22,11 @@ class Utility{
         }
 
         if ($query_type == 'INSERT') {
-            if (method_exists($conn, 'lastInsertId')) {
+            try {
                 return $conn->lastInsertId();
+            } catch (\Throwable $e) {
+                return null;
             }
-            return null;
         } elseif ($query_type == 'SELECT') {
             return $one_row ? $result->fetchAssociative() : $result->fetchAllAssociative();
         } else {

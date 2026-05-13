@@ -114,8 +114,55 @@ final class Version20260512091157 extends AbstractMigration
         $import('customer_comments', $loadJson('customer_comments.json'), [
             'message' => 'comment'
         ]);
-        $import('role_permissions', $loadJson('role_permissions.json'), ['permission' => 'permissions']);
-        $import('admin_settings', $loadJson('admin_settings.json'));
+        $rolePermissionsRaw = $loadJson('role_permissions.json');
+        
+        
+        $allPermissionKeys = [];
+        foreach ($rolePermissionsRaw as $role => $perms) {
+            foreach ($perms as $perm => $value) {
+                $allPermissionKeys[$perm] = true;
+            }
+        }
+        
+        $permissionIdMap = [];
+        foreach (array_keys($allPermissionKeys) as $permKey) {
+            $permissionId = Utility::insert('permissions', [
+                'name' => ucwords(str_replace(['.', '_'], ' ', $permKey)),
+                'keyword' => $permKey
+            ]);
+            $permissionIdMap[$permKey] = $permissionId;
+        }
+        
+        foreach ($rolePermissionsRaw as $role => $perms) {
+            $groupId = Utility::insert('groups', [
+                'name' => ucfirst($role),
+                'keyword' => $role
+            ]);
+            
+            foreach ($perms as $perm => $value) {
+                if ($value === true) {
+                    Utility::insert('group_permissions', [
+                        'group_id' => $groupId,
+                        'permission_id' => $permissionIdMap[$perm]
+                    ]);
+                }
+            }
+            
+            Utility::insert('role_permissions', [
+                'role' => $role,
+                'permissions' => json_encode($perms)
+            ]);
+        }
+
+        $adminSettingsRaw = $loadJson('admin_settings.json');
+        $adminSettingsData = [];
+        foreach ($adminSettingsRaw as $key => $value) {
+            $adminSettingsData[] = [
+                'setting_key' => $key,
+                'setting_value' => is_array($value) ? json_encode($value) : $value
+            ];
+        }
+        $import('admin_settings', $adminSettingsData);
 
         $this->addSql('SET FOREIGN_KEY_CHECKS = 1');
         Utility::safeQuery('SET FOREIGN_KEY_CHECKS = 1', [], 'UPDATE');
