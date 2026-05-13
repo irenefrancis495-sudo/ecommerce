@@ -15,6 +15,17 @@ The application uses a `.env` file for database configuration.
    DB_PASSWORD=
    ```
 
+### Database Creation
+
+```bash
+php .\scratch\create_db.php
+```
+
+### Database Reset
+```bash
+php .\scratch\reset_db.php
+```
+
 ### 🚀 Database Migrations
 Database schema changes are managed via Doctrine Migrations.
 

@@ -1,7 +1,7 @@
 <?php
 $host = '127.0.0.1';
-$user = 'revay';
-$pass = '123456';
+$user = 'root';
+$pass = '';
 $dbName = 'ecommerce';
 
 try {
