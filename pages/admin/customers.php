@@ -1,26 +1,16 @@
 <?php
+require_once __DIR__ . '/../../config/bootstrap.php';
 require_once __DIR__ . '/_auth.php';
 require_once __DIR__ . '/_notifications.php';
 
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin';
 $notificationCount = adminNotificationCount();
 $activePage = 'customers';
-$usersFile = __DIR__ . '/../../data/users.json';
-$usersData = [];
+// Load users from database (no JSON fallback)
+$usersData = \Mpemba\Utils\Database::getUsers();
 
-if (file_exists($usersFile)) {
-    $decoded = json_decode((string) file_get_contents($usersFile), true);
-    if (is_array($decoded)) {
-        $usersData = $decoded;
-    }
-}
-
-if (empty($usersData)) {
-    $usersData = [
-        ['id' => 1, 'username' => 'admin', 'email' => 'admin@mpemba.com', 'first_name' => 'Admin', 'last_name' => 'User', 'role' => 'admin'],
-        ['id' => 2, 'username' => 'john_doe', 'email' => 'john@example.com', 'first_name' => 'John', 'last_name' => 'Doe', 'role' => 'customer'],
-        ['id' => 3, 'username' => 'jane_smith', 'email' => 'jane@example.com', 'first_name' => 'Jane', 'last_name' => 'Smith', 'role' => 'customer'],
-    ];
+if (!is_array($usersData)) {
+  $usersData = [];
 }
 
 $roleOptions = array_keys(adminLoadRolePermissions());

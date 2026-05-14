@@ -1,4 +1,5 @@
-<?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+<?php require_once __DIR__ . '/../config/bootstrap.php';
+include __DIR__ . '/../components/ui/navbar.php'; ?>
 
 <main class="pt-28 bg-slate-50 text-slate-900">
     <section class="relative overflow-hidden pb-20">

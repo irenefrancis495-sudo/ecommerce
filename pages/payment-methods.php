@@ -1,4 +1,5 @@
-<?php require_once __DIR__ . '/_customer_permissions.php'; customerRequirePermission('shop.checkout'); ?>
+<?php require_once __DIR__ . '/../config/bootstrap.php';
+require_once __DIR__ . '/_customer_permissions.php'; customerRequirePermission('shop.checkout'); ?>
 <!DOCTYPE html>
 
 <html class="light" lang="en"><head>
@@ -166,68 +167,85 @@
 </section>
 <!-- Mobile Money Section (The Digital Atelier Sidebar) -->
 <aside class="lg:col-span-5">
-<div class="bg-surface-container-highest/30 rounded-3xl p-8 border border-white shadow-xl glass-panel">
-<h3 class="text-xl font-bold font-headline text-primary mb-8">Mobile Money</h3>
-<div class="space-y-6">
-<!-- M-Pesa -->
-<div class="space-y-3">
-<label class="flex items-center gap-3 cursor-pointer group">
-<input checked="" class="w-5 h-5 text-primary border-outline focus:ring-primary" name="mobile_money" type="radio"/>
-<div class="w-12 h-8 rounded bg-error/10 flex items-center justify-center p-1">
-<img alt="M-Pesa" class="h-full object-contain" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop&crop=center" />
-</div>
-<span class="font-bold text-primary">Vodacom M-Pesa</span>
-</label>
-<div class="relative">
-<input class="w-full bg-white border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
-<div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
-<span class="text-[10px] font-bold text-primary-container bg-primary-fixed px-2 py-0.5 rounded-full uppercase tracking-tighter">Verified</span>
-</div>
-</div>
-</div>
-<!-- Airtel Money -->
-<div class="space-y-3 opacity-60 hover:opacity-100 transition-opacity">
-<label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-5 h-5 text-primary border-outline focus:ring-primary" name="mobile_money" type="radio"/>
-<div class="w-12 h-8 rounded bg-error flex items-center justify-center p-1">
-<span class="text-[8px] text-white font-black leading-none">Airtel Money</span>
-</div>
-<span class="font-bold text-primary">Airtel Money</span>
-</label>
-<input class="w-full bg-white/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
-</div>
-<!-- Tigo Pesa -->
-<div class="space-y-3 opacity-60 hover:opacity-100 transition-opacity">
-<label class="flex items-center gap-3 cursor-pointer group">
-<input class="w-5 h-5 text-primary border-outline focus:ring-primary" name="mobile_money" type="radio"/>
-<div class="w-12 h-8 rounded bg-primary-container flex items-center justify-center p-1">
-<span class="text-[8px] text-white font-black leading-none italic uppercase">Tigo Pesa</span>
-</div>
-<span class="font-bold text-primary">Tigo Pesa</span>
-</label>
-<input class="w-full bg-white/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
-</div>
-<div id="payment-order-summary" class="rounded-3xl bg-white p-5 border border-surface-container-high shadow-sm mt-4">
-<h4 class="text-base font-semibold text-primary mb-3">Order Summary</h4>
-<div class="space-y-3 text-sm text-on-surface-variant">
-<div class="flex justify-between"><span>Items</span><span id="summary-count">0</span></div>
-<div class="flex justify-between"><span>Subtotal</span><span id="summary-subtotal">$0.00</span></div>
-<div class="flex justify-between"><span>Shipping</span><span id="summary-shipping">$0.00</span></div>
-<div class="flex justify-between"><span>Taxes</span><span id="summary-taxes">$0.00</span></div>
-</div>
-<div class="pt-4 border-t border-surface-container-high mt-4 flex justify-between items-center font-bold text-primary">
-<span>Total</span>
-<span id="summary-total">$0.00</span>
-</div>
-</div>
-<div id="payment-auth-warning" class="hidden mb-4 rounded-xl border border-error/20 bg-error-container/10 px-4 py-3 text-sm text-on-error-container">
-    Please sign in first to confirm your payment.
-</div>
-<button id="payment-confirm-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold font-headline mt-4 shadow-lg shadow-secondary/20 active:scale-95 transition-transform" disabled>
-                    Confirm Payment
-                </button>
-</div>
-</div>
+    <div class="bg-surface-container-highest/30 rounded-3xl p-8 border border-white shadow-xl glass-panel">
+        <h3 class="text-xl font-bold font-headline text-primary mb-8">Mobile Money</h3>
+        <?php
+        // Render a server-side payment form using session cart
+        $cart = $_SESSION['cart'] ?? [];
+        $subtotal = 0.0;
+        $itemCount = 0;
+        foreach ($cart as $ci) {
+            $subtotal += ($ci['price'] ?? 0) * ($ci['qty'] ?? 1);
+            $itemCount += ($ci['qty'] ?? 1);
+        }
+        $shipping = $subtotal > 0 ? 24.00 : 0.00;
+        $tax = round($subtotal * 0.07, 2);
+        $total = round($subtotal + $shipping + $tax, 2);
+        ?>
+        <form method="post" action="/pages/checkout_process.php">
+            <div class="space-y-6">
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input checked name="payment_method" value="Vodacom M-Pesa" class="w-5 h-5 text-primary border-outline focus:ring-primary" type="radio"/>
+                        <div class="w-12 h-8 rounded bg-error/10 flex items-center justify-center p-1">
+                            <img alt="M-Pesa" class="h-full object-contain" src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&h=400&fit=crop&crop=center" />
+                        </div>
+                        <span class="font-bold text-primary">Vodacom M-Pesa</span>
+                    </label>
+                    <div class="relative">
+                        <input name="mobile_account" class="w-full bg-white border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                            <span class="text-[10px] font-bold text-primary-container bg-primary-fixed px-2 py-0.5 rounded-full uppercase tracking-tighter">Verified</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 opacity-60 hover:opacity-100 transition-opacity">
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input name="payment_method" value="Airtel Money" class="w-5 h-5 text-primary border-outline focus:ring-primary" type="radio"/>
+                        <div class="w-12 h-8 rounded bg-error flex items-center justify-center p-1">
+                            <span class="text-[8px] text-white font-black leading-none">Airtel Money</span>
+                        </div>
+                        <span class="font-bold text-primary">Airtel Money</span>
+                    </label>
+                    <input name="mobile_account" class="w-full bg-white/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
+                </div>
+
+                <div class="space-y-3 opacity-60 hover:opacity-100 transition-opacity">
+                    <label class="flex items-center gap-3 cursor-pointer group">
+                        <input name="payment_method" value="Tigo Pesa" class="w-5 h-5 text-primary border-outline focus:ring-primary" type="radio"/>
+                        <div class="w-12 h-8 rounded bg-primary-container flex items-center justify-center p-1">
+                            <span class="text-[8px] text-white font-black leading-none italic uppercase">Tigo Pesa</span>
+                        </div>
+                        <span class="font-bold text-primary">Tigo Pesa</span>
+                    </label>
+                    <input name="mobile_account" class="w-full bg-white/50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="255 XXX XXX XXX" type="text"/>
+                </div>
+
+                <div id="payment-order-summary" class="rounded-3xl bg-white p-5 border border-surface-container-high shadow-sm mt-4">
+                    <h4 class="text-base font-semibold text-primary mb-3">Order Summary</h4>
+                    <div class="space-y-3 text-sm text-on-surface-variant">
+                        <div class="flex justify-between"><span>Items</span><span><?= (int) $itemCount ?></span></div>
+                        <div class="flex justify-between"><span>Subtotal</span><span>$<?= number_format($subtotal, 2) ?></span></div>
+                        <div class="flex justify-between"><span>Shipping</span><span>$<?= number_format($shipping, 2) ?></span></div>
+                        <div class="flex justify-between"><span>Taxes</span><span>$<?= number_format($tax, 2) ?></span></div>
+                    </div>
+                    <div class="pt-4 border-t border-surface-container-high mt-4 flex justify-between items-center font-bold text-primary">
+                        <span>Total</span>
+                        <span>$<?= number_format($total, 2) ?></span>
+                    </div>
+                </div>
+
+                <?php if (empty($_SESSION['user']) || empty($_SESSION['user']['id'])): ?>
+                    <div class="mb-4 rounded-xl border border-error/20 bg-error-container/10 px-4 py-3 text-sm text-on-error-container">Please sign in first to confirm your payment.</div>
+                    <a href="/login?next=%2Fpayment-methods" class="w-full inline-flex justify-center bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold">Login to Pay</a>
+                <?php else: ?>
+                    <button type="submit" id="payment-confirm-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-white py-4 rounded-xl font-bold font-headline mt-4 shadow-lg shadow-secondary/20 active:scale-95 transition-transform">Confirm Payment</button>
+                <?php endif; ?>
+            </div>
+        </form>
+    </div>
+</aside>
 <!-- Trust Badges -->
 <div class="mt-8 flex flex-wrap justify-center gap-6 opacity-40">
 <div class="flex items-center gap-2">
@@ -264,89 +282,18 @@
 <!-- Visual Texture Element (Asymmetric) -->
 <div class="fixed top-0 right-0 w-1/3 h-screen -z-10 bg-gradient-to-b from-primary-container/5 to-transparent pointer-events-none"></div>
 <script>
-    function getCart() {
-        return JSON.parse(localStorage.getItem('cart') || '[]');
-    }
-
-    function formatCurrency(amount) {
-        return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    }
-
-    function renderPaymentSummary() {
-        const cart = getCart();
-        const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-        const shipping = cart.length ? 24 : 0;
-        const taxes = subtotal * 0.07;
-        const total = subtotal + shipping + taxes;
-
-        document.getElementById('summary-count').textContent = cart.reduce((sum, item) => sum + item.qty, 0);
-        document.getElementById('summary-subtotal').textContent = formatCurrency(subtotal);
-        document.getElementById('summary-shipping').textContent = formatCurrency(shipping);
-        document.getElementById('summary-taxes').textContent = formatCurrency(taxes);
-        document.getElementById('summary-total').textContent = formatCurrency(total);
-
-        const confirmButton = document.getElementById('payment-confirm-button');
-        if (confirmButton) {
-            confirmButton.disabled = cart.length === 0;
-        }
-    }
-
-    function getSelectedPaymentMethod() {
-        const radios = document.querySelectorAll('input[name="mobile_money"]');
-        const selected = Array.from(radios).find(r => r.checked);
-        if (!selected) return 'Mobile Money';
-        const label = selected.closest('label');
-        return label ? label.textContent.trim() : 'Mobile Money';
-    }
-
+    // Server-driven payment form: disable double-submit on submit
     document.addEventListener('DOMContentLoaded', function() {
-        renderPaymentSummary();
-
-        const confirmButton = document.getElementById('payment-confirm-button');
-        if (confirmButton) {
-            confirmButton.addEventListener('click', async function() {
-                const cart = getCart();
-                if (cart.length === 0) {
-                    alert('Your cart is empty. Add items before confirming payment.');
-                    return;
-                }
-
-                const method = getSelectedPaymentMethod();
-
-                // Disable button to prevent double-submit
-                confirmButton.disabled = true;
-                confirmButton.textContent = 'Processing payment...';
-
-                try {
-                    const response = await fetch('/api/checkout.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            cart: cart,
-                            payment_method: method
-                        })
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success) {
-                        // Clear cart from localStorage
-                        localStorage.removeItem('cart');
-                        // Redirect to order status page
-                        window.location.href = '/order-status?placed=' + encodeURIComponent(result.order_number);
-                    } else {
-                        alert('Error: ' + (result.message || 'Please try again.'));
-                        confirmButton.disabled = false;
-                        confirmButton.textContent = 'Confirm Payment';
-                    }
-                } catch (err) {
-                    alert('Network error. Please check your connection and try again.');
-                    confirmButton.disabled = false;
-                    confirmButton.textContent = 'Confirm Payment';
-                }
-            });
-        }
+        const form = document.querySelector('form[action="/pages/checkout_process.php"]');
+        if (!form) return;
+        form.addEventListener('submit', function() {
+            const btn = document.getElementById('payment-confirm-button');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Processing payment...';
+            }
+        });
     });
- </script>
+</script>
 </body>
 </html>

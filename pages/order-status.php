@@ -106,7 +106,8 @@ $justPlaced = trim($_GET['placed'] ?? '');
     </script>
 </head>
 <body class="bg-surface text-on-surface min-h-screen">
-    <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+    <?php require_once __DIR__ . '/../config/bootstrap.php';
+    include __DIR__ . '/../components/ui/navbar.php'; ?>
 
     <main class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
 

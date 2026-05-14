@@ -1,4 +1,5 @@
-<?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+<?php require_once __DIR__ . '/../config/bootstrap.php';
+include __DIR__ . '/../components/ui/navbar.php'; ?>
 
 <main class="pt-28 pb-20 max-w-6xl mx-auto px-6">
     <section class="grid gap-8 lg:grid-cols-12 items-start mb-12">
@@ -45,21 +46,29 @@
                     <p class="mt-4 text-slate-600">Enter your details below to join our marketplace and start shopping instantly.</p>
                 </div>
 
-                <form id="registerForm" class="space-y-5">
+                <form id="registerForm" class="space-y-5" method="post" action="/pages/register_process.php">
                     <div>
                         <label for="username" class="block text-sm font-medium text-slate-700 mb-2">Username</label>
-                        <input type="text" id="username" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Enter a username" required>
+                        <input type="text" id="username" name="username" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Enter a username" required>
                     </div>
                     <div>
                         <label for="email" class="block text-sm font-medium text-slate-700 mb-2">Email address</label>
-                        <input type="email" id="email" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="you@example.com" required>
+                        <input type="email" id="email" name="email" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="you@example.com" required>
                     </div>
                     <div>
                         <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
-                        <input type="password" id="password" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Minimum 6 characters" required>
+                        <input type="password" id="password" name="password" class="w-full rounded-3xl border border-slate-300 px-5 py-3 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/50" placeholder="Minimum 6 characters" required>
                     </div>
                     <button type="submit" class="w-full rounded-3xl bg-primary px-6 py-3 text-white text-lg font-semibold hover:bg-primary/90 transition">Create account</button>
                 </form>
+
+                <?php
+                if (session_status() === PHP_SESSION_NONE) session_start();
+                if (!empty($_SESSION['register_error'])) {
+                    echo '<div class="mt-4 p-3 rounded-md bg-red-50 text-red-800">' . htmlspecialchars($_SESSION['register_error']) . '</div>';
+                    unset($_SESSION['register_error']);
+                }
+                ?>
 
                 <p class="mt-6 text-center text-slate-600">Already have an account? <a href="/login" class="text-primary font-semibold hover:underline">Login now</a></p>
             </section>
@@ -69,111 +78,4 @@
 
 <?php include __DIR__ . '/../components/ui/footer.php'; ?>
 
-<script>
-    document.getElementById('registerForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
-
-        const username = document.getElementById('username').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-        const submitBtn = document.querySelector('#registerForm button[type="submit"]');
-
-        if (!username || !email || password.length < 6) {
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Please fill in all fields and use a password with at least 6 characters.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                alert('Please fill in all fields and use a password with at least 6 characters.');
-            }
-            return;
-        }
-
-        // Basic email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Please enter a valid email address.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                alert('Please enter a valid email address.');
-            }
-            return;
-        }
-
-        // Disable button and show loading
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Registering...';
-
-        try {
-            const response = await fetch('/api/auth.php?action=register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Store user data in localStorage for client-side use
-                localStorage.setItem('user', JSON.stringify(result.user));
-
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: 'Your account has been created. Welcome!',
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                } else {
-                    alert('Registration successful!');
-                }
-
-                setTimeout(() => {
-                    window.location.href = '/home';
-                }, 1000);
-            } else {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        title: 'Failed',
-                        text: result.message,
-                        icon: 'error',
-                        confirmButtonText: 'Try Again'
-                    });
-                } else {
-                    alert(result.message);
-                }
-            }
-        } catch (error) {
-            console.error('Registration error:', error);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    title: 'Error',
-                    text: 'A technical issue occurred. Please try again.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            } else {
-                alert('A technical issue occurred. Please try again.');
-            }
-        } finally {
-            // Re-enable button
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Registering...';
-        }
-    });
-</script>
+                <!-- Server-side registration: no client-side AJAX required -->

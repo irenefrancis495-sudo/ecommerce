@@ -86,7 +86,8 @@
     </style>
 </head>
 <body class="text-on-surface">
-<?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+<?php require_once __DIR__ . '/../config/bootstrap.php';
+include __DIR__ . '/../components/ui/navbar.php'; ?>
 <main class="pt-32 pb-20">
 <!-- Hero Section: Digital Atelier Editorial -->
 <section class="max-w-7xl mx-auto px-8 mb-20">

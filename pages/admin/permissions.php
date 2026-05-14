@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../config/bootstrap.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -61,8 +62,10 @@ $customRoleGroups = count(array_filter(array_keys($roleColumns), function ($role
   return !in_array($roleKey, $defaultRoles, true);
 }));
 
-$usersFile = __DIR__ . '/../../data/users.json';
-$users = file_exists($usersFile) ? (json_decode((string) file_get_contents($usersFile), true) ?: []) : [];
+$users = \Mpemba\Utils\Database::getUsers();
+if (!is_array($users)) {
+  $users = [];
+}
 $actorIdentity = [
   'name' => (string) ($_SESSION['admin_user']['name'] ?? 'Admin'),
   'username' => (string) ($_SESSION['admin_user']['username'] ?? 'admin'),

@@ -87,7 +87,8 @@
     </style>
 </head>
 <body class="bg-surface text-on-surface selection:bg-secondary-container">
-    <?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+    <?php require_once __DIR__ . '/../config/bootstrap.php';
+    include __DIR__ . '/../components/ui/navbar.php'; ?>
     <main class="pt-24 min-h-screen">
         <section class="max-w-7xl mx-auto px-8 py-12 md:py-20 flex flex-col md:flex-row items-end justify-between gap-8">
             <div class="max-w-2xl">

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome | Mpemba Marketplace</title>
+    <?php require_once __DIR__ . '/../config/bootstrap.php'; ?>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { margin: 0; font-family: Inter, sans-serif; }

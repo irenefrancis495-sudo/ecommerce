@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
     }
 }
 ?>
-<?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+<?php require_once __DIR__ . '/../config/bootstrap.php';
+include __DIR__ . '/../components/ui/navbar.php'; ?>
 
 <main class="min-h-screen">
     <!-- Hero Section -->

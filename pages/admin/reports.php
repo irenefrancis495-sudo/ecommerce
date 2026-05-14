@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/../../config/bootstrap.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -18,7 +19,10 @@ function readJsonArray(string $path): array {
 }
 
 $orders = readJsonArray(__DIR__ . '/../../data/orders.json');
-$users = readJsonArray(__DIR__ . '/../../data/users.json');
+$users = \Mpemba\Utils\Database::getUsers();
+if (!is_array($users)) {
+  $users = [];
+}
 $products = readJsonArray(__DIR__ . '/../../data/products.json');
 
 $orderCount = count($orders);

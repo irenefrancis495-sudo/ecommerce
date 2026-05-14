@@ -22,30 +22,13 @@ class UserController {
         ];
     }
 
-    private function buildAdminSession(array $user): array {
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_user'] = [
-            'id' => $user['id'] ?? 0,
-            'username' => $user['username'] ?? 'admin',
-            'email' => $user['email'] ?? 'admin@mpemba.local',
-            'first_name' => $user['first_name'] ?? 'Site',
-            'last_name' => $user['last_name'] ?? 'Admin',
-            'role' => $user['role'] ?? 'admin',
-            'name' => trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) ?: ($user['username'] ?? 'Admin')
-        ];
-        $_SESSION['user'] = $_SESSION['admin_user'];
-
-        return [
-            'success' => true,
-            'message' => 'Admin login successful',
-            'user' => $_SESSION['admin_user'],
-            'redirect' => '/admin/index'
-        ];
+    private function findUserByLogin($login): ?array {
+        return Database::getUserByLogin($login);
     }
 
     public function loginAdmin($login, $password) {
         $adminUser = $this->getAdminUser();
-        $loginNormalized = strtolower($login);
+        $loginNormalized = strtolower(trim($login));
 
         if ($loginNormalized === strtolower($adminUser['username']) || $loginNormalized === strtolower($adminUser['email'])) {
             $isValidPassword = hash_equals($adminUser['password'], $password) || strcasecmp($adminUser['password'], $password) === 0;
@@ -57,19 +40,8 @@ class UserController {
             return ['success' => false, 'message' => 'Invalid username or password'];
         }
 
-        $users = $this->db->getUsers();
-        foreach ($users as $user) {
-            $role = strtolower((string) ($user['role'] ?? 'customer'));
-            if ($role !== 'admin') {
-                continue;
-            }
-
-            $userLogin = strtolower((string) ($user['username'] ?? ''));
-            $userEmail = strtolower((string) ($user['email'] ?? ''));
-            if ($loginNormalized !== $userLogin && $loginNormalized !== $userEmail) {
-                continue;
-            }
-
+        $user = $this->findUserByLogin($login);
+        if ($user && strtolower((string) ($user['role'] ?? 'customer')) === 'admin') {
             if (!empty($user['password']) && password_verify($password, (string) $user['password'])) {
                 return $this->buildAdminSession($user);
             }
@@ -86,42 +58,46 @@ class UserController {
             return $adminLogin;
         }
 
-        $users = $this->db->getUsers();
-
-        foreach ($users as $user) {
-            if ($user['username'] === $username && password_verify($password, $user['password'])) {
-                // Start session and store user data
-                $_SESSION['user'] = [
-                    'id' => $user['id'],
-                    'username' => $user['username'],
-                    'email' => $user['email'],
-                    'first_name' => $user['first_name'],
-                    'last_name' => $user['last_name'],
-                    'role' => $user['role']
-                ];
-                return ['success' => true, 'message' => 'Login successful', 'user' => $_SESSION['user']];
-            }
+        $user = $this->findUserByLogin($username);
+        if ($user && !empty($user['password']) && password_verify($password, (string) $user['password'])) {
+            $_SESSION['user'] = [
+                'id' => $user['id'],
+                'username' => $user['username'],
+                'email' => $user['email'],
+                'first_name' => $user['first_name'] ?? '',
+                'last_name' => $user['last_name'] ?? '',
+                'role' => $user['role'] ?? 'user'
+            ];
+            return ['success' => true, 'message' => 'Login successful', 'user' => $_SESSION['user']];
         }
 
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
 
-    public function register($username, $email, $password, $firstName = '', $lastName = '') {
-        $users = $this->db->getUsers();
+    private function buildAdminSession(array $user) {
+        $_SESSION['user'] = [
+            'id' => $user['id'] ?? 0,
+            'username' => $user['username'] ?? 'admin',
+            'email' => $user['email'] ?? '',
+            'first_name' => $user['first_name'] ?? '',
+            'last_name' => $user['last_name'] ?? '',
+            'role' => $user['role'] ?? 'admin'
+        ];
+        return ['success' => true, 'message' => 'Login successful', 'user' => $_SESSION['user']];
+    }
 
-        // Check if username already exists
-        foreach ($users as $user) {
-            if ($user['username'] === $username) {
-                return ['success' => false, 'message' => 'Username already exists'];
-            }
-            if ($user['email'] === $email) {
-                return ['success' => false, 'message' => 'Email already exists'];
-            }
+    public function register($username, $email, $password, $firstName = '', $lastName = '') {
+        $existingUsername = Database::getUserByUsername($username);
+        if ($existingUsername !== null) {
+            return ['success' => false, 'message' => 'Username already exists'];
         }
 
-        // Create new user
+        $existingEmail = Database::getUserByEmail($email);
+        if ($existingEmail !== null) {
+            return ['success' => false, 'message' => 'Email already exists'];
+        }
+
         $newUser = [
-            'id' => count($users) + 1,
             'username' => $username,
             'email' => $email,
             'password' => password_hash($password, PASSWORD_DEFAULT),
@@ -130,10 +106,16 @@ class UserController {
             'role' => 'user'
         ];
 
-        $users[] = $newUser;
-        $this->db->saveUsers($users);
+        $insertId = Database::insertUserToDb($newUser);
+        if ($insertId !== null) {
+            $newUser['id'] = (int) $insertId;
+        } else {
+            $users = $this->db->getUsers();
+            $newUser['id'] = count($users) + 1;
+            $users[] = $newUser;
+            $this->db->saveUsers($users);
+        }
 
-        // Start session
         $_SESSION['user'] = [
             'id' => $newUser['id'],
             'username' => $newUser['username'],

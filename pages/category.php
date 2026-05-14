@@ -113,6 +113,7 @@ $heroText = $activeCategory
             }
         }
     </script>
+        <?php require_once __DIR__ . '/../config/bootstrap.php'; ?>
     <style>
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;

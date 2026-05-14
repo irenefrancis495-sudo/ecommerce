@@ -20,7 +20,94 @@ class Database {
     public static function formatPrice($price): string {
         return '$' . number_format($price, 2);
     }
-    
+
+    public static function hasUsersTable(): bool {
+        global $db;
+        if ($db === null) {
+            return false;
+        }
+        try {
+            $db->executeQuery('SELECT 1 FROM `users` LIMIT 1');
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    public static function getUsersFromDb(): array {
+        if (!self::hasUsersTable()) {
+            return [];
+        }
+        try {
+            return Utility::safeQuery('SELECT * FROM `users`', [], 'SELECT');
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
+    public static function getUserByIdFromDb($id) {
+        if (!self::hasUsersTable()) {
+            return null;
+        }
+        try {
+            $res = Utility::safeQuery('SELECT * FROM `users` WHERE `id` = ?', [$id], 'SELECT', true);
+            return $res ? $res : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    public static function getUserByUsernameFromDb($username) {
+        if (!self::hasUsersTable()) {
+            return null;
+        }
+        try {
+            $res = Utility::safeQuery('SELECT * FROM `users` WHERE `username` = ?', [$username], 'SELECT', true);
+            return $res ? $res : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    public static function getUserByEmailFromDb($email) {
+        if (!self::hasUsersTable()) {
+            return null;
+        }
+        try {
+            $res = Utility::safeQuery('SELECT * FROM `users` WHERE `email` = ?', [$email], 'SELECT', true);
+            return $res ? $res : null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    public static function getUserByLoginFromDb($login) {
+        $loginNormalized = trim((string) $login);
+        if ($loginNormalized === '') {
+            return null;
+        }
+        $user = self::getUserByUsernameFromDb($loginNormalized);
+        if ($user !== null) {
+            return $user;
+        }
+        return self::getUserByEmailFromDb($loginNormalized);
+    }
+
+    public static function insertUserToDb(array $user) {
+        if (!self::hasUsersTable()) {
+            return null;
+        }
+        $insertData = $user;
+        if (isset($insertData['id'])) {
+            unset($insertData['id']);
+        }
+        try {
+            return Utility::insert('users', $insertData);
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
     public static function isValidEmail($email): bool {
         return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
     }
@@ -83,20 +170,59 @@ class Database {
     }
     
     public static function getUsers(): array {
-        $usersFile = __DIR__ . '/../data/users.json';
-        if (file_exists($usersFile)) {
-            $users = json_decode(file_get_contents($usersFile), true);
-            return $users ?: [];
-        }
-        return [];
+        // Return users from the database only. Do not fallback to JSON storage.
+        return self::getUsersFromDb();
     }
 
     public static function saveUsers(array $users): bool {
-        $usersFile = __DIR__ . '/../data/users.json';
-        return file_put_contents($usersFile, json_encode($users, JSON_PRETTY_PRINT)) !== false;
+        // Persist users to the database. This performs upsert-like behavior per user.
+        if (!self::hasUsersTable()) {
+            // No DB available - refuse to write to JSON as per project policy.
+            error_log('saveUsers: users table missing; aborting save to avoid JSON fallback');
+            return false;
+        }
+
+        try {
+            foreach ($users as $u) {
+                $id = isset($u['id']) ? (int) $u['id'] : null;
+
+                // Prepare allowed fields only
+                $data = [];
+                if (isset($u['username'])) $data['username'] = $u['username'];
+                if (isset($u['email'])) $data['email'] = $u['email'];
+                if (isset($u['password'])) $data['password'] = $u['password'];
+                if (isset($u['first_name'])) $data['first_name'] = $u['first_name'];
+                if (isset($u['last_name'])) $data['last_name'] = $u['last_name'];
+                if (isset($u['role'])) $data['role'] = $u['role'];
+
+                if ($id) {
+                    $existing = self::getUserByIdFromDb($id);
+                    if ($existing !== null) {
+                        // Update existing row
+                        $q = Utility::safePrepareUpdateQuery('users', $id, $data);
+                        Utility::safeQuery($q['query'], $q['params'], 'UPDATE');
+                        continue;
+                    }
+                    // If id provided but not found, fall through to insert
+                }
+
+                // Insert new row
+                Utility::insert('users', $data);
+            }
+
+            return true;
+        } catch (\Throwable $e) {
+            error_log('saveUsers failed: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public static function getUserById($id) {
+        $user = self::getUserByIdFromDb($id);
+        if ($user !== null) {
+            return $user;
+        }
+
         $users = self::getUsers();
         foreach ($users as $user) {
             if ($user['id'] == $id) {
@@ -107,6 +233,11 @@ class Database {
     }
 
     public static function getUserByUsername($username) {
+        $user = self::getUserByUsernameFromDb($username);
+        if ($user !== null) {
+            return $user;
+        }
+
         $users = self::getUsers();
         foreach ($users as $user) {
             if ($user['username'] === $username) {
@@ -114,6 +245,35 @@ class Database {
             }
         }
         return null;
+    }
+
+    public static function getUserByEmail($email) {
+        $user = self::getUserByEmailFromDb($email);
+        if ($user !== null) {
+            return $user;
+        }
+
+        $users = self::getUsers();
+        foreach ($users as $user) {
+            if ($user['email'] === $email) {
+                return $user;
+            }
+        }
+        return null;
+    }
+
+    public static function getUserByLogin($login) {
+        $loginNormalized = trim((string) $login);
+        if ($loginNormalized === '') {
+            return null;
+        }
+
+        $user = self::getUserByUsername($loginNormalized);
+        if ($user !== null) {
+            return $user;
+        }
+
+        return self::getUserByEmail($loginNormalized);
     }
 }
 ?>

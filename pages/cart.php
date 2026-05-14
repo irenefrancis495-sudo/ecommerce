@@ -1,8 +1,4 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-?>
+<?php require_once __DIR__ . '/../config/bootstrap.php'; ?>
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"/>
@@ -101,34 +97,79 @@ if (session_status() === PHP_SESSION_NONE) {
             <p class="text-slate-600">Items you added to your cart are shown below. Update quantities or remove items before checkout.</p>
         </div>
 
-        <div id="cart-items" class="space-y-6"></div>
-
-        <div id="cart-empty" class="hidden rounded-3xl bg-white p-8 text-center text-slate-500">
-            <p class="text-xl font-semibold text-slate-900">Your cart is currently empty.</p>
-            <p class="mt-3">Browse our catalog and start adding items to your cart.</p>
-            <a href="/products" class="inline-flex mt-5 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary/90 transition">Shop products</a>
-        </div>
+        <?php
+        if (session_status() === PHP_SESSION_NONE) session_start();
+        $cart = $_SESSION['cart'] ?? [];
+        if (empty($cart)) {
+            ?>
+            <div class="rounded-3xl bg-white p-8 text-center text-slate-500">
+                <p class="text-xl font-semibold text-slate-900">Your cart is currently empty.</p>
+                <p class="mt-3">Browse our catalog and start adding items to your cart.</p>
+                <a href="/products" class="inline-flex mt-5 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary/90 transition">Shop products</a>
+            </div>
+            <?php
+        } else {
+            foreach ($cart as $item) {
+                $lineTotal = number_format($item['price'] * $item['qty'], 2);
+                ?>
+                <div class="rounded-3xl bg-white p-6 shadow-sm flex items-center gap-6">
+                    <img src="<?= htmlspecialchars($item['image'] ?? '/assets/placeholder.png') ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-24 h-24 object-cover rounded-md">
+                    <div class="flex-1">
+                        <h3 class="font-display text-lg font-bold text-primary"><?= htmlspecialchars($item['name']) ?></h3>
+                        <p class="text-sm text-on-surface-variant">Unit: $<?= number_format($item['price'], 2) ?></p>
+                        <form method="post" action="/pages/cart_update.php" class="mt-3 flex items-center gap-3">
+                            <input type="hidden" name="product_id" value="<?= (int) $item['id'] ?>" />
+                            <input type="number" name="qty" value="<?= (int) $item['qty'] ?>" min="0" class="w-20 rounded-md border px-2 py-1" />
+                            <button type="submit" class="px-3 py-1 bg-primary text-white rounded-md">Update</button>
+                        </form>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-on-surface-variant">Line total</p>
+                        <p class="font-bold text-primary text-lg">$<?= $lineTotal ?></p>
+                        <form method="post" action="/pages/cart_remove.php" class="mt-2">
+                            <input type="hidden" name="product_id" value="<?= (int) $item['id'] ?>" />
+                            <button type="submit" class="text-sm text-red-600">Remove</button>
+                        </form>
+                    </div>
+                </div>
+                <?php
+            }
+        }
+        ?>
     </div>
 
     <aside class="space-y-6">
         <div class="p-8 bg-surface-container rounded-xl shadow-[0_32px_64px_-15px_rgba(25,28,30,0.04)] sticky top-32">
             <h2 class="font-headline text-2xl font-black text-primary mb-6 tracking-tighter">Order Summary</h2>
+            <?php
+            // compute summary from session cart
+            $cart = $_SESSION['cart'] ?? [];
+            $subtotal = 0.0;
+            $itemCount = 0;
+            foreach ($cart as $ci) {
+                $subtotal += ($ci['price'] ?? 0) * ($ci['qty'] ?? 1);
+                $itemCount += ($ci['qty'] ?? 1);
+            }
+            $shipping = $subtotal > 0 ? 24.00 : 0.00;
+            $tax = round($subtotal * 0.07, 2);
+            $total = round($subtotal + $shipping + $tax, 2);
+            ?>
             <div class="space-y-4 mb-6">
                 <div class="flex justify-between font-label text-on-surface-variant">
                     <span>Subtotal</span>
-                    <span id="cart-subtotal" class="text-primary font-semibold">$0.00</span>
+                    <span class="text-primary font-semibold">$<?= number_format($subtotal, 2) ?></span>
                 </div>
                 <div class="flex justify-between font-label text-on-surface-variant">
                     <span>Shipping</span>
-                    <span id="cart-shipping" class="text-primary font-semibold">$0.00</span>
+                    <span class="text-primary font-semibold">$<?= number_format($shipping, 2) ?></span>
                 </div>
                 <div class="flex justify-between font-label text-on-surface-variant">
                     <span>Taxes</span>
-                    <span id="cart-tax" class="text-primary font-semibold">$0.00</span>
+                    <span class="text-primary font-semibold">$<?= number_format($tax, 2) ?></span>
                 </div>
                 <div class="pt-4 border-t border-outline-variant/20 flex justify-between font-headline text-xl font-bold text-primary">
                     <span>Total</span>
-                    <span id="cart-total">$0.00</span>
+                    <span>$<?= number_format($total, 2) ?></span>
                 </div>
             </div>
             <div class="space-y-4">
@@ -136,9 +177,13 @@ if (session_status() === PHP_SESSION_NONE) {
                     <input class="w-full bg-surface-container-high border-none rounded-lg px-4 py-3 font-label text-sm focus:ring-2 focus:ring-primary transition-all" placeholder="Promo Code" type="text" />
                     <button class="absolute right-2 top-2 px-3 py-1 bg-primary text-on-primary rounded-md text-xs font-bold font-headline uppercase tracking-widest hover:bg-primary-container transition-colors">Apply</button>
                 </div>
-                <button id="checkout-button" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-4 rounded-lg text-base tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50" disabled>
-                    Proceed to Checkout
-                </button>
+                <?php if (!empty($_SESSION['user']) && !empty($_SESSION['user']['id'])): ?>
+                    <form method="post" action="/pages/checkout_process.php">
+                        <button type="submit" class="w-full bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-4 rounded-lg text-base tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300">Proceed to Checkout</button>
+                    </form>
+                <?php else: ?>
+                    <a href="/login?next=%2Fpayment-methods" class="w-full inline-flex justify-center bg-gradient-to-r from-secondary to-secondary-container text-on-secondary font-headline font-bold py-4 rounded-lg text-base tracking-tight shadow-lg shadow-secondary/20 hover:scale-[1.02] active:scale-95 transition-all duration-300">Login to Checkout</a>
+                <?php endif; ?>
                 <p class="text-center font-label text-[10px] text-on-surface-variant/60 pt-4">FREE SHIPPING ON ORDERS OVER $2,000</p>
             </div>
         </div>

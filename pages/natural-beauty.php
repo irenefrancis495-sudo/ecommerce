@@ -88,7 +88,8 @@
     </style>
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
-<?php include __DIR__ . '/../components/ui/navbar.php'; ?>
+<?php require_once __DIR__ . '/../config/bootstrap.php';
+include __DIR__ . '/../components/ui/navbar.php'; ?>
 
 <main class="pt-32 pb-24 max-w-7xl mx-auto px-6 lg:px-8">
     <section class="grid gap-10 lg:grid-cols-[1.4fr_0.95fr] items-center mb-16">
