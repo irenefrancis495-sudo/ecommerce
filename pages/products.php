@@ -111,10 +111,12 @@ $pages = range(1, max(1, (int) ($products['pages'] ?? 1)));
                 <p class="text-slate-500 max-w-lg mx-auto">Try adjusting your filters, search terms, or explore other categories to find what you're looking for.</p>
             </div>
         <?php else: ?>
-            <?php foreach ($products['products'] as $product): ?>
+            <?php foreach ($products['products'] as $product):
+                $imageUrl = \Mpemba\Utils\Utility::getProductImageUrl($product, $product['category_name'] ?? null);
+            ?>
                 <div class="group bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden hover:shadow-xl hover:border-slate-300 transition-all duration-300 transform hover:-translate-y-1 flex flex-col">
                     <div class="aspect-square bg-gradient-to-br from-slate-100 to-slate-200 relative overflow-hidden">
-                        <img src="<?= htmlspecialchars($product['image_url']) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop&crop=center'">
+                        <img src="<?= htmlspecialchars($imageUrl) ?>" alt="<?= htmlspecialchars($product['name']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='https://images.unsplash.com/photo-1512436991641-6745cdb1723f?w=400&h=400&fit=crop&crop=center'">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
                         <button class="absolute top-4 right-4 w-11 h-11 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg hover:bg-white transform hover:scale-110">
                             <span class="material-symbols-outlined text-lg text-red-500">favorite</span>

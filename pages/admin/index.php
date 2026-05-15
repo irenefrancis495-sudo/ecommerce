@@ -1,13 +1,34 @@
 <?php
+require_once __DIR__ . '/../../config/bootstrap.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 require_once __DIR__ . '/_auth.php';
 require_once __DIR__ . '/_notifications.php';
 
+// Import admin database class
+use Mpemba\Utils\AdminDatabase;
+
 $adminName = $_SESSION['admin_user']['name'] ?? 'Admin User';
 $notificationCount = adminNotificationCount();
 $activePage = 'dashboard';
+
+// Get real data from database
+$totalRevenue = AdminDatabase::getTotalRevenue();
+$totalOrders = AdminDatabase::getTotalOrders();
+$totalUsers = AdminDatabase::getTotalUsers();
+$monthlyTraffic = AdminDatabase::getMonthlyTraffic();
+$paymentStats = AdminDatabase::getPaymentStats();
+$orderStatuses = AdminDatabase::getOrderStatuses();
+$recentOrders = AdminDatabase::getRecentOrders(5);
+$monthlyRevenueData = AdminDatabase::getMonthlyRevenue();
+$recentActivities = AdminDatabase::getRecentActivities(10);
+
+// Calculate percentage changes (mock data for now, can be enhanced)
+$revenueChange = '+12.4%';
+$ordersChange = '+5.2%';
+$trafficChange = '+22.8%';
+$usersChange = '+8.5%';
 ?>
 
 <style>
@@ -159,15 +180,16 @@ $activePage = 'dashboard';
 
         <!-- Bento Grid Metrics -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Revenue Card -->
             <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-primary-fixed text-on-primary-fixed rounded-lg">
                         <span class="material-symbols-outlined">payments</span>
                     </div>
-                    <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">+12.4%</span>
+                    <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-full"><?php echo $revenueChange; ?></span>
                 </div>
                 <p class="text-sm font-medium text-on-surface-variant mb-1">Total Revenue</p>
-                <h3 class="text-2xl font-bold text-primary tracking-tight">$1,284,590.00</h3>
+                <h3 class="text-2xl font-bold text-primary tracking-tight">$<?php echo number_format($totalRevenue, 2); ?></h3>
                 <div class="mt-4 h-12 w-full flex items-end gap-1">
                     <div class="bg-primary/10 w-full h-[40%] rounded-t-sm"></div>
                     <div class="bg-primary/20 w-full h-[60%] rounded-t-sm"></div>
@@ -179,15 +201,16 @@ $activePage = 'dashboard';
                 </div>
             </div>
 
+            <!-- Orders Card -->
             <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-secondary-fixed text-on-secondary-fixed rounded-lg">
                         <span class="material-symbols-outlined">shopping_basket</span>
                     </div>
-                    <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full">+5.2%</span>
+                    <span class="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-full"><?php echo $ordersChange; ?></span>
                 </div>
-                <p class="text-sm font-medium text-on-surface-variant mb-1">New Orders</p>
-                <h3 class="text-2xl font-bold text-primary tracking-tight">3,492</h3>
+                <p class="text-sm font-medium text-on-surface-variant mb-1">Total Orders</p>
+                <h3 class="text-2xl font-bold text-primary tracking-tight"><?php echo number_format($totalOrders); ?></h3>
                 <div class="mt-4 h-12 w-full flex items-end gap-1">
                     <div class="bg-secondary/10 w-full h-[30%] rounded-t-sm"></div>
                     <div class="bg-secondary/20 w-full h-[50%] rounded-t-sm"></div>
@@ -199,15 +222,16 @@ $activePage = 'dashboard';
                 </div>
             </div>
 
+            <!-- Users Card -->
             <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-surface-container-high text-primary rounded-lg">
                         <span class="material-symbols-outlined">storefront</span>
                     </div>
-                    <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full">Stable</span>
+                    <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-1 rounded-full"><?php echo $usersChange; ?></span>
                 </div>
-                <p class="text-sm font-medium text-on-surface-variant mb-1">Active Artisans</p>
-                <h3 class="text-2xl font-bold text-primary tracking-tight">842</h3>
+                <p class="text-sm font-medium text-on-surface-variant mb-1">Active Customers</p>
+                <h3 class="text-2xl font-bold text-primary tracking-tight"><?php echo number_format($totalUsers); ?></h3>
                 <div class="mt-4 h-12 w-full flex items-end gap-1">
                     <div class="bg-primary/20 w-full h-[60%] rounded-t-sm"></div>
                     <div class="bg-primary/20 w-full h-[65%] rounded-t-sm"></div>
@@ -219,15 +243,16 @@ $activePage = 'dashboard';
                 </div>
             </div>
 
+            <!-- Traffic Card -->
             <div class="kpi-card bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-2 bg-tertiary-fixed text-on-tertiary-fixed rounded-lg">
                         <span class="material-symbols-outlined">trending_up</span>
                     </div>
-                    <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-full">+22.8%</span>
+                    <span class="text-xs font-bold text-teal-600 bg-teal-50 px-2 py-1 rounded-full"><?php echo $trafficChange; ?></span>
                 </div>
                 <p class="text-sm font-medium text-on-surface-variant mb-1">Monthly Traffic</p>
-                <h3 class="text-2xl font-bold text-primary tracking-tight">1.2M</h3>
+                <h3 class="text-2xl font-bold text-primary tracking-tight"><?php echo number_format($monthlyTraffic); ?></h3>
                 <div class="mt-4 h-12 w-full flex items-end gap-1">
                     <div class="bg-tertiary/10 w-full h-[20%] rounded-t-sm"></div>
                     <div class="bg-tertiary/20 w-full h-[35%] rounded-t-sm"></div>
@@ -273,44 +298,60 @@ $activePage = 'dashboard';
             <div class="bg-surface-container-low p-8 rounded-2xl border border-slate-200/55">
                 <h4 class="text-xl font-bold text-primary mb-6">Recent Platform Events</h4>
                 <div class="space-y-6">
-                    <div class="event-item flex gap-4">
-                        <div class="event-dot relative">
-                            <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-900">
-                                <span class="material-symbols-outlined text-sm">shopping_bag</span>
+                    <?php if (!empty($recentActivities)): ?>
+                        <?php foreach (array_slice($recentActivities, 0, 5) as $activity): ?>
+                            <?php
+                                $activityType = $activity['activity'] ?? 'unknown';
+                                $icon = 'event';
+                                $bgColor = 'bg-slate-100';
+                                $textColor = 'text-slate-700';
+                                
+                                if ($activityType === 'checkout') {
+                                    $icon = 'shopping_bag';
+                                    $bgColor = 'bg-teal-100';
+                                    $textColor = 'text-teal-900';
+                                } elseif ($activityType === 'add_to_cart') {
+                                    $icon = 'shopping_cart';
+                                    $bgColor = 'bg-blue-100';
+                                    $textColor = 'text-blue-900';
+                                } elseif ($activityType === 'login') {
+                                    $icon = 'login';
+                                    $bgColor = 'bg-amber-100';
+                                    $textColor = 'text-amber-900';
+                                }
+                                
+                                $username = $activity['username'] ?? 'Unknown User';
+                                $timestamp = new DateTime($activity['created_at'] ?? 'now');
+                                $timeAgo = $timestamp->format('M d, Y');
+                            ?>
+                            <div class="event-item flex gap-4">
+                                <div class="event-dot relative">
+                                    <div class="w-10 h-10 rounded-full <?php echo $bgColor; ?> flex items-center justify-center <?php echo $textColor; ?>">
+                                        <span class="material-symbols-outlined text-sm"><?php echo $icon; ?></span>
+                                    </div>
+                                </div>
+                                <div class="pb-2">
+                                    <p class="text-sm font-bold text-primary">
+                                        <?php 
+                                            if ($activityType === 'checkout') {
+                                                echo "Order Placed by " . htmlspecialchars($username);
+                                            } elseif ($activityType === 'add_to_cart') {
+                                                echo htmlspecialchars($username) . " Added to Cart";
+                                            } elseif ($activityType === 'login') {
+                                                echo htmlspecialchars($username) . " Logged In";
+                                            } else {
+                                                echo ucwords(str_replace('_', ' ', $activityType)) . " - " . htmlspecialchars($username);
+                                            }
+                                        ?>
+                                    </p>
+                                    <p class="text-xs text-on-surface-variant mb-1"><?php echo htmlspecialchars($activity['email'] ?? 'N/A'); ?></p>
+                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter"><?php echo $timeAgo; ?></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="pb-2">
-                            <p class="text-sm font-bold text-primary">New Premium Order #4928</p>
-                            <p class="text-xs text-on-surface-variant mb-1">Artisan Leather Collection by Studio V.</p>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">2 minutes ago</span>
-                        </div>
-                    </div>
-
-                    <div class="event-item flex gap-4">
-                        <div class="event-dot relative">
-                            <div class="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-900">
-                                <span class="material-symbols-outlined text-sm">person_add</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <p class="text-sm font-bold text-primary">Vendor Application Received</p>
-                            <p class="text-xs text-on-surface-variant mb-1">Handmade Ceramics - Kyoto Artisans.</p>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">45 minutes ago</span>
-                        </div>
-                    </div>
-
-                    <div class="event-item flex gap-4">
-                        <div class="event-dot relative">
-                            <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700">
-                                <span class="material-symbols-outlined text-sm">edit</span>
-                            </div>
-                        </div>
-                        <div class="pb-2">
-                            <p class="text-sm font-bold text-primary">System Update Complete</p>
-                            <p class="text-xs text-on-surface-variant mb-1">V2.4 Cloud Infrastructure migration successful.</p>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">2 hours ago</span>
-                        </div>
-                    </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-on-surface-variant text-sm">No recent activities yet.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

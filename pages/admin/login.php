@@ -1,5 +1,6 @@
 <?php
-if (!empty($_SESSION['admin_logged_in'])) {
+require_once __DIR__ . '/../../config/bootstrap.php';
+if (!empty($_SESSION['admin_logged_in']) || strtolower($_SESSION['user']['role'] ?? '') === 'admin') {
   echo '<script>window.location.href="/admin/index";</script>';
   return;
 }

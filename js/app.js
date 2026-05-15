@@ -105,11 +105,24 @@ async function hydrateCartImages() {
 }
 
 function updateCartCount() {
-    const cart = getCart();
-    const count = cart.reduce((sum, item) => sum + item.qty, 0);
-    document.querySelectorAll('#cart-count').forEach(el => {
-        el.textContent = count > 0 ? count : '';
-    });
+    // Fetch cart count from API if logged in
+    fetch('/api/cart_count.php')
+        .then(response => response.json())
+        .then(data => {
+            const count = data.success ? data.count : 0;
+            document.querySelectorAll('#cart-count').forEach(el => {
+                el.textContent = count > 0 ? count : '';
+            });
+        })
+        .catch(error => {
+            console.error('Failed to update cart count:', error);
+    // Fallback to localStorage if API fails
+            const cart = getCart();
+            const count = cart.reduce((sum, item) => sum + item.qty, 0);
+            document.querySelectorAll('#cart-count').forEach(el => {
+                el.textContent = count > 0 ? count : '';
+            });
+        });
 }
 
 function renderCart() {
@@ -270,34 +283,90 @@ function addToCart(product) {
         return;
     }
 
-    const cart = getCart();
-    const index = cart.findIndex(item => item.key === normalizedProduct.key);
-    if (index > -1) {
-        cart[index].qty += 1;
-    } else {
-        cart.push(normalizedProduct);
-    }
-    setCart(cart);
-    updateCartCount();
-    showCartNotification(`${normalizedProduct.name} added to cart`);
-    if (typeof renderCart === 'function') renderCart();
+    // Call API to add to cart
+    fetch('/api/cart_add.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            product_id: normalizedProduct.id,
+            quantity: 1
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartCount();
+                showCartNotification(`${normalizedProduct.name} added to cart`);
+                if (typeof renderCart === 'function') renderCart();
+            } else {
+                showCartNotification(data.message || 'Failed to add to cart', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error adding to cart:', error);
+            showCartNotification('Failed to add to cart', 'error');
+        });
 }
 
 function removeFromCart(productKey) {
-    const cart = getCart().filter(item => item.key !== productKey);
-    setCart(cart);
-    updateCartCount();
-    if (typeof renderCart === 'function') renderCart();
+    // Extract product ID from key (assuming key is 'product-{id}')
+    const productId = productKey.replace('product-', '');
+
+    fetch('/api/cart_remove.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            product_id: productId
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartCount();
+                if (typeof renderCart === 'function') renderCart();
+            } else {
+                showCartNotification(data.message || 'Failed to remove from cart', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error removing from cart:', error);
+            showCartNotification('Failed to remove from cart', 'error');
+        });
 }
 
 function changeQty(productKey, delta) {
-    const cart = getCart();
-    const index = cart.findIndex(item => item.key === productKey);
-    if (index > -1) {
-        cart[index].qty += delta;
-        if (cart[index].qty < 1) cart[index].qty = 1;
-        setCart(cart);
-        updateCartCount();
+    // Extract product ID from key (assuming key is 'product-{id}')
+    const productId = productKey.replace('product-', '');
+
+    // First get current quantity, then update
+    fetch('/api/cart_update.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            product_id: productId,
+            action: delta > 0 ? 'increase' : 'decrease'
+        })
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                updateCartCount();
+                if (typeof renderCart === 'function') renderCart();
+            } else {
+                showCartNotification(data.message || 'Failed to update quantity', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error updating quantity:', error);
+            showCartNotification('Failed to update quantity', 'error');
+        });
+}
         if (typeof renderCart === 'function') renderCart();
     }
 }

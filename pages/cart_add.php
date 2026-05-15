@@ -1,7 +1,11 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
+require_once __DIR__ . '/_customer_permissions.php';
+customerRequireLogin();
+
 require_once __DIR__ . '/../config/bootstrap.php';
 use Mpemba\Entity\Product;
+use Mpemba\Utils\Utility;
+use Mpemba\Utils\ActivityLogger;
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /products');
@@ -22,23 +26,11 @@ if (!$p) {
     exit;
 }
 
-// initialize cart in session
-if (!isset($_SESSION['cart']) || !is_array($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
+$userId = $_SESSION['user']['id'];
+Utility::addToCart($userId, $productId, $qty);
 
-$key = (int) $p['id'];
-if (!isset($_SESSION['cart'][$key])) {
-    $_SESSION['cart'][$key] = [
-        'id' => $key,
-        'name' => $p['name'],
-        'price' => (float) $p['price'],
-        'image' => $p['image_url'] ?? '',
-        'qty' => $qty
-    ];
-} else {
-    $_SESSION['cart'][$key]['qty'] = max(1, $_SESSION['cart'][$key]['qty'] + $qty);
-}
+// Log the activity
+ActivityLogger::logAddToCart($userId, $productId, $qty);
 
 // redirect back where request came from, default to products
 $referer = $_SERVER['HTTP_REFERER'] ?? '/products';

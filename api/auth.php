@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../config/bootstrap.php';
 
 use Mpemba\Controller\UserController;
+use Mpemba\Utils\ActivityLogger;
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -115,6 +116,11 @@ try {
         case 'logout':
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new Exception('Method not allowed', 405);
+            }
+
+            $user = $userController->getCurrentUser();
+            if ($user && !empty($user['id'])) {
+                ActivityLogger::logLogout((int) $user['id']);
             }
 
             $result = $userController->logout();

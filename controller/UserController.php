@@ -75,15 +75,30 @@ class UserController {
     }
 
     private function buildAdminSession(array $user) {
-        $_SESSION['user'] = [
+        $fullName = trim(sprintf('%s %s', $user['first_name'] ?? '', $user['last_name'] ?? ''));
+        if ($fullName === '') {
+            $fullName = $user['username'] ?? 'Admin';
+        }
+
+        $_SESSION['admin_user'] = [
             'id' => $user['id'] ?? 0,
             'username' => $user['username'] ?? 'admin',
             'email' => $user['email'] ?? '',
             'first_name' => $user['first_name'] ?? '',
             'last_name' => $user['last_name'] ?? '',
+            'name' => $fullName,
             'role' => $user['role'] ?? 'admin'
         ];
-        return ['success' => true, 'message' => 'Login successful', 'user' => $_SESSION['user']];
+
+        $_SESSION['user'] = $_SESSION['admin_user'];
+        $_SESSION['admin_logged_in'] = true;
+
+        return [
+            'success' => true,
+            'message' => 'Login successful',
+            'user' => $_SESSION['user'],
+            'redirect' => '/admin/index'
+        ];
     }
 
     public function register($username, $email, $password, $firstName = '', $lastName = '') {

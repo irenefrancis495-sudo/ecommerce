@@ -31,6 +31,10 @@ $heroTitle = $activeCategory ? $activeCategory . ' Collection' : 'Collections fo
 $heroText = $activeCategory
     ? 'Explore the best products curated for ' . $activeCategory . '.'
     : 'Browse signature categories that blend craftsmanship, technology and wellness into one elevated marketplace experience.';
+
+$heroBackground = $activeCategory && isset($categoryImages[$activeCategory])
+    ? $categoryImages[$activeCategory]
+    : 'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +137,7 @@ $heroText = $activeCategory
         <section class="relative h-[409px] min-h-[400px] flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 editorial-gradient z-0"></div>
             <div class="absolute inset-0 opacity-40 z-0">
-                <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=1400&q=80" alt="Marketplace curated collections background">
+                <img class="w-full h-full object-cover" src="<?= htmlspecialchars($heroBackground) ?>" alt="Marketplace curated collections background">
             </div>
             <div class="relative z-10 text-center px-6">
                 <span class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.4em] text-white/90">Curated categories</span>
@@ -146,7 +150,7 @@ $heroText = $activeCategory
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8">
                 <div class="lg:col-span-8 group cursor-pointer">
                     <div class="relative h-[600px] rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-500 hover:shadow-2xl">
-                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1495020689067-958852a7765e?auto=format&fit=crop&w=1400&q=80" alt="Heritage Fashion" />
+                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="<?= htmlspecialchars($categoryImages['Heritage Fashion']) ?>" alt="Heritage Fashion" />
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-12 text-on-primary">
                             <span class="font-label uppercase tracking-widest text-sm text-secondary-container mb-2 block">Couture Excellence</span>
@@ -158,7 +162,7 @@ $heroText = $activeCategory
                 </div>
                 <div class="lg:col-span-4 group cursor-pointer">
                     <div class="relative h-[600px] rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-500 hover:shadow-2xl">
-                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1400&q=80" alt="Sanctuary Home" />
+                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="<?= htmlspecialchars($categoryImages['Sanctuary Home']) ?>" alt="Sanctuary Home" />
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-3xl mb-3">Sanctuary Home</h2>
@@ -170,7 +174,7 @@ $heroText = $activeCategory
                 </div>
                 <div class="lg:col-span-4 group cursor-pointer">
                     <div class="relative h-[400px] rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-500 hover:shadow-xl">
-                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Atelier Electronics" />
+                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="<?= htmlspecialchars($categoryImages['Atelier Electronics']) ?>" alt="Atelier Electronics" />
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-2xl mb-2">Atelier Electronics</h2>
@@ -181,7 +185,7 @@ $heroText = $activeCategory
                 </div>
                 <div class="lg:col-span-4 group cursor-pointer">
                     <div class="relative h-[400px] rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-500 hover:shadow-xl">
-                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80" alt="Natural Beauty" />
+                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="<?= htmlspecialchars($categoryImages['Natural Beauty']) ?>" alt="Natural Beauty" />
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-2xl mb-2">Natural Beauty</h2>
@@ -192,7 +196,7 @@ $heroText = $activeCategory
                 </div>
                 <div class="lg:col-span-4 group cursor-pointer">
                     <div class="relative h-[400px] rounded-xl overflow-hidden bg-surface-container-lowest transition-all duration-500 hover:shadow-xl">
-                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80" alt="Lifestyle Essentials" />
+                        <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="<?= htmlspecialchars($categoryImages['Lifestyle Essentials']) ?>" alt="Lifestyle Essentials" />
                         <div class="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-0 left-0 p-8 text-on-primary">
                             <h2 class="font-display font-bold text-2xl mb-2">Lifestyle Essentials</h2>

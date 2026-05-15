@@ -54,6 +54,8 @@
                 if (quickFeedbackLink) {
                     quickFeedbackLink.href = '/user#feedback-center';
                 }
+                // Update cart count
+                updateCartCount();
             }
         } catch (error) {
             if (localStorage.getItem('user')) {
@@ -61,6 +63,23 @@
                 if (quickFeedbackLink) {
                     quickFeedbackLink.href = '/user#feedback-center';
                 }
+                // Update cart count
+                updateCartCount();
+            }
+        }
+
+        async function updateCartCount() {
+            try {
+                const response = await fetch('/api/cart_count.php');
+                const result = await response.json();
+                if (result.success) {
+                    const count = result.count;
+                    document.querySelectorAll('#cart-count').forEach(el => {
+                        el.textContent = count > 0 ? count : '';
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to update cart count:', error);
             }
         }
     });

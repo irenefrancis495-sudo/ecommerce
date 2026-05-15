@@ -89,6 +89,18 @@
 <div class="mb-12">
 <h1 class="font-display text-4xl font-black tracking-tighter text-primary mb-2">Your Atelier Selection</h1>
 <p class="font-body text-on-surface-variant">Review your curated artisan pieces before proceeding to checkout.</p>
+
+<?php
+// Display checkout messages
+if (!empty($_SESSION['checkout_error'])) {
+    echo '<div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">' . htmlspecialchars($_SESSION['checkout_error']) . '</div>';
+    unset($_SESSION['checkout_error']);
+}
+if (!empty($_SESSION['checkout_success'])) {
+    echo '<div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">' . htmlspecialchars($_SESSION['checkout_success']) . '</div>';
+    unset($_SESSION['checkout_success']);
+}
+?>
 </div>
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
     <div class="lg:col-span-2 space-y-8">
@@ -98,8 +110,11 @@
         </div>
 
         <?php
-        if (session_status() === PHP_SESSION_NONE) session_start();
-        $cart = $_SESSION['cart'] ?? [];
+        require_once __DIR__ . '/_customer_permissions.php';
+        customerRequireLogin();
+
+        $userId = $_SESSION['user']['id'];
+        $cart = \Mpemba\Utils\Utility::getCartItems($userId);
         if (empty($cart)) {
             ?>
             <div class="rounded-3xl bg-white p-8 text-center text-slate-500">
@@ -110,16 +125,16 @@
             <?php
         } else {
             foreach ($cart as $item) {
-                $lineTotal = number_format($item['price'] * $item['qty'], 2);
+                $lineTotal = number_format($item['price'] * $item['quantity'], 2);
                 ?>
                 <div class="rounded-3xl bg-white p-6 shadow-sm flex items-center gap-6">
-                    <img src="<?= htmlspecialchars($item['image'] ?? '/assets/placeholder.png') ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-24 h-24 object-cover rounded-md">
+                    <img src="<?= htmlspecialchars(\Mpemba\Utils\Utility::getProductImageUrl($item)) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="w-24 h-24 object-cover rounded-md">
                     <div class="flex-1">
                         <h3 class="font-display text-lg font-bold text-primary"><?= htmlspecialchars($item['name']) ?></h3>
                         <p class="text-sm text-on-surface-variant">Unit: $<?= number_format($item['price'], 2) ?></p>
                         <form method="post" action="/pages/cart_update.php" class="mt-3 flex items-center gap-3">
-                            <input type="hidden" name="product_id" value="<?= (int) $item['id'] ?>" />
-                            <input type="number" name="qty" value="<?= (int) $item['qty'] ?>" min="0" class="w-20 rounded-md border px-2 py-1" />
+                            <input type="hidden" name="product_id" value="<?= (int) $item['product_id'] ?>" />
+                            <input type="number" name="qty" value="<?= (int) $item['quantity'] ?>" min="0" class="w-20 rounded-md border px-2 py-1" />
                             <button type="submit" class="px-3 py-1 bg-primary text-white rounded-md">Update</button>
                         </form>
                     </div>
@@ -127,7 +142,7 @@
                         <p class="text-sm text-on-surface-variant">Line total</p>
                         <p class="font-bold text-primary text-lg">$<?= $lineTotal ?></p>
                         <form method="post" action="/pages/cart_remove.php" class="mt-2">
-                            <input type="hidden" name="product_id" value="<?= (int) $item['id'] ?>" />
+                            <input type="hidden" name="product_id" value="<?= (int) $item['product_id'] ?>" />
                             <button type="submit" class="text-sm text-red-600">Remove</button>
                         </form>
                     </div>
@@ -142,13 +157,12 @@
         <div class="p-8 bg-surface-container rounded-xl shadow-[0_32px_64px_-15px_rgba(25,28,30,0.04)] sticky top-32">
             <h2 class="font-headline text-2xl font-black text-primary mb-6 tracking-tighter">Order Summary</h2>
             <?php
-            // compute summary from session cart
-            $cart = $_SESSION['cart'] ?? [];
+            // compute summary from DB cart
             $subtotal = 0.0;
             $itemCount = 0;
             foreach ($cart as $ci) {
-                $subtotal += ($ci['price'] ?? 0) * ($ci['qty'] ?? 1);
-                $itemCount += ($ci['qty'] ?? 1);
+                $subtotal += ($ci['price'] ?? 0) * ($ci['quantity'] ?? 1);
+                $itemCount += ($ci['quantity'] ?? 1);
             }
             $shipping = $subtotal > 0 ? 24.00 : 0.00;
             $tax = round($subtotal * 0.07, 2);
