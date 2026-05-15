@@ -139,7 +139,7 @@ $pages = range(1, max(1, (int) ($products['pages'] ?? 1)));
                             <span class="text-2xl font-bold text-primary">$<?= number_format($product['price'], 2) ?></span>
                             <form method="post" action="/pages/cart_add.php" class="m-0">
                                 <input type="hidden" name="product_id" value="<?= (int) $product['id'] ?>" />
-                                <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all shadow-md hover:shadow-lg">Add to Cart</button>
+                                <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all shadow-md hover:shadow-lg add-to-cart" data-id="<?= (int) $product['id'] ?>" data-name="<?= htmlspecialchars($product['name']) ?>" data-price="<?= number_format($product['price'], 2) ?>" data-image="<?= htmlspecialchars($imageUrl) ?>">Add to Cart</button>
                             </form>
                         </div>
                     </div>

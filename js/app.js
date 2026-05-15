@@ -555,7 +555,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     attachFeedbackReplyLookup();
 
     document.querySelectorAll('.add-to-cart').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function (event) {
+            event.preventDefault();
             const product = findProductDataFromButton(this);
             if (!product) return;
             addToCart(product);

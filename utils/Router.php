@@ -107,20 +107,175 @@ class Router {
     }
 
     public static function getMenuRoutes(string $context = 'main'): array {
-    
-    // $menuItems = Utility::safeQuery("
-    // SELECT p.name AS title, p.link AS href,
-    // FROM menu p WHERE p.parent_id IS NULL
-    // ");
+        try {
+            $routes = self::loadMenuRoutesFromDatabase($context);
+            if (!empty($routes)) {
+                return $routes;
+            }
+        } catch (\Throwable $e) {
+            error_log('Router::getMenuRoutes fallback to static menu: ' . $e->getMessage());
+        }
 
+        return self::getFallbackMenuRoutes($context);
+    }
 
-    // if(empty($menuItems)){
-    //   return [];
-    // }
+    private static function loadMenuRoutesFromDatabase(string $context): array {
+        $contextCondition = $context === 'admin'
+            ? "(m.url LIKE '/admin/%' OR m.url = '/admin' OR m.url IS NULL)"
+            : "(m.url IS NULL OR (m.url NOT LIKE '/admin/%' AND m.url != '/admin'))";
 
-    //   $menus = self::packChildrens($menuItems);
-    
-    $mainRoutes = [
+        $query = "
+            SELECT DISTINCT
+                m.id,
+                m.name,
+                m.keyword,
+                m.url,
+                m.icon,
+                m.order_index,
+                m.parent_id,
+                m.status,
+                g.keyword AS group_keyword,
+                g.name AS group_name
+            FROM menu m
+            LEFT JOIN group_menus gm ON gm.menu_id = m.id
+            LEFT JOIN groups g ON g.id = gm.group_id
+            WHERE m.status = 'active'
+              AND {$contextCondition}
+            ORDER BY COALESCE(m.parent_id, m.id), m.order_index ASC, m.name ASC
+        ";
+
+        $rows = Utility::safeQuery($query);
+        if (empty($rows)) {
+            return [];
+        }
+
+        return self::buildMenuTreeFromRows($rows, $context);
+    }
+
+    private static function buildMenuTreeFromRows(array $rows, string $context): array {
+        $nodes = [];
+        foreach ($rows as $row) {
+            $href = self::normalizeMenuHref($row);
+            $key = self::normalizeRouteKey($href);
+
+            $nodes[(int)$row['id']] = [
+                'id' => (int)$row['id'],
+                'parent_id' => $row['parent_id'] !== null ? (int)$row['parent_id'] : null,
+                'key' => $key,
+                'href' => $href,
+                'label' => $row['name'] ?: ucfirst(str_replace(['-', '_'], [' ', ' '], $key)),
+                'page' => self::resolvePageForUrl($href),
+                'title' => self::resolveRouteTitle($row, $context),
+                'icon' => $row['icon'] ?? null,
+                'disabled' => ($row['status'] ?? '') !== 'active',
+                'meta' => self::buildRouteMeta($row, $key),
+                'children' => [],
+                'order_index' => (int)($row['order_index'] ?? 0),
+            ];
+        }
+
+        foreach ($nodes as $id => &$node) {
+            if ($node['parent_id'] !== null && isset($nodes[$node['parent_id']])) {
+                $nodes[$node['parent_id']]['children'][] = &$node;
+            }
+        }
+        unset($node);
+
+        $tree = [];
+        foreach ($nodes as $node) {
+            if ($node['parent_id'] === null || !isset($nodes[$node['parent_id']])) {
+                $tree[] = $node;
+            }
+        }
+
+        self::sortMenuTree($tree);
+
+        return self::cleanupMenuNodes($tree);
+    }
+
+    private static function normalizeMenuHref(array $row): string {
+        $href = trim((string)($row['url'] ?? ''), '/');
+        if ($href === '') {
+            $href = trim((string)($row['keyword'] ?? ''), '/');
+        }
+
+        if ($href === '') {
+            return '/';
+        }
+
+        return '/' . $href;
+    }
+
+    private static function normalizeRouteKey(string $href): string {
+        $key = trim($href, '/');
+        if ($key === 'admin') {
+            return 'admin/index';
+        }
+
+        return $key === '' ? 'splash' : $key;
+    }
+
+    private static function resolvePageForUrl(string $href): string {
+        $path = trim(parse_url($href, PHP_URL_PATH), '/');
+        if ($path === '') {
+            return 'home.php';
+        }
+
+        return $path . '.php';
+    }
+
+    private static function resolveRouteTitle(array $row, string $context): string {
+        $label = $row['name'] ?? null;
+        if ($label === null || $label === '') {
+            $label = trim((string)$row['keyword']);
+        }
+
+        $suffix = $context === 'admin' ? 'Mpemba Admin' : 'Mpemba Store';
+        return trim($label . ' - ' . $suffix);
+    }
+
+    private static function buildRouteMeta(array $row, string $routeKey): array {
+        $meta = [];
+        if (!empty($row['keyword'])) {
+            $meta['keyword'] = $row['keyword'];
+        }
+        if (!empty($row['group_keyword'])) {
+            $meta['group_keyword'] = $row['group_keyword'];
+        }
+        if (str_starts_with($routeKey, 'category/')) {
+            $meta['category_slug'] = basename($routeKey);
+            $meta['category_label'] = $row['name'] ?? '';
+        }
+
+        return $meta;
+    }
+
+    private static function sortMenuTree(array &$routes): void {
+        usort($routes, function ($left, $right) {
+            $order = $left['order_index'] <=> $right['order_index'];
+            return $order !== 0 ? $order : strcasecmp($left['label'], $right['label']);
+        });
+
+        foreach ($routes as &$route) {
+            if (!empty($route['children'])) {
+                self::sortMenuTree($route['children']);
+            }
+        }
+        unset($route);
+    }
+
+    private static function cleanupMenuNodes(array $routes): array {
+        return array_map(function ($route) {
+            unset($route['id'], $route['parent_id'], $route['order_index']);
+            if (!empty($route['children'])) {
+                $route['children'] = self::cleanupMenuNodes($route['children']);
+            }
+            return $route;
+        }, $routes);
+    }
+
+    private static function getFallbackMenuRoutes(string $context = 'main'): array {
+        $mainRoutes = [
             [
                 'key' => 'home',
                 'href' => '/home',
@@ -441,34 +596,41 @@ class Router {
     }
 
 
-    public static function getChildrens($parentKey):array{
-        $menuItems = Utility::safeQuery("
-        SELECT p.name AS title, p.link AS href,
-        FROM menu p WHERE p.parent_id = '$parentKey'
-        ");
+    public static function getChildrens($parentKey): array {
+        if ($parentKey === null) {
+            return Utility::safeQuery(
+                "SELECT id, name AS title, keyword, url AS href, parent_id FROM menu WHERE parent_id IS NULL AND status = 'active' ORDER BY order_index ASC, name ASC"
+            );
+        }
 
-        return $menuItems;
+        return Utility::safeQuery(
+            "SELECT id, name AS title, keyword, url AS href, parent_id FROM menu WHERE parent_id = ? AND status = 'active' ORDER BY order_index ASC, name ASC",
+            [$parentKey]
+        );
     }
-    public static function packChildrens($parentKey = null):array {
-        $items = self::getChildrens($parentKey);
 
-        if(empty($items)){
+    public static function packChildrens($parentKey = null): array {
+        $items = self::getChildrens($parentKey);
+        if (empty($items)) {
             return [];
         }
 
-        $grouped = [];
+        $tree = [];
+        $indexed = [];
         foreach ($items as $item) {
-            $key = $item['key'] ?? null;
-            if ($key === null) continue;
+            $item['children'] = [];
+            $indexed[$item['id']] = $item;
+        }
 
-            if (isset($item['parent']) && $item['parent'] === $parentKey) {
-                $grouped[$item['parent']]['children'][] = $item;
+        foreach ($indexed as $id => $item) {
+            if (!empty($item['parent_id']) && isset($indexed[$item['parent_id']])) {
+                $indexed[$item['parent_id']]['children'][] = $item;
             } else {
-                $grouped[$key] = $item + ['children' => []];
+                $tree[] = $item;
             }
         }
 
-        return array_values($grouped);
+        return $tree;
     }
 }
 ?>

@@ -63,9 +63,9 @@ class Product{
  }
 
  public static function getProductById($id){
-    return Utility::safeQuery("SELECT p.*,c.name AS category_name 
-    FROM `products`p INNER JOIN categories c 
-    ON c.id = p.category WHERE p.id = ?;",[$id],'SELECT');
+    return Utility::safeQuery("SELECT p.*, c.name AS category_name 
+    FROM `products` p INNER JOIN categories c 
+    ON c.id = p.category WHERE p.id = ?;", [$id], 'SELECT', true);
  }
 
  public static function getProductsByCategory($categoryId){
