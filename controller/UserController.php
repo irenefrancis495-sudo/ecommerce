@@ -2,6 +2,7 @@
 namespace Mpemba\Controller;
 
 use Mpemba\Utils\Database;
+use Mpemba\Utils\Utility;
 
 class UserController {
     private $db;
@@ -124,6 +125,9 @@ class UserController {
         $insertId = Database::insertUserToDb($newUser);
         if ($insertId !== null) {
             $newUser['id'] = (int) $insertId;
+            $data['group_id'] = self::getGroupIdByName('user');
+            $data['user_id'] = $newUser['id'];
+            Utility::insert('user_group_relations', $data);
         } else {
             $users = $this->db->getUsers();
             $newUser['id'] = count($users) + 1;
@@ -155,5 +159,11 @@ class UserController {
     public function isLoggedIn() {
         return isset($_SESSION['user']);
     }
+
+     public static function getGroupIdByName(string $groupName): ?int
+    {
+       return Utility::safeQuery("SELECT id FROM `groups` WHERE keyword = ?", [$groupName],"SELECT", 1)['id'] ?? null;
+    }
+    
 }
 ?>
