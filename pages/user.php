@@ -170,7 +170,7 @@ function accountOrderProgressMessage(string $status): string {
                         <div class="flex flex-wrap gap-2 mt-3">
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold capitalize">
                                 <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">badge</span>
-                                <?= htmlspecialchars($_SESSION['user']['role'] ?? 'customer') ?>
+                                <?= htmlspecialchars(customerCurrentGroupName()) ?>
                             </span>
                             <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold">
                                 <span class="material-symbols-outlined text-sm" style="font-variation-settings:'FILL' 1;">shopping_bag</span>

@@ -93,6 +93,61 @@ class Database {
         return self::getUserByEmailFromDb($loginNormalized);
     }
 
+    public static function hasGroupsTable(): bool {
+        global $db;
+        if ($db === null) {
+            return false;
+        }
+        try {
+            $db->executeQuery('SELECT 1 FROM `groups` LIMIT 1');
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    public static function getGroupsFromDb(): array {
+        if (!self::hasGroupsTable()) {
+            return [];
+        }
+        try {
+            return Utility::safeQuery('SELECT * FROM `groups` ORDER BY `name` ASC', [], 'SELECT');
+        } catch (\Throwable $e) {
+            return [];
+        }
+    }
+
+    public static function getGroupByKeyword(string $keyword): ?array {
+        $keywordNormalized = strtolower(trim($keyword));
+        if ($keywordNormalized === '') {
+            return null;
+        }
+        if (!self::hasGroupsTable()) {
+            return null;
+        }
+        try {
+            $result = Utility::safeQuery('SELECT * FROM `groups` WHERE LOWER(`keyword`) = ? LIMIT 1', [$keywordNormalized], 'SELECT', true);
+            return $result ?: null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    public static function getGroupLabel(string $roleOrKeyword): string {
+        $normalized = strtolower(trim($roleOrKeyword));
+        if ($normalized === '' || $normalized === 'customer') {
+            return 'User';
+        }
+        $group = self::getGroupByKeyword($normalized);
+        if ($group !== null && !empty($group['name'])) {
+            return (string) $group['name'];
+        }
+        if ($normalized === 'user') {
+            return 'User';
+        }
+        return ucwords(str_replace(['_', '-'], ' ', $normalized));
+    }
+
     public static function insertUserToDb(array $user) {
         if (!self::hasUsersTable()) {
             return null;

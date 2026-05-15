@@ -8,6 +8,15 @@ $notificationCount = adminNotificationCount();
 $activePage = 'customers';
 // Load users from database (no JSON fallback)
 $usersData = \Mpemba\Utils\Database::getUsers();
+$groupMap = [];
+$groupRows = \Mpemba\Utils\Database::getGroupsFromDb();
+foreach ($groupRows as $groupRow) {
+    $keyword = strtolower(trim((string) ($groupRow['keyword'] ?? '')));
+    if ($keyword === '') {
+        continue;
+    }
+    $groupMap[$keyword] = trim((string) ($groupRow['name'] ?? ''));
+}
 
 if (!is_array($usersData)) {
   $usersData = [];
@@ -503,18 +512,25 @@ foreach ($usersData as $u) {
                   <span class="text-xs font-mono font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded-lg">@<?php echo htmlspecialchars($u['username']); ?></span>
                 </td>
                 <td class="px-4 py-4">
-                  <?php $displayRole = strtolower((string) ($u['role'] ?? 'user')); if ($displayRole === 'customer') { $displayRole = 'user'; } ?>
-                  <?php if ($displayRole === 'admin'): ?>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[11px] font-bold">
-                      <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">shield</span>
-                      Admin
-                    </span>
-                  <?php else: ?>
-                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold">
-                      <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">person</span>
-                      <?php echo htmlspecialchars(adminRoleLabel($displayRole)); ?>
-                    </span>
-                  <?php endif; ?>
+                  <?php
+                    $displayRole = strtolower((string) ($u['role'] ?? 'user'));
+                    if ($displayRole === 'customer') {
+                        $displayRole = 'user';
+                    }
+                    $label = $groupMap[$displayRole] ?? adminRoleLabel($displayRole);
+                    $badgeClass = 'bg-slate-100 text-slate-600';
+                    if ($displayRole === 'admin') {
+                        $badgeClass = 'bg-indigo-50 text-indigo-700';
+                    } elseif ($displayRole === 'manager') {
+                        $badgeClass = 'bg-teal-50 text-teal-700';
+                    } elseif ($displayRole === 'editor') {
+                        $badgeClass = 'bg-amber-50 text-amber-700';
+                    }
+                  ?>
+                  <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full <?php echo $badgeClass; ?> text-[11px] font-bold">
+                    <span class="material-symbols-outlined text-xs" style="font-size:13px;font-variation-settings:'FILL' 1">shield</span>
+                    <?php echo htmlspecialchars($label); ?>
+                  </span>
                 </td>
                 <td class="px-4 py-4 hidden lg:table-cell text-xs text-slate-500 font-medium"><?php echo htmlspecialchars($u['joined']); ?></td>
                 <td class="px-4 py-4 hidden lg:table-cell text-center">

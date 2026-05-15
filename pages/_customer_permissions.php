@@ -55,6 +55,66 @@ function customerHasPermission(string $permission): bool
     return str_starts_with($permission, 'shop.');
 }
 
+function customerCurrentGroup(): string
+{
+    if (!customerIsLoggedIn()) {
+        return 'guest';
+    }
+    $role = strtolower((string) ($_SESSION['user']['role'] ?? 'customer'));
+    if ($role === 'customer') {
+        return 'user';
+    }
+    return $role !== '' ? $role : 'user';
+}
+
+function customerCurrentGroupName(): string
+{
+    $group = customerCurrentGroup();
+    if ($group === 'guest') {
+        return 'Guest';
+    }
+
+    if (class_exists('\Mpemba\Utils\Database')) {
+        return \Mpemba\Utils\Database::getGroupLabel($group);
+    }
+
+    return ucwords(str_replace(['_', '-'], ' ', $group));
+}
+
+function customerHasGroup(string|array $groups): bool
+{
+    if (!customerIsLoggedIn()) {
+        return false;
+    }
+
+    $currentGroup = customerCurrentGroup();
+    $allowed = is_array($groups) ? $groups : [$groups];
+    foreach ($allowed as $groupItem) {
+        if (strtolower(trim((string) $groupItem)) === $currentGroup) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function customerRequireGroup(string|array $groups, string $redirect = '/login'): void
+{
+    if (!customerIsLoggedIn()) {
+        $return = urlencode($_SERVER['REQUEST_URI'] ?? '');
+        $target = $redirect . ($return ? '?next=' . $return : '');
+        header('Location: ' . $target);
+        exit;
+    }
+
+    if (customerHasGroup($groups)) {
+        return;
+    }
+
+    http_response_code(403);
+    echo '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Access Denied</title><script src="https://cdn.tailwindcss.com"></script></head><body class="min-h-screen bg-slate-50 flex items-center justify-center font-sans p-6"><div class="bg-white rounded-3xl shadow-xl max-w-md w-full p-10 text-center"><div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-rose-50 mb-6"><svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></div><h1 class="text-2xl font-extrabold text-slate-900 mb-2">Access Denied</h1><p class="text-slate-600 mb-2">You do not have permission to view this page.</p><p class="text-slate-500 text-sm mb-8">Please sign in with the correct account or contact an administrator.</p><div class="flex flex-col sm:flex-row gap-3 justify-center"><a href="/login" class="rounded-full bg-primary px-6 py-3 text-white font-semibold hover:opacity-90 transition" style="background:#003345">Sign In</a><a href="javascript:history.back()" class="rounded-full border border-slate-300 px-6 py-3 text-slate-700 font-semibold hover:bg-slate-50 transition">Go Back</a></div></div></body></html>';
+    exit;
+}
+
 /**
  * If customer is not logged in, redirect to login with a return URL.
  * Pass $hard = true to exit immediately (no partial output).
